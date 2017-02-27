@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp"
+    android:background="@color/cardview_dark_background"
+    card_view:cardCornerRadius="4dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp">
+
+            <TextView
+                android:id="@+id/tvBankName_RV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/bank_name"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/text_size_large"
+                android:textStyle="bold"
+                />
+
+            <TextView
+                android:id="@+id/tvRegionName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvBankName_RV"
+                android:text="@string/bank_region"
+                android:textSize="@dimen/text_size_medium"
+                />
+
+            <TextView
+                android:id="@+id/tvCityName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvRegionName"
+                android:text="@string/bank_city"
+                android:textSize="@dimen/text_size_medium"
+                />
+
+            <TextView
+                android:id="@+id/tvPhoneWord"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvCityName"
+                android:layout_toStartOf="@+id/tvPhoneNumber"
+                android:text="@string/bank_phone"
+                android:textSize="@dimen/text_size_small"
+                />
+
+            <TextView
+                android:id="@+id/tvPhoneNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_below="@+id/tvCityName"
+                android:layout_marginStart="@dimen/margin_text"
+                android:text="@string/bank_phone_number"
+                android:textSize="@dimen/text_size_small"
+                />
+
+            <TextView
+                android:id="@+id/tvAddressWord"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvPhoneNumber"
+                android:layout_toStartOf="@+id/tvAddress"
+                android:text="@string/bank_address"
+                android:textSize="@dimen/text_size_small"
+                />
+
+            <TextView
+                android:id="@+id/tvAddress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_below="@+id/tvPhoneNumber"
+                android:layout_marginStart="@dimen/margin_text"
+                android:text="@string/bank_address_information"
+                android:textSize="@dimen/text_size_small"
+                />
+
+
+        </RelativeLayout>
+
+        <android.support.design.widget.BottomNavigationView
+            android:id="@+id/bottom_navigation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:itemBackground="@color/light_grey"
+            app:itemIconTint="@drawable/nav_item_color_state"
+            app:itemTextColor="@drawable/nav_item_color_state"
+            app:menu="@menu/menu_bottom_navigation_main"
+
+            />
+
+
+    </LinearLayout>
+
+
+</android.support.v7.widget.CardView>

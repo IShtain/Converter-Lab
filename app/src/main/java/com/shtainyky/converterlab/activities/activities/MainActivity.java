@@ -1,10 +1,13 @@
-package com.shtainyky.converterlab;
+package com.shtainyky.converterlab.activities.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.shtainyky.converterlab.R;
+import com.shtainyky.converterlab.activities.services.HttpManager;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -19,6 +22,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
+
+        HttpManager.getInstance().test();
     }
 
     @Override

@@ -4,15 +4,18 @@
     <string name="bank_name">Name</string>
     <string name="bank_region">Region</string>
     <string name="bank_city">City</string>
-    <string name="bank_phone">Тел.:</string>
-    <string name="bank_phone_number">Number</string>
-    <string name="bank_address">Адресс:</string>
-    <string name="bank_address_information">Information about address</string>
+    <string name="bank_phone" formatted="false">Тел. %s:</string>
+    <string name="bank_address" formatted="false">Адресс: %s</string>
     <string name="menu_link">Link</string>
     <string name="menu_map">Map</string>
     <string name="menu_phone">Phone</string>
     <string name="menu_detail">Detail</string>
     <string name="menu_search">Search</string>
     <string name="action_search">Search</string>
+    <string name="title_activity_detail">DetailActivity</string>
+    <string name="fab_call">Позвонить</string>
+    <string name="fab_link">Сайт</string>
+    <string name="fab_map">Карта</string>
+    <string name="link">Link</string>
 
 </resources>

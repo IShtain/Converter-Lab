@@ -49,60 +49,66 @@
                 />
 
             <TextView
-                android:id="@+id/tvPhoneWord"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/tvCityName"
-                android:layout_toStartOf="@+id/tvPhoneNumber"
-                android:text="@string/bank_phone"
-                android:textSize="@dimen/text_size_small"
-                />
-
-            <TextView
-                android:id="@+id/tvPhoneNumber"
+                android:id="@+id/tvPhone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_below="@+id/tvCityName"
-                android:layout_marginStart="@dimen/margin_text"
-                android:text="@string/bank_phone_number"
-                android:textSize="@dimen/text_size_small"
-                />
+                android:text="@string/bank_phone"
+                android:textSize="@dimen/text_size_small"/>
 
-            <TextView
-                android:id="@+id/tvAddressWord"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/tvPhoneNumber"
-                android:layout_toStartOf="@+id/tvAddress"
-                android:text="@string/bank_address"
-                android:textSize="@dimen/text_size_small"
-                />
 
             <TextView
                 android:id="@+id/tvAddress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:layout_below="@+id/tvPhoneNumber"
-                android:layout_marginStart="@dimen/margin_text"
-                android:text="@string/bank_address_information"
-                android:textSize="@dimen/text_size_small"
-                />
-
+                android:layout_below="@+id/tvPhone"
+                android:text="@string/bank_address"
+                android:textSize="@dimen/text_size_small"/>
 
         </RelativeLayout>
 
-        <android.support.design.widget.BottomNavigationView
-            android:id="@+id/bottom_navigation"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:itemBackground="@color/light_grey"
-            app:itemIconTint="@drawable/nav_item_color_state"
-            app:itemTextColor="@drawable/nav_item_color_state"
-            app:menu="@menu/menu_bottom_navigation_main"
+            android:layout_height="60dp"
+            android:background="@color/light_grey"
+            android:orientation="horizontal">
 
-            />
+            <ImageButton
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:contentDescription="@string/link"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:src="@drawable/ic_action_link"/>
+
+            <ImageButton
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:contentDescription="@string/link"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:src="@drawable/ic_action_map"
+                />
+
+            <ImageButton
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:contentDescription="@string/link"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:src="@drawable/ic_action_phone"/>
+            <ImageButton
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:contentDescription="@string/link"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:src="@drawable/ic_action_detail"/>
+
+
+        </LinearLayout>
 
 
     </LinearLayout>

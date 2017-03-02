@@ -8,10 +8,9 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.shtainyky.converterlab.R;
-import com.shtainyky.converterlab.activities.db.converters.ConvertDataForDB;
-import com.shtainyky.converterlab.activities.db.storeModel.TableCurrencyMap;
+import com.shtainyky.converterlab.activities.db.converters.ConvertData;
 import com.shtainyky.converterlab.activities.models.modelRetrofit.RootModel;
-import com.shtainyky.converterlab.activities.models.modelRetrofit.currency.CurrencyMap;
+import com.shtainyky.converterlab.activities.models.modelUI.OrganizationUI;
 import com.shtainyky.converterlab.activities.services.HttpManager;
 
 import java.util.List;
@@ -48,10 +47,11 @@ public class MainActivity extends AppCompatActivity {
         HttpManager.getInstance().getResponse(new HttpManager.OnResponseListener() {
             @Override
             public void onSuccess(RootModel rootModel) {
-                ConvertDataForDB.insertCurrencyMap(rootModel.getCurrencies());
-                ConvertDataForDB.insertCityMap(rootModel.getCities());
-                ConvertDataForDB.insertRegionMap(rootModel.getRegions());
-                ConvertDataForDB.insertOrganization(rootModel.getOrganizations());
+                ConvertData.insertCurrencyMap(rootModel.getCurrencies());
+                ConvertData.insertCityMap(rootModel.getCities());
+                ConvertData.insertRegionMap(rootModel.getRegions());
+                ConvertData.insertOrganization(rootModel.getOrganizations());
+                List<OrganizationUI> list = ConvertData.getListOrganizationsUI();
             }
 
             @Override

@@ -31,6 +31,7 @@ public class HttpManager {
     private static final String BASE_URL = "http://resources.finance.ua/";
     private static HttpManager manager;
     private Logger mLogger = LogManager.getLogger();
+    private ApiService mApiService;
 
     private HttpManager() {
     }
@@ -44,16 +45,12 @@ public class HttpManager {
         return manager;
     }
 
-    public void test() {
-
+    public void init() {
         OkHttpClient okHttpClient = getOkHttpClient();
         GsonBuilder gsonBuilder = getGsonBuilder();
         GsonConverterFactory factory = getGsonConverterFactory(gsonBuilder);
         Retrofit retrofit = getRetrofit(okHttpClient, factory);
-
-        final ApiService apiService = retrofit.create(ApiService.class);
-
-        getResponse(apiService);
+        mApiService = retrofit.create(ApiService.class);
     }
 
 
@@ -61,11 +58,9 @@ public class HttpManager {
         final HttpLoggingInterceptor loggingBODY = new HttpLoggingInterceptor();
         loggingBODY.setLevel(HttpLoggingInterceptor.Level.BODY);
 
-        final OkHttpClient okHttpClient = new OkHttpClient.Builder()
-                 .addInterceptor(loggingBODY)
+        return new OkHttpClient.Builder()
+                .addInterceptor(loggingBODY)
                 .build();
-
-        return okHttpClient;
     }
 
     public GsonBuilder getGsonBuilder() {
@@ -89,9 +84,7 @@ public class HttpManager {
     public GsonConverterFactory getGsonConverterFactory(GsonBuilder gsonBuilder) {
         final Gson gson = gsonBuilder.create();
 
-        final GsonConverterFactory factory = GsonConverterFactory.create(gson);
-
-        return factory;
+        return GsonConverterFactory.create(gson);
     }
 
     public Retrofit getRetrofit(OkHttpClient okHttpClient, GsonConverterFactory factory) {
@@ -103,23 +96,30 @@ public class HttpManager {
                 .build();
     }
 
-    public void getResponse(ApiService apiService) {
+    public void getResponse(final OnResponseListener listener) {
 
-        final Call<RootModel> modelCall = apiService.getModelsList();
+        final Call<RootModel> modelCall = mApiService.getModelsList();
 
         modelCall.enqueue(new Callback<RootModel>() {
                               @Override
                               public void onResponse(Call<RootModel> call, Response<RootModel> response) {
                                   mLogger.d(TAG, response.code() + "");
+                                  listener.onSuccess(response.body());
 
                               }
 
                               @Override
                               public void onFailure(Call<RootModel> call, Throwable t) {
-
+                                  listener.onError(t.getMessage());
                               }
                           }
         );
+    }
+
+    public interface OnResponseListener {
+        void onSuccess(RootModel rootModel);
+
+        void onError(String message);
     }
 
 }

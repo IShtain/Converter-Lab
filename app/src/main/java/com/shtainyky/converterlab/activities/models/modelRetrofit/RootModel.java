@@ -18,19 +18,50 @@ public class RootModel {
     private String date;
 
     @SerializedName("organizations")
+    private
     List<Organization> organizations;
 
     @SerializedName("orgTypes")
+    private
     List<OrgTypeMap> orgTypes;
 
     @SerializedName("currencies")
+    private
     List<CurrencyMap> currencies;
 
     @SerializedName("regions")
+    private
     List<RegionMap> regions;
 
     @SerializedName("cities")
+    private
     List<CityMap> cities;
 
+    public String getDate() {
+        return date;
+    }
 
+    public String getSourceId() {
+        return sourceId;
+    }
+
+    public List<Organization> getOrganizations() {
+        return organizations;
+    }
+
+    public List<OrgTypeMap> getOrgTypes() {
+        return orgTypes;
+    }
+
+    public List<CurrencyMap> getCurrencies() {
+        return currencies;
+    }
+
+    public List<RegionMap> getRegions() {
+        return regions;
+    }
+
+    public List<CityMap> getCities() {
+        return cities;
+    }
 }

@@ -5,9 +5,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.shtainyky.converterlab.R;
+import com.shtainyky.converterlab.activities.db.converters.ConvertDataForDB;
+import com.shtainyky.converterlab.activities.db.storeModel.TableCurrencyMap;
+import com.shtainyky.converterlab.activities.models.modelRetrofit.RootModel;
+import com.shtainyky.converterlab.activities.models.modelRetrofit.currency.CurrencyMap;
 import com.shtainyky.converterlab.activities.services.HttpManager;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -15,6 +22,20 @@ import butterknife.ButterKnife;
 public class MainActivity extends AppCompatActivity {
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+    @BindView(R.id.tvBankName_RV)
+    TextView tvBankName;
+
+    @BindView(R.id.tvRegionName)
+    TextView tvRegionName;
+
+    @BindView(R.id.tvCityName)
+    TextView tvCityName;
+
+    @BindView(R.id.tvPhone)
+    TextView tvPhone;
+
+    @BindView(R.id.tvAddress)
+    TextView tvAddress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,7 +44,21 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
 
-        HttpManager.getInstance().test();
+        HttpManager.getInstance().init();
+        HttpManager.getInstance().getResponse(new HttpManager.OnResponseListener() {
+            @Override
+            public void onSuccess(RootModel rootModel) {
+                ConvertDataForDB.insertCurrencyMap(rootModel.getCurrencies());
+                ConvertDataForDB.insertCityMap(rootModel.getCities());
+                ConvertDataForDB.insertRegionMap(rootModel.getRegions());
+                ConvertDataForDB.insertOrganization(rootModel.getOrganizations());
+            }
+
+            @Override
+            public void onError(String message) {
+
+            }
+        });
     }
 
     @Override

@@ -4,23 +4,12 @@ package com.shtainyky.converterlab.activities.models.modelUI;
 import java.util.Map;
 
 public class OrganizationUI {
-
     private String name;
-
     private String phone;
-
-
     private String address;
-
-
     private String link;
-
-
     private String regionName;
-
-
     private String cityName;
-
     private Map<String, CurrencyUI> currencies;
 
     public class CurrencyUI {
@@ -33,6 +22,14 @@ public class OrganizationUI {
 
         public double getBid() {
             return bid;
+        }
+
+        public void setAsk(double ask) {
+            this.ask = ask;
+        }
+
+        public void setBid(double bid) {
+            this.bid = bid;
         }
     }
 

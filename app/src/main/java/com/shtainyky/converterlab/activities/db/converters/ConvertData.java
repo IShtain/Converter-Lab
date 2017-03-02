@@ -6,10 +6,14 @@ import com.raizlabs.android.dbflow.structure.database.transaction.ProcessModelTr
 import com.raizlabs.android.dbflow.structure.database.transaction.Transaction;
 import com.shtainyky.converterlab.activities.db.storeModel.ConverterDatabase;
 import com.shtainyky.converterlab.activities.db.storeModel.TableCityMap;
+import com.shtainyky.converterlab.activities.db.storeModel.TableCityMap_Table;
 import com.shtainyky.converterlab.activities.db.storeModel.TableCurrenciesList;
+import com.shtainyky.converterlab.activities.db.storeModel.TableCurrenciesList_Table;
 import com.shtainyky.converterlab.activities.db.storeModel.TableCurrencyMap;
+import com.shtainyky.converterlab.activities.db.storeModel.TableCurrencyMap_Table;
 import com.shtainyky.converterlab.activities.db.storeModel.TableOrganization;
 import com.shtainyky.converterlab.activities.db.storeModel.TableRegionMap;
+import com.shtainyky.converterlab.activities.db.storeModel.TableRegionMap_Table;
 import com.shtainyky.converterlab.activities.logger.LogManager;
 import com.shtainyky.converterlab.activities.logger.Logger;
 import com.shtainyky.converterlab.activities.models.modelRetrofit.city.CityMap;
@@ -19,6 +23,7 @@ import com.shtainyky.converterlab.activities.models.modelRetrofit.region.RegionM
 import com.shtainyky.converterlab.activities.models.modelUI.OrganizationUI;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -226,18 +231,55 @@ public class ConvertData {
             organizationUI.setPhone(organization.getPhone());
             organizationUI.setAddress(organization.getAddress());
             organizationUI.setLink(organization.getLink());
-            organizationUI.setCityName(getCityForID(organization.getCityId()));
+            organizationUI.setCityName(getCityNameForID(organization.getCityId()));
+            organizationUI.setRegionName(getRegionNameForID(organization.getRegionId()));
+            organizationUI.setCurrencies(getCurrenciesForID(organization.getId()));
+            organizationUIList.add(organizationUI);
         }
         return organizationUIList;
     }
 
-    private static String getCityForID(String id) {
+    private static Map<String, OrganizationUI.CurrencyUI> getCurrenciesForID(String id) {
+        List<TableCurrenciesList> tableCurrenciesLists = SQLite.select()
+                .from(TableCurrenciesList.class)
+                .where(TableCurrenciesList_Table.organizationId.is(id))
+                .queryList();
+        Map<String, OrganizationUI.CurrencyUI> stringCurrencyUIMap = new HashMap<>();
+        for (int i = 0; i < tableCurrenciesLists.size(); i++) {
+            TableCurrenciesList currenciesList = tableCurrenciesLists.get(i);
+            OrganizationUI.CurrencyUI currencyUI = new OrganizationUI(). new CurrencyUI();
+            currencyUI.setAsk(currenciesList.getAsk());
+            currencyUI.setBid(currenciesList.getBid());
+            stringCurrencyUIMap.put(getCurrencyNameForID(currenciesList.getCurrencyId()), currencyUI);
+        }
 
-//        Cursor = SQLite.select(TableCityMap_Table.name)
-//                .from(TableCityMap.class)
-//                .where(TableCityMap_Table.id.is(id))
-//                .query();
-        return null;
+        return stringCurrencyUIMap;
+    }
+
+    private static String getCurrencyNameForID(String currencyId) {
+        List<TableCurrencyMap> currencyMaps = SQLite.select()
+                .from(TableCurrencyMap.class)
+                .where(TableCurrencyMap_Table.id.is(currencyId))
+                .queryList();
+        return currencyMaps.get(0).getName();
+    }
+
+    private static String getRegionNameForID(String regionId) {
+        List<TableRegionMap> regionMaps = SQLite.select()
+                .from(TableRegionMap.class)
+                .where(TableRegionMap_Table.id.is(regionId))
+                .queryList();
+        return regionMaps.get(0).getName();
+
+    }
+
+    private static String getCityNameForID(String cityId) {
+
+        List<TableCityMap> cityMaps = SQLite.select()
+                .from(TableCityMap.class)
+                .where(TableCityMap_Table.id.is(cityId))
+                .queryList();
+        return cityMaps.get(0).getName();
     }
 
 

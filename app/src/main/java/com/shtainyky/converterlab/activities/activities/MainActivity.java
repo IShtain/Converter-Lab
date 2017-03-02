@@ -9,16 +9,21 @@ import android.widget.TextView;
 
 import com.shtainyky.converterlab.R;
 import com.shtainyky.converterlab.activities.db.converters.ConvertData;
+import com.shtainyky.converterlab.activities.logger.LogManager;
+import com.shtainyky.converterlab.activities.logger.Logger;
 import com.shtainyky.converterlab.activities.models.modelRetrofit.RootModel;
 import com.shtainyky.converterlab.activities.models.modelUI.OrganizationUI;
 import com.shtainyky.converterlab.activities.services.HttpManager;
 
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity {
+    private static final String TAG = "MainActivity";
+    private Logger mLogger = LogManager.getLogger();
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.tvBankName_RV)
@@ -51,7 +56,28 @@ public class MainActivity extends AppCompatActivity {
                 ConvertData.insertCityMap(rootModel.getCities());
                 ConvertData.insertRegionMap(rootModel.getRegions());
                 ConvertData.insertOrganization(rootModel.getOrganizations());
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 List<OrganizationUI> list = ConvertData.getListOrganizationsUI();
+                mLogger.d(TAG, "organization.getName()=" + list.get(0).getName());
+                mLogger.d(TAG, "list.get(0).getRegionName()=" + list.get(0).getRegionName());
+                mLogger.d(TAG, "list.get(0).getCityName()=" + list.get(0).getCityName());
+                mLogger.d(TAG, "list.get(0).getPhone()=" + list.get(0).getPhone());
+                mLogger.d(TAG, "list.get(0).getAddress()=" + list.get(0).getAddress());
+                Map<String, OrganizationUI.CurrencyUI> currencies = list.get(0).getCurrencies();
+                for (String key : currencies.keySet())
+                {
+                    mLogger.d(TAG, "VaLuta key=" + key);
+                    OrganizationUI.CurrencyUI currencyUI = currencies.get(key);
+                    mLogger.d(TAG, "currencyUI.getAsk()=" + currencyUI.getAsk());
+                    mLogger.d(TAG, "currencyUI.getBid()=" + currencyUI.getBid());
+
+                }
+
+
             }
 
             @Override

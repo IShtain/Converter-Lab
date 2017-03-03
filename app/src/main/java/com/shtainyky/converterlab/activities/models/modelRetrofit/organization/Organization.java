@@ -82,4 +82,36 @@ public class Organization {
     public Map<String, Currency> getCurrencies() {
         return currencies;
     }
+
+    public void setOrgType(int orgType) {
+        this.orgType = orgType;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setRegionId(String regionId) {
+        this.regionId = regionId;
+    }
+
+    public void setCityId(String cityId) {
+        this.cityId = cityId;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
+    }
+
+    public void setCurrencies(Map<String, Currency> currencies) {
+        this.currencies = currencies;
+    }
 }

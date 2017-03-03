@@ -1,9 +1,10 @@
-package com.shtainyky.converterlab.activities.db.converters;
+package com.shtainyky.converterlab.activities.db.storedata;
 
 import com.raizlabs.android.dbflow.config.FlowManager;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 import com.raizlabs.android.dbflow.structure.database.transaction.ProcessModelTransaction;
 import com.raizlabs.android.dbflow.structure.database.transaction.Transaction;
+import com.shtainyky.converterlab.activities.db.converter.ConvertData;
 import com.shtainyky.converterlab.activities.db.storeModel.ConverterDatabase;
 import com.shtainyky.converterlab.activities.db.storeModel.TableCityMap;
 import com.shtainyky.converterlab.activities.db.storeModel.TableCityMap_Table;
@@ -16,10 +17,6 @@ import com.shtainyky.converterlab.activities.db.storeModel.TableRegionMap;
 import com.shtainyky.converterlab.activities.db.storeModel.TableRegionMap_Table;
 import com.shtainyky.converterlab.activities.logger.LogManager;
 import com.shtainyky.converterlab.activities.logger.Logger;
-import com.shtainyky.converterlab.activities.models.modelRetrofit.city.CityMap;
-import com.shtainyky.converterlab.activities.models.modelRetrofit.currency.CurrencyMap;
-import com.shtainyky.converterlab.activities.models.modelRetrofit.organization.Organization;
-import com.shtainyky.converterlab.activities.models.modelRetrofit.region.RegionMap;
 import com.shtainyky.converterlab.activities.models.modelUI.OrganizationUI;
 
 import java.util.ArrayList;
@@ -28,19 +25,20 @@ import java.util.List;
 import java.util.Map;
 
 
-public class ConvertData {
+public class StoreData {
 
     private static Logger mLogger = LogManager.getLogger();
-    private static String TAG = "ConvertData";
+    private static String TAG = "StoreData";
 
-    public static void insertCurrencyMap(List<CurrencyMap> currencyMapList) {
-        List<TableCurrencyMap> tableCurrencyList = new ArrayList<>();
-        for (int i = 0; i < currencyMapList.size(); i++) {
-            TableCurrencyMap tableCurrencyMap = new TableCurrencyMap();
-            tableCurrencyMap.setId(currencyMapList.get(i).getId());
-            tableCurrencyMap.setName(currencyMapList.get(i).getCurrencyTitle());
-            tableCurrencyList.add(tableCurrencyMap);
-        }
+    public static void saveData() {
+        insertCurrencyMap();
+        insertCityMap();
+        insertRegionMap();
+        insertOrganization();
+    }
+
+    private static void insertCurrencyMap() {
+        List<TableCurrencyMap> tableCurrencyList = ConvertData.getTableCurrencyList();
         saveAllCurrenciesMap(tableCurrencyList);
         mLogger.d(TAG, "insertCurrencyMap");
     }
@@ -67,14 +65,8 @@ public class ConvertData {
         mLogger.d(TAG, "saveAllCurrenciesMap");
     }
 
-    public static void insertCityMap(List<CityMap> cityMapList) {
-        List<TableCityMap> tableCityMapList = new ArrayList<>();
-        for (int i = 0; i < cityMapList.size(); i++) {
-            TableCityMap tableCityMap = new TableCityMap();
-            tableCityMap.setId(cityMapList.get(i).getId());
-            tableCityMap.setName(cityMapList.get(i).getCityName());
-            tableCityMapList.add(tableCityMap);
-        }
+    private static void insertCityMap() {
+        List<TableCityMap> tableCityMapList = ConvertData.getTableCityMapList();
         saveAllCitiesMap(tableCityMapList);
         mLogger.d(TAG, "insertCityMap");
     }
@@ -101,14 +93,8 @@ public class ConvertData {
         mLogger.d(TAG, "saveAllCitiesMap");
     }
 
-    public static void insertRegionMap(List<RegionMap> regionMapList) {
-        List<TableRegionMap> tableRegionMapList = new ArrayList<>();
-        for (int i = 0; i < regionMapList.size(); i++) {
-            TableRegionMap tableRegionMap = new TableRegionMap();
-            tableRegionMap.setId(regionMapList.get(i).getId());
-            tableRegionMap.setName(regionMapList.get(i).getRegionName());
-            tableRegionMapList.add(tableRegionMap);
-        }
+    private static void insertRegionMap() {
+        List<TableRegionMap> tableRegionMapList = ConvertData.getTableRegionMapList();
         saveAllRegions(tableRegionMapList);
         mLogger.d(TAG, "insertRegionMap");
     }
@@ -135,24 +121,10 @@ public class ConvertData {
         mLogger.d(TAG, "saveAllRegions");
     }
 
-    public static void insertOrganization(List<Organization> organizations) {
-        List<TableOrganization> tableOrganizationList = new ArrayList<>();
-        for (int i = 0; i < organizations.size(); i++) {
-            Organization organization = organizations.get(i);
-            Map<String, Organization.Currency> organizationCurrenciesList = organization.getCurrencies();
-            TableOrganization tableOrganization = new TableOrganization();
-            tableOrganization.setId(organization.getId());
-            tableOrganization.setName(organization.getTitle());
-            tableOrganization.setAddress(organization.getAddress());
-            tableOrganization.setLink(organization.getLink());
-            tableOrganization.setPhone(organization.getPhone());
-            tableOrganization.setCityId(organization.getCityId());
-            tableOrganization.setRegionId(organization.getRegionId());
-            tableOrganization.setCurrenciesListId(organization.getId());
-            insertCurrenciesForOrganization(organization.getId(), organizationCurrenciesList);
-            tableOrganizationList.add(tableOrganization);
-        }
+    private static void insertOrganization() {
+        List<TableOrganization> tableOrganizationList = ConvertData.getTableOrganizationList();
         saveAllOrganizations(tableOrganizationList);
+        insertCurrenciesForOrganization();
         mLogger.d(TAG, "insertOrganization");
     }
 
@@ -178,23 +150,8 @@ public class ConvertData {
         mLogger.d(TAG, "saveAllOrganizations");
     }
 
-    private static void insertCurrenciesForOrganization(String organizationId,
-                                                        Map<String, Organization.Currency> currencies) {
-//        int count = SQLite.select(TableCurrenciesList_Table.id)
-//                .from(TableCurrenciesList.class)
-//                .where(TableCurrenciesList_Table.id.is(1))
-//                .count();
-
-        List<TableCurrenciesList> tableCurrenciesLists = new ArrayList<>();
-        for (String key : currencies.keySet()) {
-            TableCurrenciesList currenciesList = new TableCurrenciesList();
-            currenciesList.setId(organizationId + key);
-            currenciesList.setOrganizationId(organizationId);
-            currenciesList.setCurrencyId(key);
-            currenciesList.setAsk(currencies.get(key).getAsk());
-            currenciesList.setBid(currencies.get(key).getBid());
-            tableCurrenciesLists.add(currenciesList);
-        }
+    private static void insertCurrenciesForOrganization() {
+        List<TableCurrenciesList> tableCurrenciesLists = ConvertData.getTableCurrenciesLists();
         saveAllCurrenciesList(tableCurrenciesLists);
     }
 
@@ -247,12 +204,11 @@ public class ConvertData {
         Map<String, OrganizationUI.CurrencyUI> stringCurrencyUIMap = new HashMap<>();
         for (int i = 0; i < tableCurrenciesLists.size(); i++) {
             TableCurrenciesList currenciesList = tableCurrenciesLists.get(i);
-            OrganizationUI.CurrencyUI currencyUI = new OrganizationUI(). new CurrencyUI();
+            OrganizationUI.CurrencyUI currencyUI = new OrganizationUI().new CurrencyUI();
             currencyUI.setAsk(currenciesList.getAsk());
             currencyUI.setBid(currenciesList.getBid());
             stringCurrencyUIMap.put(getCurrencyNameForID(currenciesList.getCurrencyId()), currencyUI);
         }
-
         return stringCurrencyUIMap;
     }
 
@@ -274,7 +230,6 @@ public class ConvertData {
     }
 
     private static String getCityNameForID(String cityId) {
-
         List<TableCityMap> cityMaps = SQLite.select()
                 .from(TableCityMap.class)
                 .where(TableCityMap_Table.id.is(cityId))

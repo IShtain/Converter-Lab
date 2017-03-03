@@ -8,7 +8,8 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.shtainyky.converterlab.R;
-import com.shtainyky.converterlab.activities.db.converters.ConvertData;
+import com.shtainyky.converterlab.activities.db.converter.ConvertData;
+import com.shtainyky.converterlab.activities.db.storedata.StoreData;
 import com.shtainyky.converterlab.activities.logger.LogManager;
 import com.shtainyky.converterlab.activities.logger.Logger;
 import com.shtainyky.converterlab.activities.models.modelRetrofit.RootModel;
@@ -47,21 +48,20 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
-
+        mLogger.d(TAG, "onCreate**********************************************");
         HttpManager.getInstance().init();
         HttpManager.getInstance().getResponse(new HttpManager.OnResponseListener() {
             @Override
             public void onSuccess(RootModel rootModel) {
-                ConvertData.insertCurrencyMap(rootModel.getCurrencies());
-                ConvertData.insertCityMap(rootModel.getCities());
-                ConvertData.insertRegionMap(rootModel.getRegions());
-                ConvertData.insertOrganization(rootModel.getOrganizations());
+                mLogger.d(TAG, "onSuccess");
+                ConvertData.convertRootModelForStoring(rootModel);
+                StoreData.saveData();
                 try {
                     Thread.sleep(2000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                List<OrganizationUI> list = ConvertData.getListOrganizationsUI();
+                List<OrganizationUI> list = StoreData.getListOrganizationsUI();
                 mLogger.d(TAG, "organization.getName()=" + list.get(0).getName());
                 mLogger.d(TAG, "list.get(0).getRegionName()=" + list.get(0).getRegionName());
                 mLogger.d(TAG, "list.get(0).getCityName()=" + list.get(0).getCityName());
@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onError(String message) {
-
+                mLogger.d(TAG, "message -- > "+  message);
             }
         });
     }

@@ -15,10 +15,13 @@ import com.shtainyky.converterlab.activities.models.modelRetrofit.org_type.OrgTy
 import com.shtainyky.converterlab.activities.models.modelRetrofit.region.RegionDeserializer;
 import com.shtainyky.converterlab.activities.models.modelRetrofit.region.RegionMap;
 
+import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.List;
 
+import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -54,16 +57,17 @@ public class HttpManager {
     }
 
 
-    public OkHttpClient getOkHttpClient() {
+    private OkHttpClient getOkHttpClient() {
         final HttpLoggingInterceptor loggingBODY = new HttpLoggingInterceptor();
         loggingBODY.setLevel(HttpLoggingInterceptor.Level.BODY);
 
         return new OkHttpClient.Builder()
                 .addInterceptor(loggingBODY)
+                .addInterceptor(new CustomInterceptor())
                 .build();
     }
 
-    public GsonBuilder getGsonBuilder() {
+    private GsonBuilder getGsonBuilder() {
         final Type typeRegion = new TypeToken<List<RegionMap>>() {
         }.getType();
         final Type typeCity = new TypeToken<List<CityMap>>() {
@@ -81,13 +85,13 @@ public class HttpManager {
     }
 
 
-    public GsonConverterFactory getGsonConverterFactory(GsonBuilder gsonBuilder) {
+    private GsonConverterFactory getGsonConverterFactory(GsonBuilder gsonBuilder) {
         final Gson gson = gsonBuilder.create();
 
         return GsonConverterFactory.create(gson);
     }
 
-    public Retrofit getRetrofit(OkHttpClient okHttpClient, GsonConverterFactory factory) {
+    private Retrofit getRetrofit(OkHttpClient okHttpClient, GsonConverterFactory factory) {
 
         return new Retrofit.Builder()
                 .baseUrl(BASE_URL)
@@ -120,6 +124,14 @@ public class HttpManager {
         void onSuccess(RootModel rootModel);
 
         void onError(String message);
+    }
+
+    private class CustomInterceptor implements Interceptor {
+        @Override
+        public okhttp3.Response intercept(Chain chain) throws IOException {
+            Request reques = chain.request().newBuilder().addHeader("blabal0", "agag").build();
+            return chain.proceed(reques);
+        }
     }
 
 }

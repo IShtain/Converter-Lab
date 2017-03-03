@@ -151,8 +151,36 @@ public class StoreData {
     }
 
     private static void insertCurrenciesForOrganization() {
-        List<TableCurrenciesList> tableCurrenciesLists = ConvertData.getTableCurrenciesLists();
-        saveAllCurrenciesList(tableCurrenciesLists);
+        List<TableCurrenciesList> newTableCurrenciesLists = ConvertData.getTableCurrenciesLists();
+        List<TableCurrenciesList> oldTableCurrenciesLists = SQLite.select()
+                .from(TableCurrenciesList.class)
+                .where()
+                .queryList();
+
+        mLogger.d(TAG, "oldTableCurrenciesLists.size() = " + oldTableCurrenciesLists.size());
+        if (oldTableCurrenciesLists.size() > 0) {
+            for (int i = 0; i < oldTableCurrenciesLists.size(); i++) {
+                for (int j = 0; j < newTableCurrenciesLists.size(); j++) {
+                    if (haveSameId(oldTableCurrenciesLists.get(i), newTableCurrenciesLists.get(j))) {
+                        double oldAsk = oldTableCurrenciesLists.get(i).getAsk();
+                        double newAsk = newTableCurrenciesLists.get(j).getAsk();
+                        double diffAsk = oldAsk - newAsk;
+                        newTableCurrenciesLists.get(j).setDiffAsk(diffAsk);
+
+                        double oldBid = oldTableCurrenciesLists.get(i).getBid();
+                        double newBid = newTableCurrenciesLists.get(j).getBid();
+                        double diffBid = oldBid - newBid;
+                        newTableCurrenciesLists.get(j).setDiffBid(diffBid);
+                        break;
+                    }
+                }
+            }
+        }
+        saveAllCurrenciesList(newTableCurrenciesLists);
+    }
+
+    private static boolean haveSameId(TableCurrenciesList firstCurrencyList, TableCurrenciesList secondCurrencyList) {
+        return firstCurrencyList.getId().equals(secondCurrencyList.getId());
     }
 
     private static void saveAllCurrenciesList(List<TableCurrenciesList> tableCurrenciesLists) {
@@ -176,6 +204,8 @@ public class StoreData {
                 }).build().execute();
     }
 
+    //************************************************************************************
+
     public static List<OrganizationUI> getListOrganizationsUI() {
         List<OrganizationUI> organizationUIList = new ArrayList<>();
         List<TableOrganization> organizationList = SQLite.select()
@@ -197,6 +227,7 @@ public class StoreData {
     }
 
     private static Map<String, OrganizationUI.CurrencyUI> getCurrenciesForID(String id) {
+
         List<TableCurrenciesList> tableCurrenciesLists = SQLite.select()
                 .from(TableCurrenciesList.class)
                 .where(TableCurrenciesList_Table.organizationId.is(id))
@@ -206,7 +237,9 @@ public class StoreData {
             TableCurrenciesList currenciesList = tableCurrenciesLists.get(i);
             OrganizationUI.CurrencyUI currencyUI = new OrganizationUI().new CurrencyUI();
             currencyUI.setAsk(currenciesList.getAsk());
+            currencyUI.setDiffAsk(currenciesList.getDiffAsk());
             currencyUI.setBid(currenciesList.getBid());
+            currencyUI.setDiffBid(currenciesList.getDiffBid());
             stringCurrencyUIMap.put(getCurrencyNameForID(currenciesList.getCurrencyId()), currencyUI);
         }
         return stringCurrencyUIMap;

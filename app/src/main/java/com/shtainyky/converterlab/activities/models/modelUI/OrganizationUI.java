@@ -14,7 +14,9 @@ public class OrganizationUI {
 
     public class CurrencyUI {
         private double ask;
+        private double diffAsk;
         private double bid;
+        private double diffBid;
 
         public double getAsk() {
             return ask;
@@ -30,6 +32,22 @@ public class OrganizationUI {
 
         public void setBid(double bid) {
             this.bid = bid;
+        }
+
+        public double getDiffAsk() {
+            return diffAsk;
+        }
+
+        public void setDiffAsk(double diffAsk) {
+            this.diffAsk = diffAsk;
+        }
+
+        public double getDiffBid() {
+            return diffBid;
+        }
+
+        public void setDiffBid(double diffBid) {
+            this.diffBid = diffBid;
         }
     }
 

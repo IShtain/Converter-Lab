@@ -27,10 +27,34 @@ public class TableCurrenciesList extends BaseModel {
 
     @Column
     private
+    double diffAsk;
+
+    @Column
+    private
     double bid;
+
+    @Column
+    private
+    double diffBid;
 
     public String getId() {
         return id;
+    }
+
+    public double getDiffAsk() {
+        return diffAsk;
+    }
+
+    public void setDiffAsk(double diffAsk) {
+        this.diffAsk = diffAsk;
+    }
+
+    public double getDiffBid() {
+        return diffBid;
+    }
+
+    public void setDiffBid(double diffBid) {
+        this.diffBid = diffBid;
     }
 
     public void setId(String id) {

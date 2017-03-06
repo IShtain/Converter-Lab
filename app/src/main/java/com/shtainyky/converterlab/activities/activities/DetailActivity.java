@@ -8,17 +8,28 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.shtainyky.converterlab.R;
+import com.shtainyky.converterlab.activities.models.modelUI.OrganizationUI;
 
-public class DetailActivity extends AppCompatActivity {
+import java.util.List;
+
+public class DetailActivity extends BaseActivity {
+
+    @Override
+    protected int getLayoutResId() {
+        return R.layout.activity_detail;
+    }
+
+    @Override
+    protected int getFragmentContainerResId() {
+        return 0;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detail);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
 
     }
-
 }

@@ -27,10 +27,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <include
-            android:id="@+id/include"
-            layout="@layout/content_detail"/>
+        <FrameLayout
+            android:id="@+id/fragment_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
+        </FrameLayout>
         <com.github.clans.fab.FloatingActionMenu
             android:id="@+id/floating_action_menu"
             android:layout_width="36dp"
@@ -40,7 +42,7 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:padding="10dp"
-            fab:layout_anchor="@+id/include"
+            fab:layout_anchor="@+id/fragment_container"
             fab:menu_animationDelayPerItem="55"
             fab:menu_backgroundColor="@android:color/transparent"
             fab:menu_buttonSpacing="0dp"

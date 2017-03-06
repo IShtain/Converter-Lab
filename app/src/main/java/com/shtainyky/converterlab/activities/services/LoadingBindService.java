@@ -39,14 +39,17 @@ public class LoadingBindService extends Service {
             @Override
             public void onSuccess(RootModel rootModel) {
                 mLogger.d(TAG, "onSuccess");
-                ConvertData.convertRootModelForStoring(rootModel);
-                StoreData.saveData();
-                try {
-                    Thread.sleep(2000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                String oldDate = StoreData.getDate();
+                if (rootModel.getDate().equals(oldDate)) {
+                    ConvertData.convertDate(rootModel.getDate());
+                    StoreData.insertDate();
+                    mLogger.d(TAG, "oldDate -- > " + oldDate);
+                } else {
+                    ConvertData.convertRootModelForStoring(rootModel);
+                    StoreData.saveData();
+                    mLogger.d(TAG, "NEW DATE rootModel.getDate() -- > " + rootModel.getDate());
                 }
-                Toast.makeText(LoadingBindService.this, "yes, i'm getting response", Toast.LENGTH_SHORT).show();
+                sendMessage();
             }
 
             @Override
@@ -54,7 +57,7 @@ public class LoadingBindService extends Service {
                 mLogger.d(TAG, "message -- > " + message);
             }
         });
-        sendMessage();
+
 
     }
 

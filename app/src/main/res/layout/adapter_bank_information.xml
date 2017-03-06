@@ -77,6 +77,7 @@
             android:orientation="horizontal">
 
             <ImageButton
+                android:id="@+id/ibLink"
                 android:layout_width="0dp"
                 android:layout_height="?attr/actionBarSize"
                 android:contentDescription="@string/link"
@@ -85,6 +86,7 @@
                 android:src="@drawable/ic_action_link"/>
 
             <ImageButton
+                android:id="@+id/ibMap"
                 android:layout_width="0dp"
                 android:layout_height="?attr/actionBarSize"
                 android:contentDescription="@string/link"
@@ -94,6 +96,7 @@
                 />
 
             <ImageButton
+                android:id="@+id/ibPhone"
                 android:layout_width="0dp"
                 android:layout_height="?attr/actionBarSize"
                 android:contentDescription="@string/link"
@@ -101,6 +104,7 @@
                 android:background="@android:color/transparent"
                 android:src="@drawable/ic_action_phone"/>
             <ImageButton
+                android:id="@+id/ibDetail"
                 android:layout_width="0dp"
                 android:layout_height="?attr/actionBarSize"
                 android:contentDescription="@string/link"

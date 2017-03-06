@@ -6,10 +6,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.os.Handler;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.os.Message;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.shtainyky.converterlab.R;
 import com.shtainyky.converterlab.activities.db.storedata.StoreData;
@@ -19,11 +25,12 @@ import com.shtainyky.converterlab.activities.services.LoadingBindService;
 
 import java.util.List;
 
-import butterknife.BindView;
+
 import butterknife.ButterKnife;
 
 public class MainActivity extends BaseActivity {
     private static final String TAG = "MainActivity";
+    private ProgressBar mProgressBar;
     private LoadingBindService mService;
     private boolean mBound = false;
     private boolean mIsLoaded;
@@ -42,12 +49,9 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Toolbar toolbar = ButterKnife.findById(this, R.id.toolbar);
+        mProgressBar = ButterKnife.findById(this, R.id.progress);
         setSupportActionBar(toolbar);
 
-        if (savedInstanceState == null) {
-            OrganizationsFragment organizationFragment = new OrganizationsFragment();
-            addFragment(organizationFragment);
-        }
         logger.d(TAG, "onCreate**********************************************");
     }
 
@@ -100,6 +104,7 @@ public class MainActivity extends BaseActivity {
                                        IBinder service) {
             // We've bound to LocalService, cast the IBinder and get LocalService instance
             LoadingBindService.MyBinder binder = (LoadingBindService.MyBinder) service;
+            mBound = true;
             mService = binder.getService();
         }
 
@@ -114,18 +119,23 @@ public class MainActivity extends BaseActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             mIsLoaded = true;
+            addFragment(OrganizationsFragment.newInstance());
+            mProgressBar.setVisibility(View.GONE);
         }
     };
 
+
     public List<OrganizationUI> getOrganizations() {
-        logger.d(TAG, "getOrganizationDataFromDB");
-        if (!mIsLoaded)
-            try {
-                Thread.sleep(3000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+        logger.d(TAG, "getOrganizations");
         return StoreData.getListOrganizationsUI();
+    }
+
+    public void refreshDatabase() {
+        logger.d(TAG, "refreshDatabase");
+        if (mBound) {
+            mService.loadAndSaveData();
+            logger.d(TAG, "loadAndSaveData");
+        }
     }
 
 }

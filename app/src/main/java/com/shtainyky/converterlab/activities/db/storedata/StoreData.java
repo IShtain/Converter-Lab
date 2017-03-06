@@ -12,6 +12,8 @@ import com.shtainyky.converterlab.activities.db.storeModel.TableCurrenciesList;
 import com.shtainyky.converterlab.activities.db.storeModel.TableCurrenciesList_Table;
 import com.shtainyky.converterlab.activities.db.storeModel.TableCurrencyMap;
 import com.shtainyky.converterlab.activities.db.storeModel.TableCurrencyMap_Table;
+import com.shtainyky.converterlab.activities.db.storeModel.TableDate;
+import com.shtainyky.converterlab.activities.db.storeModel.TableDate_Table;
 import com.shtainyky.converterlab.activities.db.storeModel.TableOrganization;
 import com.shtainyky.converterlab.activities.db.storeModel.TableRegionMap;
 import com.shtainyky.converterlab.activities.db.storeModel.TableRegionMap_Table;
@@ -31,10 +33,26 @@ public class StoreData {
     private static String TAG = "StoreData";
 
     public static void saveData() {
+        insertDate();
         insertCurrencyMap();
         insertCityMap();
         insertRegionMap();
         insertOrganization();
+    }
+
+    public static void insertDate() {
+        TableDate tableDate = ConvertData.getTableDate();
+        tableDate.save();
+    }
+
+    public static String getDate() {
+        List<TableDate> dates = SQLite.select()
+                .from(TableDate.class)
+                .where(TableDate_Table.id.is("date"))
+                .queryList();
+        if (dates.size() > 0)
+            return dates.get(0).getDate();
+        return "no date";
     }
 
     private static void insertCurrencyMap() {

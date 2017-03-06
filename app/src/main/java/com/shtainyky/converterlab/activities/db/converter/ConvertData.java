@@ -3,6 +3,7 @@ package com.shtainyky.converterlab.activities.db.converter;
 import com.shtainyky.converterlab.activities.db.storeModel.TableCityMap;
 import com.shtainyky.converterlab.activities.db.storeModel.TableCurrenciesList;
 import com.shtainyky.converterlab.activities.db.storeModel.TableCurrencyMap;
+import com.shtainyky.converterlab.activities.db.storeModel.TableDate;
 import com.shtainyky.converterlab.activities.db.storeModel.TableOrganization;
 import com.shtainyky.converterlab.activities.db.storeModel.TableRegionMap;
 import com.shtainyky.converterlab.activities.logger.LogManager;
@@ -26,14 +27,22 @@ public class ConvertData {
     private static List<TableRegionMap> tableRegionMapList = new ArrayList<>();
     private static List<TableOrganization> tableOrganizationList = new ArrayList<>();
     private static List<TableCurrenciesList> tableCurrenciesLists = new ArrayList<>();
+    private static TableDate tableDate = new TableDate();
+
     private static Validator mValidator = new Validator();
 
     public static void convertRootModelForStoring(RootModel rootModel) {
         mLogger.d(TAG, "convertRootModelForStoring");
+        convertDate(rootModel.getDate());
         convertCurrencies(rootModel.getCurrencies());
         convertCities(rootModel.getCities());
         convertRegions(rootModel.getRegions());
         convertOrganizations(rootModel.getOrganizations());
+    }
+
+    public static void convertDate(String date) {
+        tableDate.setId("date");
+        tableDate.setDate(date);
     }
 
     private static void convertCurrencies(List<CurrencyMap> currencyMapList) {
@@ -115,5 +124,9 @@ public class ConvertData {
 
     public static List<TableCurrenciesList> getTableCurrenciesLists() {
         return tableCurrenciesLists;
+    }
+
+    public static TableDate getTableDate() {
+        return tableDate;
     }
 }

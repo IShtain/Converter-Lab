@@ -35,6 +35,7 @@ import com.shtainyky.converterlab.activities.models.modelUI.OrganizationUI;
 import com.shtainyky.converterlab.activities.services.LoadingBindService;
 import com.shtainyky.converterlab.activities.util.Constants;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -52,6 +53,7 @@ public class OrganizationsFragment extends BaseFragment<MainActivity> implements
     private LoadingBindService mService;
     private boolean mBound = false;
     private OnOrganizationClickListener mOrganizationClickListener;
+    private OrganizationsRecyclerViewAdapter mAdapter;
 
     public static OrganizationsFragment newInstance() {
         Bundle args = new Bundle();
@@ -163,14 +165,29 @@ public class OrganizationsFragment extends BaseFragment<MainActivity> implements
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        return false;
+        String gotText = newText.toLowerCase();
+        List<OrganizationUI> organizationUIs = getOrganizations();
+        List<OrganizationUI> filteredOrganizationUIs = new ArrayList<>();
+        for (int i = 0; i < organizationUIs.size(); i++) {
+            String title = organizationUIs.get(i).getName().toLowerCase();
+            String region = organizationUIs.get(i).getRegionName().toLowerCase();
+            String city = organizationUIs.get(i).getCityName().toLowerCase();
+
+            if (title.contains(gotText))
+                filteredOrganizationUIs.add(organizationUIs.get(i));
+            else if (region.contains(gotText))
+                filteredOrganizationUIs.add(organizationUIs.get(i));
+            else if (city.contains(gotText))
+                filteredOrganizationUIs.add(organizationUIs.get(i));
+        }
+        mAdapter.update(filteredOrganizationUIs);
+        return true;
     }
 
     private ServiceConnection mConnection = new ServiceConnection() {
 
         @Override
-        public void onServiceConnected(ComponentName className,
-                                       IBinder service) {
+        public void onServiceConnected(ComponentName className, IBinder service) {
             // We've bound to LocalService, cast the IBinder and get LocalService instance
             LoadingBindService.MyBinder binder = (LoadingBindService.MyBinder) service;
             mBound = true;
@@ -211,9 +228,9 @@ public class OrganizationsFragment extends BaseFragment<MainActivity> implements
     private void setupAdapter() {
         organizationsRecyclerView.setLayoutManager(new LinearLayoutManager
                 (getActivity()));
-        OrganizationsRecyclerViewAdapter adapter = new OrganizationsRecyclerViewAdapter(getOrganizations());
-        adapter.setOnItemClickListener(this);
-        organizationsRecyclerView.setAdapter(adapter);
+        mAdapter = new OrganizationsRecyclerViewAdapter(getOrganizations());
+        mAdapter.setOnItemClickListener(this);
+        organizationsRecyclerView.setAdapter(mAdapter);
     }
 
     public List<OrganizationUI> getOrganizations() {

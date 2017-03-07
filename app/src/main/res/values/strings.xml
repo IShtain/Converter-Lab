@@ -19,5 +19,6 @@
     <string name="link">Link</string>
     <string name="no_internet_connection">No internet connection</string>
     <string name="no_data">Нет данных</string>
+    <string name="data_update">Данные обновлены</string>
 
 </resources>

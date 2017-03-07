@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.Map;
 
-public class Organization {
+public class OrganizationUI {
     @SerializedName("id")
     private String id;
 

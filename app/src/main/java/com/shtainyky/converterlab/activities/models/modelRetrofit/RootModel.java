@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName;
 import com.shtainyky.converterlab.activities.models.modelRetrofit.city.CityMap;
 import com.shtainyky.converterlab.activities.models.modelRetrofit.currency.CurrencyMap;
 import com.shtainyky.converterlab.activities.models.modelRetrofit.org_type.OrgTypeMap;
-import com.shtainyky.converterlab.activities.models.modelRetrofit.organization.Organization;
+import com.shtainyky.converterlab.activities.models.modelRetrofit.organization.OrganizationUI;
 import com.shtainyky.converterlab.activities.models.modelRetrofit.region.RegionMap;
 
 import java.util.List;
@@ -19,7 +19,7 @@ public class RootModel {
 
     @SerializedName("organizations")
     private
-    List<Organization> organizations;
+    List<OrganizationUI> organizations;
 
     @SerializedName("orgTypes")
     private
@@ -45,7 +45,7 @@ public class RootModel {
         return sourceId;
     }
 
-    public List<Organization> getOrganizations() {
+    public List<OrganizationUI> getOrganizations() {
         return organizations;
     }
 

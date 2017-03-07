@@ -20,6 +20,7 @@ import com.shtainyky.converterlab.activities.db.storeModel.TableRegionMap_Table;
 import com.shtainyky.converterlab.activities.logger.LogManager;
 import com.shtainyky.converterlab.activities.logger.Logger;
 import com.shtainyky.converterlab.activities.models.modelUI.OrganizationUI;
+import com.shtainyky.converterlab.activities.util.Constants;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -52,7 +53,7 @@ public class StoreData {
                 .queryList();
         if (dates.size() > 0)
             return dates.get(0).getDate();
-        return "no date";
+        return Constants.DATABASE_NOT_CREATED;
     }
 
     private static void insertCurrencyMap() {

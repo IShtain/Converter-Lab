@@ -13,6 +13,8 @@ import com.shtainyky.converterlab.activities.logger.LogManager;
 import com.shtainyky.converterlab.activities.logger.Logger;
 import com.shtainyky.converterlab.activities.models.modelRetrofit.RootModel;
 import com.shtainyky.converterlab.activities.services.serverconection.HttpManager;
+import com.shtainyky.converterlab.activities.util.Constants;
+import com.shtainyky.converterlab.activities.util.Util;
 
 public class LoadingBindService extends Service {
     private static final String TAG = "LoadingBindService";
@@ -34,29 +36,42 @@ public class LoadingBindService extends Service {
     }
 
     public void loadAndSaveData() {
-        HttpManager.getInstance().init();
-        HttpManager.getInstance().getResponse(new HttpManager.OnResponseListener() {
-            @Override
-            public void onSuccess(RootModel rootModel) {
-                mLogger.d(TAG, "onSuccess");
-                String oldDate = StoreData.getDate();
-                if (rootModel.getDate().equals(oldDate)) {
-                    ConvertData.convertDate(rootModel.getDate());
-                    StoreData.insertDate();
-                    mLogger.d(TAG, "oldDate -- > " + oldDate);
-                } else {
-                    ConvertData.convertRootModelForStoring(rootModel);
-                    StoreData.saveData();
-                    mLogger.d(TAG, "NEW DATE rootModel.getDate() -- > " + rootModel.getDate());
+        final String oldDate = StoreData.getDate();
+        if (Util.isOnline(getApplicationContext())) {
+            HttpManager.getInstance().init();
+            HttpManager.getInstance().getResponse(new HttpManager.OnResponseListener() {
+                @Override
+                public void onSuccess(RootModel rootModel) {
+                    mLogger.d(TAG, "onSuccess");
+                    if (rootModel.getDate().equals(oldDate)) {
+                        ConvertData.convertDate(rootModel.getDate());
+                        StoreData.insertDate();
+                        mLogger.d(TAG, "oldDate -- > " + oldDate);
+                    } else {
+                        ConvertData.convertRootModelForStoring(rootModel);
+                        StoreData.saveData();
+                        mLogger.d(TAG, "NEW DATE rootModel.getDate() -- > " + rootModel.getDate());
+                    }
+                    sendMessage(Constants.SERVICE_USER_HAS_INTERNET);
                 }
-                sendMessage();
-            }
+                @Override
+                public void onError(String message) {
+                    if (oldDate.equals(Constants.DATABASE_NOT_CREATED))
+                        sendMessage(Constants.SERVICE_USER_HAS_NOT_CREATED_DB_AND_INTERNET);
+                    else
+                        sendMessage(Constants.SERVICE_USER_HAS_NOT_INTERNET);
+                    mLogger.d(TAG, "message -- > " + message);
+                }
+            });
+        }
+        else
+        {
+            if (oldDate.equals(Constants.DATABASE_NOT_CREATED))
+                sendMessage(Constants.SERVICE_USER_HAS_NOT_CREATED_DB_AND_INTERNET);
+            else
+                sendMessage(Constants.SERVICE_USER_HAS_NOT_INTERNET);
 
-            @Override
-            public void onError(String message) {
-                mLogger.d(TAG, "message -- > " + message);
-            }
-        });
+        }
 
 
     }
@@ -67,9 +82,10 @@ public class LoadingBindService extends Service {
         }
     }
 
-    private void sendMessage() {
+    private void sendMessage(String message) {
         mLogger.d(TAG, "sendMessage");
-        Intent intent = new Intent("custom-event-name");
+        Intent intent = new Intent(Constants.LOCAL_BROADCAST_EVENT_NAME);
+        intent.putExtra(Constants.SERVICE_MESSAGE, message);
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 }

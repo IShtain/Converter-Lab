@@ -11,7 +11,7 @@ import com.shtainyky.converterlab.activities.logger.Logger;
 import com.shtainyky.converterlab.activities.models.modelRetrofit.RootModel;
 import com.shtainyky.converterlab.activities.models.modelRetrofit.city.CityMap;
 import com.shtainyky.converterlab.activities.models.modelRetrofit.currency.CurrencyMap;
-import com.shtainyky.converterlab.activities.models.modelRetrofit.organization.Organization;
+import com.shtainyky.converterlab.activities.models.modelRetrofit.organization.OrganizationUI;
 import com.shtainyky.converterlab.activities.models.modelRetrofit.region.RegionMap;
 
 import java.util.ArrayList;
@@ -75,10 +75,10 @@ public class ConvertData {
         }
     }
 
-    private static void convertOrganizations(List<Organization> organizations) {
+    private static void convertOrganizations(List<OrganizationUI> organizations) {
         for (int i = 0; i < organizations.size(); i++) {
-            Organization organization = mValidator.validateOrganization(organizations.get(i));
-            Map<String, Organization.Currency> organizationCurrenciesList = organization.getCurrencies();
+            OrganizationUI organization = mValidator.validateOrganization(organizations.get(i));
+            Map<String, OrganizationUI.Currency> organizationCurrenciesList = organization.getCurrencies();
             TableOrganization tableOrganization = new TableOrganization();
             tableOrganization.setId(organization.getId());
             tableOrganization.setName(organization.getTitle());
@@ -94,7 +94,7 @@ public class ConvertData {
     }
 
     private static void convertListCurrenciesForOrganization(String organizationId,
-                                                             Map<String, Organization.Currency> currencies) {
+                                                             Map<String, OrganizationUI.Currency> currencies) {
         for (String key : currencies.keySet()) {
             TableCurrenciesList currenciesList = new TableCurrenciesList();
             currenciesList.setId(organizationId + key);

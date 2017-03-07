@@ -1,16 +1,12 @@
 package com.shtainyky.converterlab.activities.adapter;
 
 
-import android.content.Intent;
-import android.net.Uri;
-import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.shtainyky.converterlab.R;
 import com.shtainyky.converterlab.activities.models.modelUI.OrganizationUI;
@@ -22,9 +18,14 @@ import butterknife.ButterKnife;
 public class OrganizationsRecyclerViewAdapter extends RecyclerView.Adapter<OrganizationsRecyclerViewAdapter.OrganizationsRecyclerViewHolder> {
     private List<OrganizationUI> mOrganizationUIList;
 
+    private OnItemClickListener mOnItemClickListener;
 
-    public OrganizationsRecyclerViewAdapter(List<OrganizationUI> organizationUIList) {
+    public OrganizationsRecyclerViewAdapter(List<com.shtainyky.converterlab.activities.models.modelUI.OrganizationUI> organizationUIList) {
         mOrganizationUIList = organizationUIList;
+    }
+
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        mOnItemClickListener = onItemClickListener;
     }
 
     @Override
@@ -36,7 +37,8 @@ public class OrganizationsRecyclerViewAdapter extends RecyclerView.Adapter<Organ
 
     @Override
     public void onBindViewHolder(OrganizationsRecyclerViewHolder holder, int position) {
-        holder.bindOrganization(mOrganizationUIList.get(position));
+        holder.bindOrganization(mOrganizationUIList.get(position), mOnItemClickListener);
+
     }
 
     @Override
@@ -58,6 +60,8 @@ public class OrganizationsRecyclerViewAdapter extends RecyclerView.Adapter<Organ
         ImageButton ibPhone;
         ImageButton ibDetail;
 
+        OnItemClickListener mOnItemClickListener;
+
         OrganizationsRecyclerViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
@@ -77,48 +81,49 @@ public class OrganizationsRecyclerViewAdapter extends RecyclerView.Adapter<Organ
             ibDetail.setOnClickListener(this);
         }
 
-        void bindOrganization(OrganizationUI organizationUI) {
+        void bindOrganization(OrganizationUI organizationUI, OnItemClickListener onItemClickListener) {
             mOrganizationUI = organizationUI;
             tvBankName.setText(organizationUI.getName());
             tvRegionName.setText(organizationUI.getRegionName());
             tvCityName.setText(organizationUI.getCityName());
             tvPhone.setText(itemView.getContext().getResources().getString(R.string.bank_phone, organizationUI.getPhone()));
             tvAddress.setText(itemView.getContext().getResources().getString(R.string.bank_address, organizationUI.getAddress()));
-
+            mOnItemClickListener = onItemClickListener;
         }
-
 
         @Override
         public void onClick(View v) {
-            Intent intent;
             switch (v.getId()) {
                 case R.id.ibLink:
-                    intent = new Intent(Intent.ACTION_VIEW, Uri.parse(mOrganizationUI.getLink()));
-                    v.getContext().startActivity(intent);
+                    if (mOnItemClickListener != null)
+                        mOnItemClickListener.onLinkClick(mOrganizationUI);
                     break;
                 case R.id.ibMap:
-                    Toast.makeText(itemView.getContext(), "ibMap", Toast.LENGTH_LONG).show();
+                    if (mOnItemClickListener != null)
+                        mOnItemClickListener.onMapClick(mOrganizationUI);
                     break;
                 case R.id.ibPhone:
-                    intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + mOrganizationUI.getPhone()));
-                    v.getContext().startActivity(intent);
+                    if (mOnItemClickListener != null)
+                        mOnItemClickListener.onCallClick(mOrganizationUI);
                     break;
                 case R.id.ibDetail:
-                    onDetailClickListener(mOrganizationUI);
+                    if (mOnItemClickListener != null)
+                        mOnItemClickListener.onDetailClick(mOrganizationUI);
                     break;
             }
-
         }
-
-        @NonNull
-        private View.OnClickListener onDetailClickListener(final OrganizationUI organizationUI) {
-            return new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Toast.makeText(v.getContext(), "onDetailClickListener", Toast.LENGTH_SHORT).show();
-                }
-            };
-        }
-
     }
+
+    public interface OnItemClickListener {
+
+        void onCallClick(OrganizationUI organization);
+
+        void onMapClick(OrganizationUI organization);
+
+        void onLinkClick(OrganizationUI organization);
+
+        void onDetailClick(OrganizationUI organization);
+    }
+
+
 }

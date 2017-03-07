@@ -57,6 +57,7 @@ public class LoadingBindService extends Service {
                     }
                     sendMessage(Constants.SERVICE_USER_HAS_INTERNET);
                 }
+
                 @Override
                 public void onError(String message) {
                     if (oldDate.equals(Constants.DATABASE_NOT_CREATED))
@@ -66,9 +67,7 @@ public class LoadingBindService extends Service {
                     mLogger.d(TAG, "message -- > " + message);
                 }
             });
-        }
-        else
-        {
+        } else {
             if (oldDate.equals(Constants.DATABASE_NOT_CREATED))
                 sendMessage(Constants.SERVICE_USER_HAS_NOT_CREATED_DB_AND_INTERNET);
             else

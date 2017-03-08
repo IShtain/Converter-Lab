@@ -4,6 +4,7 @@ package com.shtainyky.converterlab.activities.models.modelUI;
 import java.util.Map;
 
 public class OrganizationUI {
+    private String id;
     private String name;
     private String phone;
     private String address;
@@ -49,6 +50,14 @@ public class OrganizationUI {
         public void setDiffBid(double diffBid) {
             this.diffBid = diffBid;
         }
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getName() {

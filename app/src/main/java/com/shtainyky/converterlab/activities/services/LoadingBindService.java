@@ -1,9 +1,13 @@
 package com.shtainyky.converterlab.activities.services;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
+import android.os.SystemClock;
 import android.support.v4.content.LocalBroadcastManager;
 import android.widget.Toast;
 
@@ -23,21 +27,58 @@ public class LoadingBindService extends Service {
     private Logger mLogger = LogManager.getLogger();
     private final IBinder mBinder = new MyBinder();
 
+    private static final int DOWNLOAD_INTERVAL = 1000 * 60; // 60 second
+
     public LoadingBindService() {
+    }
+
+    public void setServiceAlarm(Context context, boolean isOn, int minutes) {
+        mLogger.d(TAG, "setServiceAlarm isOn -- > " + isOn);
+        Intent i = new Intent(context, LoadingBindService.class);
+        PendingIntent pi = PendingIntent.getService(context, 0, i, 0);
+        AlarmManager alarmManager = (AlarmManager)
+                context.getSystemService(Context.ALARM_SERVICE);
+        if (isOn) {
+            alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME,
+                    SystemClock.elapsedRealtime(), 2 * AlarmManager.INTERVAL_FIFTEEN_MINUTES, pi);
+        } else {
+            alarmManager.cancel(pi);
+            pi.cancel();
+        }
+
+    }
+
+    public boolean isServiceAlarmOn(Context context) {
+        mLogger.d(TAG, "isServiceAlarmOn isOn -- > ");
+        Intent i = new Intent(context, LoadingBindService.class);
+        PendingIntent pi = PendingIntent
+                .getService(context, 0, i, PendingIntent.FLAG_NO_CREATE);
+        return pi != null;
     }
 
     @Override
     public void onCreate() {
+        mLogger.d(TAG, "onCreate");
         super.onCreate();
-        loadAndSaveData();
+        loadAndSaveData(true);
     }
 
     @Override
     public IBinder onBind(Intent intent) {
+
         return mBinder;
     }
 
-    public void loadAndSaveData() {
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        mLogger.d(TAG, "onStartCommand");
+        loadAndSaveData(false);
+        stopSelf();
+        return START_NOT_STICKY;
+    }
+
+
+    public void loadAndSaveData(final boolean hasLocalListener) {
         final String oldDate = StoreData.getDate();
         if (Util.isOnline(getApplicationContext())) {
             HttpManager.getInstance().init();
@@ -55,15 +96,17 @@ public class LoadingBindService extends Service {
                         NotificationAboutLoading.sendNotification(getApplicationContext(), getString(R.string.data_update), 0);
                         mLogger.d(TAG, "NEW DATE rootModel.getDate() -- > " + rootModel.getDate());
                     }
-                    sendMessage(Constants.SERVICE_USER_HAS_INTERNET);
+                    if (hasLocalListener)
+                        sendMessage(Constants.SERVICE_USER_HAS_INTERNET);
                 }
 
                 @Override
                 public void onError(String message) {
-                    if (oldDate.equals(Constants.DATABASE_NOT_CREATED))
-                        sendMessage(Constants.SERVICE_USER_HAS_NOT_CREATED_DB_AND_INTERNET);
-                    else
-                        sendMessage(Constants.SERVICE_USER_HAS_NOT_INTERNET);
+                    if (hasLocalListener)
+                        if (oldDate.equals(Constants.DATABASE_NOT_CREATED))
+                            sendMessage(Constants.SERVICE_USER_HAS_NOT_CREATED_DB_AND_INTERNET);
+                        else
+                            sendMessage(Constants.SERVICE_USER_HAS_NOT_INTERNET);
                     mLogger.d(TAG, "message -- > " + message);
                 }
             });
@@ -72,10 +115,7 @@ public class LoadingBindService extends Service {
                 sendMessage(Constants.SERVICE_USER_HAS_NOT_CREATED_DB_AND_INTERNET);
             else
                 sendMessage(Constants.SERVICE_USER_HAS_NOT_INTERNET);
-
         }
-
-
     }
 
     public class MyBinder extends Binder {

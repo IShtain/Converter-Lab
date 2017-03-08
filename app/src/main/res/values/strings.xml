@@ -4,7 +4,7 @@
     <string name="bank_name">Name</string>
     <string name="bank_region">Region</string>
     <string name="bank_city">City</string>
-    <string name="bank_phone" formatted="false">Тел. %s:</string>
+    <string name="bank_phone" formatted="false">Тел.: %s</string>
     <string name="bank_address" formatted="false">Адресс: %s</string>
     <string name="menu_link">Link</string>
     <string name="menu_map">Map</string>
@@ -20,5 +20,9 @@
     <string name="no_internet_connection">No internet connection</string>
     <string name="no_data">Нет данных</string>
     <string name="data_update">Данные обновлены</string>
+    <string name="currencies_names">Название валюты</string>
+    <string name="sales_purchase">Покупка/ \n Продажа</string>
+    <string name="ask">ask</string>
+    <string name="action_share">Поделиться</string>
 
 </resources>

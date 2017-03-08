@@ -15,6 +15,7 @@ import com.shtainyky.converterlab.activities.db.storeModel.TableCurrencyMap_Tabl
 import com.shtainyky.converterlab.activities.db.storeModel.TableDate;
 import com.shtainyky.converterlab.activities.db.storeModel.TableDate_Table;
 import com.shtainyky.converterlab.activities.db.storeModel.TableOrganization;
+import com.shtainyky.converterlab.activities.db.storeModel.TableOrganization_Table;
 import com.shtainyky.converterlab.activities.db.storeModel.TableRegionMap;
 import com.shtainyky.converterlab.activities.db.storeModel.TableRegionMap_Table;
 import com.shtainyky.converterlab.activities.logger.LogManager;
@@ -233,6 +234,7 @@ public class StoreData {
         for (int i = 0; i < organizationList.size(); i++) {
             TableOrganization organization = organizationList.get(i);
             OrganizationUI organizationUI = new OrganizationUI();
+            organizationUI.setId(organization.getId());
             organizationUI.setName(organization.getName());
             organizationUI.setPhone(organization.getPhone());
             organizationUI.setAddress(organization.getAddress());
@@ -243,6 +245,25 @@ public class StoreData {
             organizationUIList.add(organizationUI);
         }
         return organizationUIList;
+    }
+
+    public static OrganizationUI getOrganizationForID(String id) {
+        List<TableOrganization> organizationList = SQLite.select()
+                .from(TableOrganization.class)
+                .where(TableOrganization_Table.id.in(id))
+                .queryList();
+        if (organizationList.size() <= 0) return null;
+        TableOrganization organization = organizationList.get(0);
+        OrganizationUI organizationUI = new OrganizationUI();
+        organizationUI.setId(organization.getId());
+        organizationUI.setName(organization.getName());
+        organizationUI.setPhone(organization.getPhone());
+        organizationUI.setAddress(organization.getAddress());
+        organizationUI.setLink(organization.getLink());
+        organizationUI.setCityName(getCityNameForID(organization.getCityId()));
+        organizationUI.setRegionName(getRegionNameForID(organization.getRegionId()));
+        organizationUI.setCurrencies(getCurrenciesForID(organization.getId()));
+        return organizationUI;
     }
 
     private static Map<String, OrganizationUI.CurrencyUI> getCurrenciesForID(String id) {

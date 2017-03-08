@@ -41,7 +41,7 @@ import java.util.List;
 import butterknife.ButterKnife;
 
 public class OrganizationsFragment extends BaseFragment<MainActivity> implements SearchView.OnQueryTextListener,
-        OrganizationsRecyclerViewAdapter.OnItemClickListener {
+        OnItemClickListener {
     public static final String TAG = "OrganizationsFragment";
     private RecyclerView organizationsRecyclerView;
     private RelativeLayout relativeLayout;
@@ -114,7 +114,7 @@ public class OrganizationsFragment extends BaseFragment<MainActivity> implements
     public void refreshDatabase() {
         logger.d(TAG, "refreshDatabase");
         if (mBound) {
-            mService.loadAndSaveData();
+            mService.loadAndSaveData(true);
             refreshLayout.setRefreshing(false);
             logger.d(TAG, "loadAndSaveData");
         }
@@ -209,21 +209,42 @@ public class OrganizationsFragment extends BaseFragment<MainActivity> implements
                 case Constants.SERVICE_USER_HAS_INTERNET:
                     textView.setVisibility(View.GONE);
                     setupAdapter();
+                    cancelPreviousAlarmManger();
+                    startAlamManager(5);
                     break;
                 case Constants.SERVICE_USER_HAS_NOT_INTERNET:
                     textView.setVisibility(View.GONE);
                     setupAdapter();
                     Snackbar.make(relativeLayout, R.string.no_internet_connection, Snackbar.LENGTH_LONG).show();
+                    cancelPreviousAlarmManger();
+                    startAlamManager(1);
                     break;
                 case Constants.SERVICE_USER_HAS_NOT_CREATED_DB_AND_INTERNET:
                     textView.setVisibility(View.VISIBLE);
                     textView.setText(R.string.no_data);
                     Snackbar.make(relativeLayout, R.string.no_internet_connection, Snackbar.LENGTH_LONG).show();
+                    cancelPreviousAlarmManger();
+                    startAlamManager(1);
                     break;
             }
             progressBar.setVisibility(View.GONE);
         }
     };
+
+    private void startAlamManager(int intervalMinutes) {
+        if (mBound) {
+            mService.setServiceAlarm(getContext(), true, intervalMinutes);
+        }
+    }
+
+    private void cancelPreviousAlarmManger() {
+        if (mBound) {
+            boolean isOn = mService.isServiceAlarmOn(getContext());
+            if (isOn)
+                mService.setServiceAlarm(getContext(), false, 1);
+
+        }
+    }
 
     private void setupAdapter() {
         organizationsRecyclerView.setLayoutManager(new LinearLayoutManager
@@ -246,7 +267,8 @@ public class OrganizationsFragment extends BaseFragment<MainActivity> implements
 
     @Override
     public void onMapClick(OrganizationUI organization) {
-        mOrganizationClickListener.onMapClick(organization.getAddress());
+        String address = organization.getAddress() + " " + organization.getCityName() + " " + organization.getRegionName();
+        mOrganizationClickListener.onMapClick(address);
     }
 
     @Override
@@ -256,18 +278,7 @@ public class OrganizationsFragment extends BaseFragment<MainActivity> implements
 
     @Override
     public void onDetailClick(OrganizationUI organization) {
-        mOrganizationClickListener.onDetailClick(organization);
+        mOrganizationClickListener.onDetailClick(organization.getId());
     }
 
-    public interface OnOrganizationClickListener {
-
-        void onCallClick(String organizationPhone);
-
-        void onMapClick(String organizationAddress);
-
-        void onLinkClick(String organizationLink);
-
-        void onDetailClick(OrganizationUI organization);
-
-    }
 }

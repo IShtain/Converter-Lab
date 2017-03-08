@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:background="@color/cardview_dark_background"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    card_view:cardCornerRadius="4dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp">
+
+
+        <TextView
+            android:id="@+id/tvCurrenciesNames"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerHorizontal="true"
+            android:layout_centerInParent="true"
+            android:layout_marginStart="5dp"
+            android:layout_toLeftOf="@+id/tvAsk"
+            android:text="@string/currencies_names"
+            android:textSize="@dimen/text_size_medium"/>
+
+        <ImageButton
+            android:id="@+id/ibAsk"
+            android:layout_width="13dp"
+            android:layout_height="13dp"
+            android:layout_marginStart="5dp"
+            android:layout_toLeftOf="@+id/tvAsk"
+            android:background="@color/colorAccent"
+            android:contentDescription="@string/ask"/>
+
+        <TextView
+            android:id="@+id/tvAsk"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginStart="5dp"
+            android:text="@string/fab_link"
+            android:textSize="@dimen/text_size_small"/>
+
+        <ImageButton
+            android:id="@+id/ibBid"
+            android:layout_width="13dp"
+            android:layout_height="13dp"
+            android:layout_below="@+id/ibAsk"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_toLeftOf="@+id/tvBid"
+            android:background="@color/colorAccent"
+            android:contentDescription="@string/ask"/>
+
+        <TextView
+            android:id="@+id/tvBid"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/tvAsk"
+            android:layout_marginStart="5dp"
+            android:text="@string/fab_link"
+            android:textSize="@dimen/text_size_small"/>
+    </RelativeLayout>
+
+
+</android.support.v7.widget.CardView>

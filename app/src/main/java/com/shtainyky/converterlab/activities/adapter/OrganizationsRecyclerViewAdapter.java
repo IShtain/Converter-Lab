@@ -9,6 +9,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.shtainyky.converterlab.R;
+import com.shtainyky.converterlab.activities.fragments.OnItemClickListener;
 import com.shtainyky.converterlab.activities.models.modelUI.OrganizationUI;
 
 import java.util.List;
@@ -37,7 +38,7 @@ public class OrganizationsRecyclerViewAdapter extends RecyclerView.Adapter<Organ
     @Override
     public OrganizationsRecyclerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-        View view = layoutInflater.inflate(R.layout.adapter_bank_information, parent, false);
+        View view = layoutInflater.inflate(R.layout.adapter_organization_information, parent, false);
         return new OrganizationsRecyclerViewHolder(view);
     }
 
@@ -120,16 +121,6 @@ public class OrganizationsRecyclerViewAdapter extends RecyclerView.Adapter<Organ
         }
     }
 
-    public interface OnItemClickListener {
-
-        void onCallClick(OrganizationUI organization);
-
-        void onMapClick(OrganizationUI organization);
-
-        void onLinkClick(OrganizationUI organization);
-
-        void onDetailClick(OrganizationUI organization);
-    }
 
 
 }

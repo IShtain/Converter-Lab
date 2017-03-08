@@ -3,16 +3,15 @@ package com.shtainyky.converterlab.activities.activities;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
 
 import com.shtainyky.converterlab.R;
+import com.shtainyky.converterlab.activities.fragments.DetailFragment;
+import com.shtainyky.converterlab.activities.fragments.OnOrganizationClickListener;
 import com.shtainyky.converterlab.activities.fragments.OrganizationsFragment;
-import com.shtainyky.converterlab.activities.models.modelUI.OrganizationUI;
+import com.shtainyky.converterlab.activities.util.Util;
 
-import butterknife.ButterKnife;
-
-public class MainActivity extends BaseActivity implements OrganizationsFragment.OnOrganizationClickListener{
+public class MainActivity extends BaseActivity implements OnOrganizationClickListener {
     private static final String TAG = "MainActivity";
 
     @Override
@@ -28,31 +27,39 @@ public class MainActivity extends BaseActivity implements OrganizationsFragment.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Toolbar toolbar = ButterKnife.findById(this, R.id.toolbar);
-        setSupportActionBar(toolbar);
-        addFragmentWithBackStack(OrganizationsFragment.newInstance());
+        if (savedInstanceState == null)
+            addFragmentWithBackStack(OrganizationsFragment.newInstance());
         logger.d(TAG, "onCreate**********************************************");
     }
 
     @Override
     public void onCallClick(String organizationPhone) {
         Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + organizationPhone));
-        startActivity(intent);
+        startIntentIfItIsSafe(intent);
     }
 
     @Override
     public void onMapClick(String organizationAddress) {
-        Toast.makeText(this, "ibMap", Toast.LENGTH_LONG).show();
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("geo:0,0?q=" + organizationAddress));
+        startIntentIfItIsSafe(intent);
     }
 
     @Override
     public void onLinkClick(String organizationLink) {
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(organizationLink));
-        startActivity(intent);
+        startIntentIfItIsSafe(intent);
     }
 
     @Override
-    public void onDetailClick(OrganizationUI organization) {
+    public void onDetailClick(String organizationId) {
         Toast.makeText(this, "onDetailClick", Toast.LENGTH_LONG).show();
+        addFragmentWithBackStack(DetailFragment.newInstance(organizationId));
+    }
+
+    private void startIntentIfItIsSafe(Intent intent) {
+        if (Util.isIntentSave(this, intent))
+            startActivity(intent);
+        else
+            Toast.makeText(this, "You haven't application for view this address", Toast.LENGTH_LONG).show();
     }
 }

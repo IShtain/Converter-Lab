@@ -1,14 +1,17 @@
 package com.shtainyky.converterlab.activities.activities;
 
+
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.widget.Toast;
 
 import com.shtainyky.converterlab.R;
 import com.shtainyky.converterlab.activities.fragments.DetailFragment;
 import com.shtainyky.converterlab.activities.fragments.OnOrganizationClickListener;
 import com.shtainyky.converterlab.activities.fragments.OrganizationsFragment;
+import com.shtainyky.converterlab.activities.models.modelUI.OrganizationUI;
 import com.shtainyky.converterlab.activities.util.Util;
 
 public class MainActivity extends BaseActivity implements OnOrganizationClickListener {
@@ -51,9 +54,15 @@ public class MainActivity extends BaseActivity implements OnOrganizationClickLis
     }
 
     @Override
-    public void onDetailClick(String organizationId) {
+    public void onDetailClick(OrganizationUI organization) {
         Toast.makeText(this, "onDetailClick", Toast.LENGTH_LONG).show();
-        addFragmentWithBackStack(DetailFragment.newInstance(organizationId));
+        logger.d(TAG, organization.getId());
+        ActionBar ab = getSupportActionBar();
+        if (ab != null) {
+            ab.setTitle(organization.getName());
+            ab.setSubtitle(organization.getCityName());
+        }
+        addFragmentWithBackStack(DetailFragment.newInstance(organization.getId()));
     }
 
     private void startIntentIfItIsSafe(Intent intent) {
@@ -61,5 +70,15 @@ public class MainActivity extends BaseActivity implements OnOrganizationClickLis
             startActivity(intent);
         else
             Toast.makeText(this, "You haven't application for view this address", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        ActionBar ab = getSupportActionBar();
+        if (ab != null) {
+            ab.setTitle(R.string.app_name);
+            ab.setSubtitle("");
+        }
     }
 }

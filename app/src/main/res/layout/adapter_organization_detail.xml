@@ -36,7 +36,7 @@
             android:layout_height="13dp"
             android:layout_marginStart="5dp"
             android:layout_toLeftOf="@+id/tvAsk"
-            android:background="@color/colorAccent"
+            android:src="@drawable/ic_action_narrow_up"
             android:contentDescription="@string/ask"/>
 
         <TextView
@@ -56,7 +56,8 @@
             android:layout_marginStart="5dp"
             android:layout_marginTop="5dp"
             android:layout_toLeftOf="@+id/tvBid"
-            android:background="@color/colorAccent"
+
+           android:src="@drawable/ic_action_narrow_down"
             android:contentDescription="@string/ask"/>
 
         <TextView

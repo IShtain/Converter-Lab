@@ -1,6 +1,8 @@
 package com.shtainyky.converterlab.activities.fragments;
 
 
+import com.shtainyky.converterlab.activities.models.modelUI.OrganizationUI;
+
 public interface OnOrganizationClickListener {
 
     void onCallClick(String organizationPhone);
@@ -9,6 +11,6 @@ public interface OnOrganizationClickListener {
 
     void onLinkClick(String organizationLink);
 
-    void onDetailClick(String organizationID);
+    void onDetailClick(OrganizationUI organization);
 
 }

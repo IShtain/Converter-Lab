@@ -278,7 +278,7 @@ public class OrganizationsFragment extends BaseFragment<MainActivity> implements
 
     @Override
     public void onDetailClick(OrganizationUI organization) {
-        mOrganizationClickListener.onDetailClick(organization.getId());
+        mOrganizationClickListener.onDetailClick(organization);
     }
 
 }

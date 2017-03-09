@@ -19,7 +19,7 @@
 
 
         <TextView
-            android:id="@+id/tvCurrenciesNames"
+            android:id="@+id/tvCurrencyName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
@@ -31,7 +31,7 @@
             android:textSize="@dimen/text_size_medium"/>
 
         <ImageButton
-            android:id="@+id/ibAsk"
+            android:id="@+id/ivAsk"
             android:layout_width="13dp"
             android:layout_height="13dp"
             android:layout_marginStart="5dp"
@@ -49,7 +49,7 @@
             android:textSize="@dimen/text_size_small"/>
 
         <ImageButton
-            android:id="@+id/ibBid"
+            android:id="@+id/ivBid"
             android:layout_width="13dp"
             android:layout_height="13dp"
             android:layout_below="@+id/ibAsk"

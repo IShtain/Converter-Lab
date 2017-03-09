@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 
 import com.shtainyky.converterlab.R;
 import com.shtainyky.converterlab.activities.activities.MainActivity;
+import com.shtainyky.converterlab.activities.adapter.DetailOfOrganizationRecyclerViewAdapter;
 import com.shtainyky.converterlab.activities.db.storedata.StoreData;
 import com.shtainyky.converterlab.activities.logger.LogManager;
 import com.shtainyky.converterlab.activities.logger.Logger;
@@ -34,6 +36,7 @@ public class DetailFragment extends BaseFragment<MainActivity>
     private OnOrganizationClickListener mOrganizationClickListener;
     private OrganizationUI mOrganizationUI;
     private RecyclerView organizationRecyclerView;
+    private DetailOfOrganizationRecyclerViewAdapter mAdapter;
 
     TextView tvBankName;
     TextView tvRegionName;
@@ -96,6 +99,11 @@ public class DetailFragment extends BaseFragment<MainActivity>
         tvPhone.setText(view.getContext().getResources().getString(R.string.bank_phone, mOrganizationUI.getPhone()));
         tvAddress = ButterKnife.findById(view, R.id.tvAddress);
         tvAddress.setText(view.getContext().getResources().getString(R.string.bank_address, mOrganizationUI.getAddress()));
+
+        organizationRecyclerView.setLayoutManager(new LinearLayoutManager
+                (getActivity()));
+        mAdapter = new DetailOfOrganizationRecyclerViewAdapter(mOrganizationUI.getCurrencies());
+        organizationRecyclerView.setAdapter(mAdapter);
     }
 
 

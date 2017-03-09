@@ -1,6 +1,7 @@
 package com.shtainyky.converterlab.activities.models.modelUI;
 
 
+import java.util.List;
 import java.util.Map;
 
 public class OrganizationUI {
@@ -11,13 +12,22 @@ public class OrganizationUI {
     private String link;
     private String regionName;
     private String cityName;
-    private Map<String, CurrencyUI> currencies;
+    private List<CurrencyUI> currencies;
 
     public class CurrencyUI {
+        String name;
         private double ask;
         private double diffAsk;
         private double bid;
         private double diffBid;
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
 
         public double getAsk() {
             return ask;
@@ -108,11 +118,11 @@ public class OrganizationUI {
         this.cityName = cityName;
     }
 
-    public Map<String, CurrencyUI> getCurrencies() {
+    public List<CurrencyUI> getCurrencies() {
         return currencies;
     }
 
-    public void setCurrencies(Map<String, CurrencyUI> currencies) {
+    public void setCurrencies(List<CurrencyUI> currencies) {
         this.currencies = currencies;
     }
 }

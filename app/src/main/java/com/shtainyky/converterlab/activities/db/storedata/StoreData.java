@@ -266,23 +266,25 @@ public class StoreData {
         return organizationUI;
     }
 
-    private static Map<String, OrganizationUI.CurrencyUI> getCurrenciesForID(String id) {
+    private static List<OrganizationUI.CurrencyUI> getCurrenciesForID(String id) {
+        List<OrganizationUI.CurrencyUI> currencyUIs = new ArrayList<>();
 
         List<TableCurrenciesList> tableCurrenciesLists = SQLite.select()
                 .from(TableCurrenciesList.class)
                 .where(TableCurrenciesList_Table.organizationId.is(id))
                 .queryList();
-        Map<String, OrganizationUI.CurrencyUI> stringCurrencyUIMap = new HashMap<>();
+
         for (int i = 0; i < tableCurrenciesLists.size(); i++) {
             TableCurrenciesList currenciesList = tableCurrenciesLists.get(i);
             OrganizationUI.CurrencyUI currencyUI = new OrganizationUI().new CurrencyUI();
+            currencyUI.setName(getCurrencyNameForID(currenciesList.getCurrencyId()));
             currencyUI.setAsk(currenciesList.getAsk());
             currencyUI.setDiffAsk(currenciesList.getDiffAsk());
             currencyUI.setBid(currenciesList.getBid());
             currencyUI.setDiffBid(currenciesList.getDiffBid());
-            stringCurrencyUIMap.put(getCurrencyNameForID(currenciesList.getCurrencyId()), currencyUI);
+            currencyUIs.add(currencyUI);
         }
-        return stringCurrencyUIMap;
+        return currencyUIs;
     }
 
     private static String getCurrencyNameForID(String currencyId) {

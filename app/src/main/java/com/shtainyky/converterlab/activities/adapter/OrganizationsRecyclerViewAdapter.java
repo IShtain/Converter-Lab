@@ -21,7 +21,7 @@ public class OrganizationsRecyclerViewAdapter extends RecyclerView.Adapter<Organ
 
     private OnItemClickListener mOnItemClickListener;
 
-    public OrganizationsRecyclerViewAdapter(List<com.shtainyky.converterlab.activities.models.modelUI.OrganizationUI> organizationUIList) {
+    public OrganizationsRecyclerViewAdapter(List<OrganizationUI> organizationUIList) {
         mOrganizationUIList = organizationUIList;
     }
 

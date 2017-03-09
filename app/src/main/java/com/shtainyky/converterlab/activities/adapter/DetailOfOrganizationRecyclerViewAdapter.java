@@ -1,17 +1,16 @@
 package com.shtainyky.converterlab.activities.adapter;
 
 
-import android.support.v7.view.menu.MenuView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.shtainyky.converterlab.R;
 import com.shtainyky.converterlab.activities.models.modelUI.OrganizationUI;
+import com.shtainyky.converterlab.activities.widgets.CustomImageView;
 
 import java.text.DecimalFormat;
 import java.util.List;
@@ -36,6 +35,8 @@ public class DetailOfOrganizationRecyclerViewAdapter extends
     @Override
     public void onBindViewHolder(DetailOfOrganizationRecyclerViewHolder holder, int position) {
         holder.bindCurrency(mCurrencyUIList.get(position));
+        if (position + 1 == mCurrencyUIList.size())
+            holder.separator.setVisibility(View.GONE);
     }
 
     @Override
@@ -48,10 +49,12 @@ public class DetailOfOrganizationRecyclerViewAdapter extends
         TextView tvAsk;
         TextView tvBid;
 
-        ImageButton ivAsk;
-        ImageButton ivBid;
+        CustomImageView ivAsk;
+        CustomImageView ivBid;
 
-        public DetailOfOrganizationRecyclerViewHolder(View itemView) {
+        View separator;
+
+        DetailOfOrganizationRecyclerViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
             tvCurrencyName = ButterKnife.findById(itemView, R.id.tvCurrencyName);
@@ -61,13 +64,17 @@ public class DetailOfOrganizationRecyclerViewAdapter extends
             ivAsk = ButterKnife.findById(itemView, R.id.ivAsk);
             ivBid = ButterKnife.findById(itemView, R.id.ivBid);
 
+            separator = ButterKnife.findById(itemView, R.id.separator);
+
         }
 
-        public void bindCurrency(OrganizationUI.CurrencyUI currencyUI) {
+        void bindCurrency(OrganizationUI.CurrencyUI currencyUI) {
             DecimalFormat format = new DecimalFormat("0.0000");
             tvCurrencyName.setText(currencyUI.getName());
             tvAsk.setText(format.format(currencyUI.getAsk()));
             tvBid.setText(format.format(currencyUI.getAsk()));
+            ivAsk.setIncrease(currencyUI.getDiffAsk() >= 0);
+            ivBid.setIncrease(currencyUI.getDiffBid() >= 0);
         }
     }
 }

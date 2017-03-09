@@ -55,14 +55,13 @@ public class MainActivity extends BaseActivity implements OnOrganizationClickLis
 
     @Override
     public void onDetailClick(OrganizationUI organization) {
-        Toast.makeText(this, "onDetailClick", Toast.LENGTH_LONG).show();
+        addFragmentWithBackStack(DetailFragment.newInstance(organization.getId()));
         logger.d(TAG, organization.getId());
         ActionBar ab = getSupportActionBar();
         if (ab != null) {
             ab.setTitle(organization.getName());
             ab.setSubtitle(organization.getCityName());
         }
-        addFragmentWithBackStack(DetailFragment.newInstance(organization.getId()));
     }
 
     private void startIntentIfItIsSafe(Intent intent) {

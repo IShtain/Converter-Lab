@@ -9,7 +9,6 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.shtainyky.converterlab.R;
-import com.shtainyky.converterlab.activities.fragments.OnItemClickListener;
 import com.shtainyky.converterlab.activities.models.modelUI.OrganizationUI;
 
 import java.util.List;
@@ -52,6 +51,18 @@ public class OrganizationsRecyclerViewAdapter extends RecyclerView.Adapter<Organ
     public int getItemCount() {
         return mOrganizationUIList != null ? mOrganizationUIList.size() : 0;
     }
+
+    public interface OnItemClickListener {
+
+        void onCallClick(OrganizationUI organization);
+
+        void onMapClick(OrganizationUI organization);
+
+        void onLinkClick(OrganizationUI organization);
+
+        void onDetailClick(OrganizationUI organization);
+    }
+
 
     static class OrganizationsRecyclerViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private OrganizationUI mOrganizationUI;

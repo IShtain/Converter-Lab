@@ -3,20 +3,17 @@ package com.shtainyky.converterlab.activities.fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v7.app.ActionBar;
+
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.github.clans.fab.FloatingActionButton;
+import com.github.clans.fab.FloatingActionMenu;
 import com.shtainyky.converterlab.R;
 import com.shtainyky.converterlab.activities.activities.MainActivity;
 import com.shtainyky.converterlab.activities.adapter.DetailOfOrganizationRecyclerViewAdapter;
@@ -28,21 +25,17 @@ import com.shtainyky.converterlab.activities.models.modelUI.OrganizationUI;
 import butterknife.ButterKnife;
 
 public class DetailFragment extends BaseFragment<MainActivity>
-        //  implements OnItemClickListener
-{
+        implements View.OnClickListener {
     private static final String TAG = "DetailFragment";
-    private static Logger logger ;
+    private static Logger logger;
     public static final String ARG_ORGANIZATION_ID = "organization_id";
     private OnOrganizationClickListener mOrganizationClickListener;
     private OrganizationUI mOrganizationUI;
-    private RecyclerView organizationRecyclerView;
+    private String mOrgID;
+    private FloatingActionMenu fabMenu;
+    private SwipeRefreshLayout refreshLayout;
     private DetailOfOrganizationRecyclerViewAdapter mAdapter;
-
-    TextView tvBankName;
-    TextView tvRegionName;
-    TextView tvCityName;
-    TextView tvPhone;
-    TextView tvAddress;
+    private RecyclerView organizationRecyclerView;
 
     public static DetailFragment newInstance(String organizationID) {
         Bundle args = new Bundle();
@@ -76,34 +69,76 @@ public class DetailFragment extends BaseFragment<MainActivity>
         logger.d(TAG, "onCreate = ");
     }
 
-
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         logger.d(TAG, "onViewCreated = ");
+        getBundle();
+        showMainInformation(view);
+        setupRecyclerView(view);
+        setupFabMenu(view);
+        refreshLayout = ButterKnife.findById(view, R.id.swipe_refresh_for_currencies);
+        swipeRefreshListener(refreshLayout);
+    }
+
+    private void swipeRefreshListener(final SwipeRefreshLayout refreshLayout) {
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                logger.d(TAG, "onRefresh");
+                mOrganizationUI = StoreData.getOrganizationForID(mOrgID);
+                setupAdapter();
+                refreshLayout.setRefreshing(false);
+            }
+        });
+    }
+
+    private void getBundle() {
         Bundle bundle = this.getArguments();
         if (bundle != null) {
-            mOrganizationUI = getOrganizationUI(bundle.getString(ARG_ORGANIZATION_ID));
-            logger.d(TAG, "savedInstanceState.getString(ARG_ORGANIZATION_ID) = " + bundle.getString(ARG_ORGANIZATION_ID));
+            mOrgID = bundle.getString(ARG_ORGANIZATION_ID);
+            mOrganizationUI = getOrganizationUI(mOrgID);
+            logger.d(TAG, "savedInstanceState.getString(ARG_ORGANIZATION_ID) = " + mOrgID);
         }
+    }
 
-        organizationRecyclerView = ButterKnife.findById(view, R.id.recycler_view_organization);
-
-        tvBankName = ButterKnife.findById(view, R.id.tvBankName);
+    private void showMainInformation(View view) {
+        TextView tvBankName = ButterKnife.findById(view, R.id.tvBankName);
         tvBankName.setText(mOrganizationUI.getName());
-        tvRegionName = ButterKnife.findById(view, R.id.tvRegionName);
+        TextView tvRegionName = ButterKnife.findById(view, R.id.tvRegionName);
         tvRegionName.setText(mOrganizationUI.getRegionName());
-        tvCityName = ButterKnife.findById(view, R.id.tvCityName);
+        TextView tvCityName = ButterKnife.findById(view, R.id.tvCityName);
         tvCityName.setText(mOrganizationUI.getCityName());
-        tvPhone = ButterKnife.findById(view, R.id.tvPhone);
+        TextView tvPhone = ButterKnife.findById(view, R.id.tvPhone);
         tvPhone.setText(view.getContext().getResources().getString(R.string.bank_phone, mOrganizationUI.getPhone()));
-        tvAddress = ButterKnife.findById(view, R.id.tvAddress);
+        TextView tvAddress = ButterKnife.findById(view, R.id.tvAddress);
         tvAddress.setText(view.getContext().getResources().getString(R.string.bank_address, mOrganizationUI.getAddress()));
+    }
 
+    private void setupRecyclerView(View view) {
+        organizationRecyclerView = ButterKnife.findById(view, R.id.recycler_view_organization);
         organizationRecyclerView.setLayoutManager(new LinearLayoutManager
                 (getActivity()));
         mAdapter = new DetailOfOrganizationRecyclerViewAdapter(mOrganizationUI.getCurrencies());
         organizationRecyclerView.setAdapter(mAdapter);
+
+    }
+
+    private void setupAdapter() {
+        mAdapter = new DetailOfOrganizationRecyclerViewAdapter(mOrganizationUI.getCurrencies());
+        organizationRecyclerView.setAdapter(mAdapter);
+    }
+
+    private void setupFabMenu(View view) {
+        fabMenu = ButterKnife.findById(view, R.id.floating_action_menu);
+        fabMenu.setOnClickListener(this);
+        FloatingActionButton fabLink = ButterKnife.findById(view, R.id.floating_action_menu_link);
+        fabLink.setOnClickListener(this);
+        FloatingActionButton fabMap = ButterKnife.findById(view, R.id.floating_action_menu_map);
+        fabMap.setOnClickListener(this);
+        FloatingActionButton fabCall = ButterKnife.findById(view, R.id.floating_action_menu_phone);
+        fabCall.setOnClickListener(this);
+
     }
 
 
@@ -117,24 +152,23 @@ public class DetailFragment extends BaseFragment<MainActivity>
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.menu_detail, menu);
     }
-//
-//    @Override
-//    public void onCallClick(OrganizationUI organization) {
-//        mOrganizationClickListener.onCallClick(organization.getPhone());
-//    }
-//
-//    @Override
-//    public void onMapClick(OrganizationUI organization) {
-//        mOrganizationClickListener.onMapClick(organization);
-//    }
-//
-//    @Override
-//    public void onLinkClick(OrganizationUI organization) {
-//        mOrganizationClickListener.onLinkClick(organization.getLink());
-//    }
-//
-//    @Override
-//    public void onDetailClick(OrganizationUI organization) {
-//
-//    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.floating_action_menu_link:
+                mOrganizationClickListener.onLinkClick(mOrganizationUI.getLink());
+                break;
+            case R.id.floating_action_menu_map:
+                String address = mOrganizationUI.getAddress() + " " + mOrganizationUI.getCityName() + " " + mOrganizationUI.getRegionName();
+                mOrganizationClickListener.onMapClick(address);
+                break;
+            case R.id.floating_action_menu_phone:
+                mOrganizationClickListener.onCallClick(mOrganizationUI.getPhone());
+                break;
+            case R.id.floating_action_menu:
+                break;
+        }
+    }
+
 }

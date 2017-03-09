@@ -1,150 +1,169 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+
+
+<android.support.v4.widget.SwipeRefreshLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:fab="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/scrollView"
+    android:id="@+id/swipe_refresh_for_currencies"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
+    android:layout_height="wrap_content">
 
     <RelativeLayout
-        android:id="@+id/rL"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <android.support.v7.widget.CardView
-            android:id="@+id/card_view_detail"
+        android:layout_height="match_parent"
+        >
+        <ScrollView
+            android:id="@+id/scrollView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:background="@color/cardview_dark_background"
-            fab:cardCornerRadius="4dp"
-            fab:layout_behavior="@string/appbar_scrolling_view_behavior">
+            >
 
             <LinearLayout
+                android:id="@+id/rL"
+                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:orientation="vertical">
+                android:layout_height="wrap_content">
 
-                <TextView
-                    android:id="@+id/tvBankName"
+                <android.support.v7.widget.CardView
+                    android:id="@+id/card_view_detail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:text="@string/app_name"
-                    android:textColor="@color/colorAccent"
-                    android:textSize="@dimen/text_size_large"
-                    android:textStyle="bold"
-                    />
+                    android:layout_margin="10dp"
+                    android:background="@color/cardview_dark_background"
+                    fab:cardCornerRadius="2dp">
 
-                <TextView
-                    android:id="@+id/tvCityName"
-                    android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tvBankName"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:text="@string/app_name"
+                            android:textColor="@color/colorAccent"
+                            android:textSize="@dimen/text_size_large"
+                            android:textStyle="bold"
+                            />
+
+                        <TextView
+                            android:id="@+id/tvCityName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
+                            android:text="@string/bank_city"
+                            android:textSize="@dimen/text_size_medium"
+                            />
+
+                        <TextView
+                            android:id="@+id/tvRegionName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
+                            android:text="@string/bank_region"
+                            android:textSize="@dimen/text_size_medium"
+                            />
+
+                        <TextView
+                            android:id="@+id/tvPhone"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
+                            android:text="@string/bank_phone"
+                            android:textSize="@dimen/text_size_medium"/>
+
+
+                        <TextView
+                            android:id="@+id/tvAddress"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
+                            android:text="@string/bank_address"
+                            android:textSize="@dimen/text_size_medium"/>
+                    </LinearLayout>
+
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
+                    android:id="@+id/card_view_text"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:text="@string/bank_city"
-                    android:textSize="@dimen/text_size_medium"
-                    />
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@color/cardview_dark_background"
+                    fab:cardCornerRadius="2dp"
+                    >
 
-                <TextView
-                    android:id="@+id/tvRegionName"
-                    android:layout_width="wrap_content"
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp">
+
+                        <TextView
+                            android:id="@+id/tvCurrenciesNames"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:layout_centerHorizontal="true"
+                            android:layout_centerInParent="true"
+                            android:layout_marginStart="5dp"
+                            android:layout_toLeftOf="@+id/tvSalesPurchase"
+                            android:text="@string/currencies_names"
+                            android:textSize="@dimen/text_size_medium"/>
+
+                        <TextView
+                            android:id="@+id/tvSalesPurchase"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginStart="5dp"
+                            android:text="@string/sales_purchase"
+                            android:textSize="@dimen/text_size_medium"/>
+
+
+                    </RelativeLayout>
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
+                    android:id="@+id/card_view_recycler"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:text="@string/bank_region"
-                    android:textSize="@dimen/text_size_medium"
-                    />
+                    android:layout_margin="10dp"
+                    android:background="@color/cardview_dark_background"
+                    fab:cardCornerRadius="2dp"
+                    >
 
-                <TextView
-                    android:id="@+id/tvPhone"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:text="@string/bank_phone"
-                    android:textSize="@dimen/text_size_medium"/>
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/recycler_view_organization"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"/>
 
-
-                <TextView
-                    android:id="@+id/tvAddress"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:text="@string/bank_address"
-                    android:textSize="@dimen/text_size_medium"/>
+                </android.support.v7.widget.CardView>
 
 
             </LinearLayout>
 
-        </android.support.v7.widget.CardView>
-
-        <android.support.v7.widget.CardView
-            android:id="@+id/card_view_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/card_view_detail"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:background="@color/cardview_dark_background"
-            fab:cardCornerRadius="4dp"
-            fab:layout_behavior="@string/appbar_scrolling_view_behavior"
-            >
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp">
-
-                <TextView
-                    android:id="@+id/tvCurrenciesNames"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_centerHorizontal="true"
-                    android:layout_centerInParent="true"
-                    android:layout_marginStart="5dp"
-                    android:layout_toLeftOf="@+id/tvSalesPurchase"
-                    android:text="@string/currencies_names"
-                    android:textSize="@dimen/text_size_medium"/>
-
-                <TextView
-                    android:id="@+id/tvSalesPurchase"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginStart="5dp"
-                    android:text="@string/sales_purchase"
-                    android:textSize="@dimen/text_size_medium"/>
-
-
-            </RelativeLayout>
-        </android.support.v7.widget.CardView>
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler_view_organization"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/card_view_text"
-            android:layout_margin="10dp"/>
-
+        </ScrollView>
         <com.github.clans.fab.FloatingActionMenu
             android:id="@+id/floating_action_menu"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
             android:padding="10dp"
-            fab:layout_anchor="@+id/recycler_view_organization"
+            fab:layout_anchor="@+id/scrollView"
             fab:menu_animationDelayPerItem="55"
-            fab:menu_backgroundColor="@android:color/transparent"
+            fab:menu_backgroundColor="#ccdedada"
             fab:menu_buttonSpacing="0dp"
             fab:menu_colorNormal="@color/colorAccent"
             fab:menu_colorPressed="@color/colorAccent"
             fab:menu_colorRipple="#99d4d4d4"
             fab:menu_fab_size="normal"
-            fab:menu_icon="@drawable/ic_menu"
+            fab:menu_icon="@drawable/ic_action_menu"
             fab:menu_labels_colorNormal="#333"
             fab:menu_labels_colorPressed="#444"
             fab:menu_labels_colorRipple="#66efecec"
@@ -158,6 +177,7 @@
             fab:menu_labels_showAnimation="@anim/fab_scale_up"
             fab:menu_labels_showShadow="true"
             fab:menu_labels_singleLine="false"
+            fab:menu_labels_style="@style/MenuLabelsStyle"
             fab:menu_labels_textColor="#f2f1f1"
             fab:menu_labels_textSize="15sp"
             fab:menu_openDirection="up"
@@ -169,11 +189,11 @@
 
             <com.github.clans.fab.FloatingActionButton
                 android:id="@+id/floating_action_menu_map"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:background="@android:color/darker_gray"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:src="@drawable/ic_action_map"
                 fab:fab_colorNormal="@android:color/darker_gray"
+                fab:fab_colorPressed="@color/colorAccent"
                 fab:fab_label="@string/fab_map"
                 fab:fab_size="mini"
                 fab:menu_colorNormal="@android:color/transparent"
@@ -181,25 +201,27 @@
 
             <com.github.clans.fab.FloatingActionButton
                 android:id="@+id/floating_action_menu_link"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:background="@android:color/darker_gray"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:src="@drawable/ic_action_link"
                 fab:fab_colorNormal="@android:color/darker_gray"
+                fab:fab_colorPressed="@color/colorAccent"
                 fab:fab_label="@string/fab_link"
                 fab:fab_size="mini"
                 fab:menu_colorNormal="@android:color/transparent"/>
 
             <com.github.clans.fab.FloatingActionButton
                 android:id="@+id/floating_action_menu_phone"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:background="@android:color/darker_gray"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:src="@drawable/ic_action_phone"
                 fab:fab_colorNormal="@android:color/darker_gray"
+                fab:fab_colorPressed="@color/colorAccent"
                 fab:fab_label="@string/fab_call"
                 fab:fab_size="mini"
                 fab:menu_colorNormal="@android:color/transparent"/>
         </com.github.clans.fab.FloatingActionMenu>
     </RelativeLayout>
-</ScrollView>
+</android.support.v4.widget.SwipeRefreshLayout>
+
+

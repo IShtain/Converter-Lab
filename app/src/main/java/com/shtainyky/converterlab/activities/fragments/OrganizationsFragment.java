@@ -41,7 +41,7 @@ import java.util.List;
 import butterknife.ButterKnife;
 
 public class OrganizationsFragment extends BaseFragment<MainActivity> implements SearchView.OnQueryTextListener,
-        OnItemClickListener {
+        OrganizationsRecyclerViewAdapter.OnItemClickListener {
     public static final String TAG = "OrganizationsFragment";
     private RecyclerView organizationsRecyclerView;
     private RelativeLayout relativeLayout;
@@ -96,8 +96,9 @@ public class OrganizationsFragment extends BaseFragment<MainActivity> implements
         organizationsRecyclerView = ButterKnife.findById(view, R.id.recycler_view_organizations);
         progressBar = ButterKnife.findById(view, R.id.progress);
         relativeLayout = ButterKnife.findById(view, R.id.main_layout);
-        refreshLayout = ButterKnife.findById(view, R.id.swipe_refresh_for_organizations);
         textView = ButterKnife.findById(view, R.id.tv_no_data);
+
+        refreshLayout = ButterKnife.findById(view, R.id.swipe_refresh_for_currencies);
         swipeRefreshListener(refreshLayout);
     }
 

@@ -22,7 +22,7 @@
 
 
     <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/swipe_refresh_for_organizations"
+        android:id="@+id/swipe_refresh_for_currencies"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 

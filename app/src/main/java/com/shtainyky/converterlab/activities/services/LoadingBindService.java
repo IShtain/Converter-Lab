@@ -74,7 +74,7 @@ public class LoadingBindService extends Service {
         mLogger.d(TAG, "onStartCommand");
         loadAndSaveData();
         stopSelf();
-        return START_NOT_STICKY;
+        return START_STICKY;
     }
 
 

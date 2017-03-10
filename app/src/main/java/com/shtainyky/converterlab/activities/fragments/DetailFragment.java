@@ -21,6 +21,7 @@ import com.shtainyky.converterlab.activities.db.storedata.StoreData;
 import com.shtainyky.converterlab.activities.logger.LogManager;
 import com.shtainyky.converterlab.activities.logger.Logger;
 import com.shtainyky.converterlab.activities.models.modelUI.OrganizationUI;
+import com.shtainyky.converterlab.activities.widgets.CustomDividerItemDecoration;
 
 import butterknife.ButterKnife;
 
@@ -120,6 +121,7 @@ public class DetailFragment extends BaseFragment<MainActivity>
         organizationRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mAdapter = new DetailOfOrganizationRecyclerViewAdapter();
         organizationRecyclerView.setAdapter(mAdapter);
+        organizationRecyclerView.addItemDecoration(new CustomDividerItemDecoration(getContext()));
         setupData();
     }
 

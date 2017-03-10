@@ -42,8 +42,7 @@ public class DetailOfOrganizationRecyclerViewAdapter extends
     @Override
     public void onBindViewHolder(DetailOfOrganizationRecyclerViewHolder holder, int position) {
         holder.bindCurrency(mCurrencyUIList.get(position));
-        if (position + 1 == mCurrencyUIList.size())
-            holder.separator.setVisibility(View.GONE);
+
     }
 
     @Override
@@ -59,7 +58,7 @@ public class DetailOfOrganizationRecyclerViewAdapter extends
         CustomImageView ivAsk;
         CustomImageView ivBid;
 
-        View separator;
+
 
         DetailOfOrganizationRecyclerViewHolder(View itemView) {
             super(itemView);
@@ -70,8 +69,6 @@ public class DetailOfOrganizationRecyclerViewAdapter extends
 
             ivAsk = ButterKnife.findById(itemView, R.id.ivAsk);
             ivBid = ButterKnife.findById(itemView, R.id.ivBid);
-
-            separator = ButterKnife.findById(itemView, R.id.separator);
 
         }
 

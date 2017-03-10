@@ -1,76 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:padding="10dp"
+    >
 
-    <RelativeLayout
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/tvCurrencyName"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        >
+        android:layout_alignParentLeft="true"
+        android:layout_centerHorizontal="true"
+        android:layout_centerInParent="true"
+        android:layout_marginStart="5dp"
+        android:layout_toLeftOf="@+id/tvAsk"
+        android:text="@string/currencies_names"
+        android:textSize="@dimen/text_size_medium"/>
 
-        <TextView
-            android:id="@+id/tvCurrencyName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_centerHorizontal="true"
-            android:layout_centerInParent="true"
-            android:layout_marginStart="5dp"
-            android:layout_toLeftOf="@+id/tvAsk"
-            android:text="@string/currencies_names"
-            android:textSize="@dimen/text_size_medium"/>
+    <com.shtainyky.converterlab.activities.widgets.CustomImageView
+        android:id="@+id/ivAsk"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:layout_marginStart="5dp"
+        android:layout_toLeftOf="@+id/tvAsk"
+        android:contentDescription="@string/ask"
+        android:src="@drawable/image_selector"/>
 
-        <com.shtainyky.converterlab.activities.widgets.CustomImageView
-            android:id="@+id/ivAsk"
-            android:layout_width="15dp"
-            android:layout_height="15dp"
-            android:layout_marginStart="5dp"
-            android:layout_toLeftOf="@+id/tvAsk"
-            android:contentDescription="@string/ask"
-            android:src="@drawable/image_selector"/>
+    <TextView
+        android:id="@+id/tvAsk"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginStart="5dp"
+        android:text="@string/fab_link"
+        android:textSize="@dimen/text_size_small"/>
 
-        <TextView
-            android:id="@+id/tvAsk"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_marginStart="5dp"
-            android:text="@string/fab_link"
-            android:textSize="@dimen/text_size_small"/>
+    <com.shtainyky.converterlab.activities.widgets.CustomImageView
+        android:id="@+id/ivBid"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:layout_below="@+id/ivAsk"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_toLeftOf="@+id/tvBid"
+        android:contentDescription="@string/ask"
+        android:src="@drawable/image_selector"/>
 
-        <com.shtainyky.converterlab.activities.widgets.CustomImageView
-            android:id="@+id/ivBid"
-            android:layout_width="15dp"
-            android:layout_height="15dp"
-            android:layout_below="@+id/ivAsk"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="5dp"
-            android:layout_toLeftOf="@+id/tvBid"
-            android:contentDescription="@string/ask"
-            android:src="@drawable/image_selector"/>
+    <TextView
+        android:id="@+id/tvBid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/tvAsk"
+        android:layout_marginStart="5dp"
+        android:text="@string/fab_link"
+        android:textSize="@dimen/text_size_small"/>
 
-        <TextView
-            android:id="@+id/tvBid"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_below="@+id/tvAsk"
-            android:layout_marginStart="5dp"
-            android:text="@string/fab_link"
-            android:textSize="@dimen/text_size_small"/>
+</RelativeLayout>
 
-    </RelativeLayout>
 
-    <View
-        android:id="@+id/separator"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_margin="10dp"
-        android:background="@color/dark_grey"/>
-</LinearLayout>
+
 
 

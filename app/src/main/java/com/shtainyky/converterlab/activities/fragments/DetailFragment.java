@@ -87,7 +87,7 @@ public class DetailFragment extends BaseFragment<MainActivity>
             public void onRefresh() {
                 logger.d(TAG, "onRefresh");
                 mOrganizationUI = StoreData.getOrganizationForID(mOrgID);
-                setupAdapter();
+                setupData();
                 refreshLayout.setRefreshing(false);
             }
         });
@@ -117,16 +117,14 @@ public class DetailFragment extends BaseFragment<MainActivity>
 
     private void setupRecyclerView(View view) {
         organizationRecyclerView = ButterKnife.findById(view, R.id.recycler_view_organization);
-        organizationRecyclerView.setLayoutManager(new LinearLayoutManager
-                (getActivity()));
-        mAdapter = new DetailOfOrganizationRecyclerViewAdapter(mOrganizationUI.getCurrencies());
+        organizationRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mAdapter = new DetailOfOrganizationRecyclerViewAdapter();
         organizationRecyclerView.setAdapter(mAdapter);
-
+        setupData();
     }
 
-    private void setupAdapter() {
-        mAdapter = new DetailOfOrganizationRecyclerViewAdapter(mOrganizationUI.getCurrencies());
-        organizationRecyclerView.setAdapter(mAdapter);
+    private void setupData() {
+        mAdapter.setOrganizationUIList(mOrganizationUI.getCurrencies());
     }
 
     private void setupFabMenu(View view) {
@@ -166,9 +164,18 @@ public class DetailFragment extends BaseFragment<MainActivity>
             case R.id.floating_action_menu_phone:
                 mOrganizationClickListener.onCallClick(mOrganizationUI.getPhone());
                 break;
-            case R.id.floating_action_menu:
-                break;
+//            case R.id.floating_action_menu:
+//                if (fabMenu.isOpened())
+//                    fabMenu.setBackground(getContext().getResources().getDrawable(R.drawable.ic_action_map));
+//                else
+//                    fabMenu.setBackground(getContext().getResources().getDrawable(R.drawable.ic_action_menu));
+//
+//                break;
         }
+
+
     }
+
+
 
 }

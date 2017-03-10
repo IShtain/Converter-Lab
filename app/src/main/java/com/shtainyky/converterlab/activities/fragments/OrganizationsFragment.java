@@ -100,6 +100,11 @@ public class OrganizationsFragment extends BaseFragment<MainActivity> implements
 
         refreshLayout = ButterKnife.findById(view, R.id.swipe_refresh_for_currencies);
         swipeRefreshListener(refreshLayout);
+        mAdapter = new OrganizationsRecyclerViewAdapter();
+        organizationsRecyclerView.setLayoutManager(new LinearLayoutManager
+                (getActivity()));
+        mAdapter.setOnItemClickListener(this);
+        organizationsRecyclerView.setAdapter(mAdapter);
     }
 
     private void swipeRefreshListener(final SwipeRefreshLayout refreshLayout) {
@@ -209,13 +214,13 @@ public class OrganizationsFragment extends BaseFragment<MainActivity> implements
             switch (message) {
                 case Constants.SERVICE_USER_HAS_INTERNET:
                     textView.setVisibility(View.GONE);
-                    setupAdapter();
+                    setData();
                     cancelPreviousAlarmManger();
                     startAlamManager(5);
                     break;
                 case Constants.SERVICE_USER_HAS_NOT_INTERNET:
                     textView.setVisibility(View.GONE);
-                    setupAdapter();
+                    setData();
                     Snackbar.make(relativeLayout, R.string.no_internet_connection, Snackbar.LENGTH_LONG).show();
                     cancelPreviousAlarmManger();
                     startAlamManager(1);
@@ -247,15 +252,11 @@ public class OrganizationsFragment extends BaseFragment<MainActivity> implements
         }
     }
 
-    private void setupAdapter() {
-        organizationsRecyclerView.setLayoutManager(new LinearLayoutManager
-                (getActivity()));
-        mAdapter = new OrganizationsRecyclerViewAdapter(getOrganizations());
-        mAdapter.setOnItemClickListener(this);
-        organizationsRecyclerView.setAdapter(mAdapter);
+    private void setData() {
+        mAdapter.setOrganizationUIList(getOrganizations());
     }
 
-    public List<OrganizationUI> getOrganizations() {
+    private List<OrganizationUI> getOrganizations() {
         logger.d(TAG, "getOrganizations");
         return StoreData.getListOrganizationsUI();
     }

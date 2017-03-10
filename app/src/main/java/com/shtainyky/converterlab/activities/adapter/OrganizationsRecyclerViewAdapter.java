@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.shtainyky.converterlab.R;
 import com.shtainyky.converterlab.activities.models.modelUI.OrganizationUI;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -20,8 +21,14 @@ public class OrganizationsRecyclerViewAdapter extends RecyclerView.Adapter<Organ
 
     private OnItemClickListener mOnItemClickListener;
 
-    public OrganizationsRecyclerViewAdapter(List<OrganizationUI> organizationUIList) {
-        mOrganizationUIList = organizationUIList;
+    public OrganizationsRecyclerViewAdapter() {
+        mOrganizationUIList = new ArrayList<>();
+    }
+
+    public void setOrganizationUIList(List<OrganizationUI> organizationUIList) {
+        mOrganizationUIList.clear();
+        mOrganizationUIList.addAll(organizationUIList);
+        notifyDataSetChanged();
     }
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {

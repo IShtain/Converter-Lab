@@ -13,16 +13,23 @@ import com.shtainyky.converterlab.activities.models.modelUI.OrganizationUI;
 import com.shtainyky.converterlab.activities.widgets.CustomImageView;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
 
 public class DetailOfOrganizationRecyclerViewAdapter extends
         RecyclerView.Adapter<DetailOfOrganizationRecyclerViewAdapter.DetailOfOrganizationRecyclerViewHolder> {
+
     private List<OrganizationUI.CurrencyUI> mCurrencyUIList;
 
-    public DetailOfOrganizationRecyclerViewAdapter(List<OrganizationUI.CurrencyUI> currencyUIList) {
-        mCurrencyUIList = currencyUIList;
+    public DetailOfOrganizationRecyclerViewAdapter() {
+        mCurrencyUIList = new ArrayList<>();
+    }
+    public void setOrganizationUIList(List<OrganizationUI.CurrencyUI> currencyUIList) {
+        mCurrencyUIList.clear();
+        mCurrencyUIList.addAll(currencyUIList);
+        notifyDataSetChanged();
     }
 
     @Override

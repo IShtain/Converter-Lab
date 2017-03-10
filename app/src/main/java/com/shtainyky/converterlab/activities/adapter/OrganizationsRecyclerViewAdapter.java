@@ -35,12 +35,6 @@ public class OrganizationsRecyclerViewAdapter extends RecyclerView.Adapter<Organ
         mOnItemClickListener = onItemClickListener;
     }
 
-    public void update(List<OrganizationUI> organizations) {
-        mOrganizationUIList.clear();
-        mOrganizationUIList = organizations;
-        notifyDataSetChanged();
-    }
-
     @Override
     public OrganizationsRecyclerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());

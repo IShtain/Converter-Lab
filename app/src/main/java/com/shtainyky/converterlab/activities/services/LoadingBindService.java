@@ -60,7 +60,7 @@ public class LoadingBindService extends Service {
     public void onCreate() {
         mLogger.d(TAG, "onCreate");
         super.onCreate();
-        loadAndSaveData(true);
+        loadAndSaveData();
     }
 
     @Override
@@ -72,13 +72,13 @@ public class LoadingBindService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         mLogger.d(TAG, "onStartCommand");
-        loadAndSaveData(false);
+        loadAndSaveData();
         stopSelf();
         return START_NOT_STICKY;
     }
 
 
-    public void loadAndSaveData(final boolean hasLocalListener) {
+    public void loadAndSaveData() {
         final String oldDate = StoreData.getDate();
         if (Util.isOnline(getApplicationContext())) {
             HttpManager.getInstance().init();
@@ -94,19 +94,18 @@ public class LoadingBindService extends Service {
                         ConvertData.convertRootModelForStoring(rootModel);
                         StoreData.saveData();
                         NotificationAboutLoading.sendNotification(getApplicationContext(), getString(R.string.data_update), 0);
+                        if (oldDate.equals(Constants.DATABASE_NOT_CREATED))
+                            sendMessage(Constants.SERVICE_USER_HAS_FIRST_INSTALLATION);
                         mLogger.d(TAG, "NEW DATE rootModel.getDate() -- > " + rootModel.getDate());
                     }
-                    if (hasLocalListener)
-                        sendMessage(Constants.SERVICE_USER_HAS_INTERNET);
                 }
 
                 @Override
                 public void onError(String message) {
-                    if (hasLocalListener)
-                        if (oldDate.equals(Constants.DATABASE_NOT_CREATED))
-                            sendMessage(Constants.SERVICE_USER_HAS_NOT_CREATED_DB_AND_INTERNET);
-                        else
-                            sendMessage(Constants.SERVICE_USER_HAS_NOT_INTERNET);
+                    if (oldDate.equals(Constants.DATABASE_NOT_CREATED))
+                        sendMessage(Constants.SERVICE_USER_HAS_NOT_CREATED_DB_AND_INTERNET);
+                    else
+                        sendMessage(Constants.SERVICE_USER_HAS_NOT_INTERNET);
                     mLogger.d(TAG, "message -- > " + message);
                 }
             });

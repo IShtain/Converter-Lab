@@ -13,7 +13,7 @@ import com.shtainyky.converterlab.R;
 public class CustomDividerItemDecoration extends RecyclerView.ItemDecoration {
     private Drawable mDivider;
     public CustomDividerItemDecoration(Context context) {
-        mDivider = ContextCompat.getDrawable(context,R.drawable.line_divider);;
+        mDivider = ContextCompat.getDrawable(context, R.drawable.line_divider);;
     }
 
     @Override

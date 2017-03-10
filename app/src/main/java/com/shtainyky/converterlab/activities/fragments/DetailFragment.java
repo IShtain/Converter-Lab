@@ -34,9 +34,7 @@ public class DetailFragment extends BaseFragment<MainActivity>
     private OrganizationUI mOrganizationUI;
     private String mOrgID;
     private FloatingActionMenu fabMenu;
-    private SwipeRefreshLayout refreshLayout;
     private DetailOfOrganizationRecyclerViewAdapter mAdapter;
-    private RecyclerView organizationRecyclerView;
 
     public static DetailFragment newInstance(String organizationID) {
         Bundle args = new Bundle();
@@ -78,7 +76,7 @@ public class DetailFragment extends BaseFragment<MainActivity>
         showMainInformation(view);
         setupRecyclerView(view);
         setupFabMenu(view);
-        refreshLayout = ButterKnife.findById(view, R.id.swipe_refresh_for_currencies);
+        SwipeRefreshLayout refreshLayout = ButterKnife.findById(view, R.id.swipe_refresh_for_currencies);
         swipeRefreshListener(refreshLayout);
     }
 
@@ -117,7 +115,7 @@ public class DetailFragment extends BaseFragment<MainActivity>
     }
 
     private void setupRecyclerView(View view) {
-        organizationRecyclerView = ButterKnife.findById(view, R.id.recycler_view_organization);
+        RecyclerView organizationRecyclerView = ButterKnife.findById(view, R.id.recycler_view_organization);
         organizationRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mAdapter = new DetailOfOrganizationRecyclerViewAdapter();
         organizationRecyclerView.setAdapter(mAdapter);
@@ -127,6 +125,7 @@ public class DetailFragment extends BaseFragment<MainActivity>
 
     private void setupData() {
         mAdapter.setOrganizationUIList(mOrganizationUI.getCurrencies());
+        logger.d(TAG, "setupData size = "+mOrganizationUI.getCurrencies().size() );
     }
 
     private void setupFabMenu(View view) {

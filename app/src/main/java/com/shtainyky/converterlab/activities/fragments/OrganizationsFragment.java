@@ -43,7 +43,6 @@ import butterknife.ButterKnife;
 public class OrganizationsFragment extends BaseFragment<MainActivity> implements SearchView.OnQueryTextListener,
         OrganizationsRecyclerViewAdapter.OnItemClickListener {
     public static final String TAG = "OrganizationsFragment";
-    private RecyclerView organizationsRecyclerView;
     private RelativeLayout relativeLayout;
     private Logger logger;
     private ProgressBar progressBar;
@@ -93,18 +92,35 @@ public class OrganizationsFragment extends BaseFragment<MainActivity> implements
     @Override
     public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        organizationsRecyclerView = ButterKnife.findById(view, R.id.recycler_view_organizations);
+        initViews(view);
+        initRefreshLayout(view);
+        initRecyclerView(view);
+    }
+
+    private void initViews(View view) {
         progressBar = ButterKnife.findById(view, R.id.progress);
         relativeLayout = ButterKnife.findById(view, R.id.main_layout);
         textView = ButterKnife.findById(view, R.id.tv_no_data);
+    }
 
-        refreshLayout = ButterKnife.findById(view, R.id.swipe_refresh_for_currencies);
-        swipeRefreshListener(refreshLayout);
+    private void initRecyclerView(View view) {
+        RecyclerView organizationsRecyclerView = ButterKnife.findById(view, R.id.recycler_view_organizations);
         mAdapter = new OrganizationsRecyclerViewAdapter();
-        organizationsRecyclerView.setLayoutManager(new LinearLayoutManager
-                (getActivity()));
+        organizationsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mAdapter.setOnItemClickListener(this);
         organizationsRecyclerView.setAdapter(mAdapter);
+        setData();
+
+    }
+
+    private void setData() {
+        mAdapter.setOrganizationUIList(getOrganizations());
+        progressBar.setVisibility(View.GONE);
+    }
+
+    private void initRefreshLayout(View view) {
+        refreshLayout = ButterKnife.findById(view, R.id.swipe_refresh_for_currencies);
+        swipeRefreshListener(refreshLayout);
     }
 
     private void swipeRefreshListener(final SwipeRefreshLayout refreshLayout) {
@@ -120,7 +136,8 @@ public class OrganizationsFragment extends BaseFragment<MainActivity> implements
     public void refreshDatabase() {
         logger.d(TAG, "refreshDatabase");
         if (mBound) {
-            mService.loadAndSaveData(true);
+            mService.loadAndSaveData();
+            setData();
             refreshLayout.setRefreshing(false);
             logger.d(TAG, "loadAndSaveData");
         }
@@ -186,7 +203,7 @@ public class OrganizationsFragment extends BaseFragment<MainActivity> implements
             else if (city.contains(gotText))
                 filteredOrganizationUIs.add(organizationUIs.get(i));
         }
-        mAdapter.update(filteredOrganizationUIs);
+        mAdapter.setOrganizationUIList(filteredOrganizationUIs);
         return true;
     }
 
@@ -212,7 +229,7 @@ public class OrganizationsFragment extends BaseFragment<MainActivity> implements
         public void onReceive(Context context, Intent intent) {
             String message = intent.getStringExtra(Constants.SERVICE_MESSAGE);
             switch (message) {
-                case Constants.SERVICE_USER_HAS_INTERNET:
+                case Constants.SERVICE_USER_HAS_FIRST_INSTALLATION:
                     textView.setVisibility(View.GONE);
                     setData();
                     cancelPreviousAlarmManger();
@@ -220,20 +237,21 @@ public class OrganizationsFragment extends BaseFragment<MainActivity> implements
                     break;
                 case Constants.SERVICE_USER_HAS_NOT_INTERNET:
                     textView.setVisibility(View.GONE);
-                    setData();
-                    Snackbar.make(relativeLayout, R.string.no_internet_connection, Snackbar.LENGTH_LONG).show();
+                    progressBar.setVisibility(View.GONE);
+                    Snackbar.make(relativeLayout, R.string.no_internet_connection, Snackbar.LENGTH_SHORT).show();
                     cancelPreviousAlarmManger();
                     startAlamManager(1);
                     break;
                 case Constants.SERVICE_USER_HAS_NOT_CREATED_DB_AND_INTERNET:
+                    progressBar.setVisibility(View.GONE);
                     textView.setVisibility(View.VISIBLE);
                     textView.setText(R.string.no_data);
-                    Snackbar.make(relativeLayout, R.string.no_internet_connection, Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(relativeLayout, R.string.no_internet_connection, Snackbar.LENGTH_SHORT).show();
                     cancelPreviousAlarmManger();
                     startAlamManager(1);
                     break;
             }
-            progressBar.setVisibility(View.GONE);
+
         }
     };
 
@@ -252,9 +270,7 @@ public class OrganizationsFragment extends BaseFragment<MainActivity> implements
         }
     }
 
-    private void setData() {
-        mAdapter.setOrganizationUIList(getOrganizations());
-    }
+
 
     private List<OrganizationUI> getOrganizations() {
         logger.d(TAG, "getOrganizations");

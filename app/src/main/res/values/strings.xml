@@ -24,5 +24,6 @@
     <string name="sales_purchase">Покупка/ \n Продажа</string>
     <string name="ask">ask</string>
     <string name="action_share">Поделиться</string>
+    <string name="bank_share">SHARE</string>
 
 </resources>

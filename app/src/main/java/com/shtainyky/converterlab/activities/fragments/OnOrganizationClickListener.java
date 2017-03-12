@@ -13,4 +13,6 @@ public interface OnOrganizationClickListener {
 
     void onDetailClick(OrganizationUI organization);
 
+    void onShareClick(OrganizationUI organization);
+
 }

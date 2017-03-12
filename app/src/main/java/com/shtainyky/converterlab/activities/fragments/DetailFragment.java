@@ -4,13 +4,17 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
@@ -51,7 +55,7 @@ public class DetailFragment extends BaseFragment<MainActivity>
             mOrganizationClickListener = (OnOrganizationClickListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
-                    + " must implement OnItemClickListener");
+                    + " must implement OnOrganizationClickListener");
         }
     }
 
@@ -150,6 +154,16 @@ public class DetailFragment extends BaseFragment<MainActivity>
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.menu_detail, menu);
+
+        MenuItem menuItem = menu.findItem(R.id.action_share);
+        menuItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                mOrganizationClickListener.onShareClick(mOrganizationUI);
+                return true;
+            }
+        });
+        
     }
 
     @Override
@@ -166,10 +180,10 @@ public class DetailFragment extends BaseFragment<MainActivity>
                 mOrganizationClickListener.onCallClick(mOrganizationUI.getPhone());
                 break;
 //            case R.id.floating_action_menu:
-//                if (fabMenu.isOpened())
-//                    fabMenu.setBackground(getContext().getResources().getDrawable(R.drawable.ic_action_map));
+//                if (fabMenu.isInTouchMode())
+//                    fabMenu.getMenuIconView().setImageResource(R.drawable.ic_action_map);
 //                else
-//                    fabMenu.setBackground(getContext().getResources().getDrawable(R.drawable.ic_action_menu));
+//                    fabMenu.getMenuIconView().setImageResource(R.drawable.ic_action_menu);
 //
 //                break;
         }

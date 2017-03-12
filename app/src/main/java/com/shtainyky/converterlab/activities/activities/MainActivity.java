@@ -1,6 +1,7 @@
 package com.shtainyky.converterlab.activities.activities;
 
 
+import android.app.DialogFragment;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import com.shtainyky.converterlab.R;
 import com.shtainyky.converterlab.activities.fragments.DetailFragment;
 import com.shtainyky.converterlab.activities.fragments.OnOrganizationClickListener;
 import com.shtainyky.converterlab.activities.fragments.OrganizationsFragment;
+import com.shtainyky.converterlab.activities.fragments.ShareDialogFragment;
 import com.shtainyky.converterlab.activities.models.modelUI.OrganizationUI;
 import com.shtainyky.converterlab.activities.util.Util;
 
@@ -62,6 +64,14 @@ public class MainActivity extends BaseActivity implements OnOrganizationClickLis
             ab.setTitle(organization.getName());
             ab.setSubtitle(organization.getCityName());
         }
+    }
+
+    @Override
+    public void onShareClick(OrganizationUI organization) {
+        DialogFragment shareDialogFragment = ShareDialogFragment.newInstance(organization.getId());
+        shareDialogFragment.setStyle(DialogFragment.STYLE_NO_TITLE, android.R.style.Theme_Holo_Dialog_NoActionBar);
+        shareDialogFragment.show(getFragmentManager(), "ShareDialogFragment");
+
     }
 
     private void startIntentIfItIsSafe(Intent intent) {

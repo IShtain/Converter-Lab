@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/cardview_light_background"
+    app:cardCornerRadius="4dp"
+    >
+
+    <ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/scrollView"
+        android:background="@android:color/white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+            <ImageView
+                android:id="@+id/iv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/app_name"
+                android:scrollbarAlwaysDrawVerticalTrack="true"/>
+
+            <Button
+                android:id="@+id/bt_share"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/iv"
+                android:layout_centerInParent="true"
+                android:background="@color/light_grey"
+                android:text="@string/bank_share"
+                android:textColor="@color/colorAccent"
+                android:textSize="@dimen/text_size_medium"
+                android:textStyle="bold"
+                />
+        </RelativeLayout>
+    </ScrollView>
+
+
+</android.support.v7.widget.CardView>

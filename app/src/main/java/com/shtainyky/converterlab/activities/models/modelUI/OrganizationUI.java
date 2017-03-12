@@ -15,7 +15,8 @@ public class OrganizationUI {
     private List<CurrencyUI> currencies;
 
     public class CurrencyUI {
-        String name;
+        private String currencyId;
+        private String name;
         private double ask;
         private double diffAsk;
         private double bid;
@@ -59,6 +60,14 @@ public class OrganizationUI {
 
         public void setDiffBid(double diffBid) {
             this.diffBid = diffBid;
+        }
+
+        public String getCurrencyId() {
+            return currencyId;
+        }
+
+        public void setCurrencyId(String currencyId) {
+            this.currencyId = currencyId;
         }
     }
 

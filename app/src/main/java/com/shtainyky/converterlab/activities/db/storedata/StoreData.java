@@ -1,5 +1,7 @@
 package com.shtainyky.converterlab.activities.db.storedata;
 
+import android.database.sqlite.SQLiteException;
+
 import com.raizlabs.android.dbflow.config.FlowManager;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 import com.raizlabs.android.dbflow.structure.database.transaction.ProcessModelTransaction;
@@ -48,13 +50,21 @@ public class StoreData {
     }
 
     public static String getDate() {
-        List<TableDate> dates = SQLite.select()
-                .from(TableDate.class)
-                .where(TableDate_Table.id.is("date"))
-                .queryList();
-        if (dates.size() > 0)
-            return dates.get(0).getDate();
-        return Constants.DATABASE_NOT_CREATED;
+        List<TableDate> dates;
+        try {
+            dates = SQLite.select()
+                    .from(TableDate.class)
+                    .where(TableDate_Table.id.is("date"))
+                    .queryList();
+            if (dates.size() > 0)
+                return dates.get(0).getDate();
+            else
+                return Constants.DATABASE_NOT_CREATED;
+        }
+        catch (SQLiteException e) {
+            return Constants.DATABASE_NOT_CREATED;
+        }
+
     }
 
     private static void insertCurrencyMap() {
@@ -277,6 +287,7 @@ public class StoreData {
         for (int i = 0; i < tableCurrenciesLists.size(); i++) {
             TableCurrenciesList currenciesList = tableCurrenciesLists.get(i);
             OrganizationUI.CurrencyUI currencyUI = new OrganizationUI().new CurrencyUI();
+            currencyUI.setCurrencyId(currenciesList.getCurrencyId());
             currencyUI.setName(getCurrencyNameForID(currenciesList.getCurrencyId()));
             currencyUI.setAsk(currenciesList.getAsk());
             currencyUI.setDiffAsk(currenciesList.getDiffAsk());

@@ -88,6 +88,7 @@ public class MainActivity extends BaseActivity implements OnOrganizationClickLis
         if (ab != null) {
             ab.setTitle(R.string.app_name);
             ab.setSubtitle("");
+            ab.setDisplayHomeAsUpEnabled(false);
         }
     }
 }

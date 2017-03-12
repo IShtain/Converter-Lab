@@ -4,8 +4,10 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -68,6 +70,10 @@ public class DetailFragment extends BaseFragment<MainActivity>
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        ActionBar ab = getActivityGeneric().getSupportActionBar();
+        if (ab != null) {
+            ab.setDisplayHomeAsUpEnabled(true);
+        }
         logger = LogManager.getLogger();
         logger.d(TAG, "onCreate = ");
     }
@@ -164,6 +170,23 @@ public class DetailFragment extends BaseFragment<MainActivity>
             }
         });
         
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                getActivityGeneric().getSupportFragmentManager().popBackStack();
+                ActionBar ab = getActivityGeneric().getSupportActionBar();
+                if (ab != null) {
+                    ab.setDisplayHomeAsUpEnabled(false);
+                    ab.setTitle(R.string.app_name);
+                    ab.setSubtitle("");
+                }
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override

@@ -75,7 +75,7 @@ public class MainActivity extends BaseActivity implements OnOrganizationClickLis
     }
 
     private void startIntentIfItIsSafe(Intent intent) {
-        if (Util.isIntentSave(this, intent))
+        if (Util.isIntentSafe(this, intent))
             startActivity(intent);
         else
             Toast.makeText(this, "You haven't application for view this address", Toast.LENGTH_LONG).show();

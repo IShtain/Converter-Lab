@@ -15,7 +15,7 @@ public class Util {
         return networkInfo != null && networkInfo.isConnectedOrConnecting();
     }
 
-    public static boolean isIntentSave(Context context, Intent intent) {
+    public static boolean isIntentSafe(Context context, Intent intent) {
         PackageManager packageManager = context.getPackageManager();
         List activities = packageManager.queryIntentActivities(intent,
                 PackageManager.MATCH_DEFAULT_ONLY);

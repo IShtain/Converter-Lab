@@ -224,7 +224,7 @@ public class DetailFragment extends BaseFragment<MainActivity>{
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.menu_detail, menu);
+        inflater.inflate(R.menu.menu_detail_fragment, menu);
 
         MenuItem menuItem = menu.findItem(R.id.action_share);
         menuItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {

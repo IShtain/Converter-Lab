@@ -5,7 +5,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.shtainyky.converterlab.R;
@@ -16,6 +15,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class DetailOfOrganizationRecyclerViewAdapter extends
@@ -26,6 +26,7 @@ public class DetailOfOrganizationRecyclerViewAdapter extends
     public DetailOfOrganizationRecyclerViewAdapter() {
         mCurrencyUIList = new ArrayList<>();
     }
+
     public void setOrganizationUIList(List<OrganizationUI.CurrencyUI> currencyUIList) {
         mCurrencyUIList.clear();
         mCurrencyUIList.addAll(currencyUIList);
@@ -51,25 +52,21 @@ public class DetailOfOrganizationRecyclerViewAdapter extends
     }
 
     static class DetailOfOrganizationRecyclerViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.tvCurrencyName)
         TextView tvCurrencyName;
+        @BindView(R.id.tvAsk)
         TextView tvAsk;
+        @BindView(R.id.tvBid)
         TextView tvBid;
-
+        @BindView(R.id.ivAsk)
         CustomImageView ivAsk;
+        @BindView(R.id.ivBid)
         CustomImageView ivBid;
-
 
 
         DetailOfOrganizationRecyclerViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-            tvCurrencyName = ButterKnife.findById(itemView, R.id.tvCurrencyName);
-            tvAsk = ButterKnife.findById(itemView, R.id.tvAsk);
-            tvBid = ButterKnife.findById(itemView, R.id.tvBid);
-
-            ivAsk = ButterKnife.findById(itemView, R.id.ivAsk);
-            ivBid = ButterKnife.findById(itemView, R.id.ivBid);
-
         }
 
         void bindCurrency(OrganizationUI.CurrencyUI currencyUI) {

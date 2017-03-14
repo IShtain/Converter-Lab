@@ -14,7 +14,9 @@ import com.shtainyky.converterlab.activities.models.modelUI.OrganizationUI;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class OrganizationsRecyclerViewAdapter extends RecyclerView.Adapter<OrganizationsRecyclerViewAdapter.OrganizationsRecyclerViewHolder> {
     private List<OrganizationUI> mOrganizationUIList;
@@ -65,39 +67,33 @@ public class OrganizationsRecyclerViewAdapter extends RecyclerView.Adapter<Organ
     }
 
 
-    static class OrganizationsRecyclerViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    static class OrganizationsRecyclerViewHolder extends RecyclerView.ViewHolder {
         private OrganizationUI mOrganizationUI;
-
+        @BindView(R.id.tvBankName_RV)
         TextView tvBankName;
+        @BindView(R.id.tvRegionName)
         TextView tvRegionName;
+        @BindView(R.id.tvCityName)
         TextView tvCityName;
+        @BindView(R.id.tvPhone)
         TextView tvPhone;
+        @BindView(R.id.tvAddress)
         TextView tvAddress;
 
+        @BindView(R.id.ibLink)
         ImageButton ibLink;
+        @BindView(R.id.ibMap)
         ImageButton ibMap;
+        @BindView(R.id.ibPhone)
         ImageButton ibPhone;
+        @BindView(R.id.ibDetail)
         ImageButton ibDetail;
 
-        OnItemClickListener mOnItemClickListener;
+        private OnItemClickListener mOnItemClickListener;
 
         OrganizationsRecyclerViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-            tvBankName = ButterKnife.findById(itemView, R.id.tvBankName_RV);
-            tvRegionName = ButterKnife.findById(itemView, R.id.tvRegionName);
-            tvCityName = ButterKnife.findById(itemView, R.id.tvCityName);
-            tvPhone = ButterKnife.findById(itemView, R.id.tvPhone);
-            tvAddress = ButterKnife.findById(itemView, R.id.tvAddress);
-
-            ibLink = ButterKnife.findById(itemView, R.id.ibLink);
-            ibLink.setOnClickListener(this);
-            ibMap = ButterKnife.findById(itemView, R.id.ibMap);
-            ibMap.setOnClickListener(this);
-            ibPhone = ButterKnife.findById(itemView, R.id.ibPhone);
-            ibPhone.setOnClickListener(this);
-            ibDetail = ButterKnife.findById(itemView, R.id.ibDetail);
-            ibDetail.setOnClickListener(this);
         }
 
         void bindOrganization(OrganizationUI organizationUI, OnItemClickListener onItemClickListener) {
@@ -110,8 +106,8 @@ public class OrganizationsRecyclerViewAdapter extends RecyclerView.Adapter<Organ
             mOnItemClickListener = onItemClickListener;
         }
 
-        @Override
-        public void onClick(View v) {
+        @OnClick({R.id.ibLink, R.id.ibMap, R.id.ibPhone, R.id.ibDetail})
+        void onOrganizationCardClick(View v) {
             switch (v.getId()) {
                 case R.id.ibLink:
                     if (mOnItemClickListener != null)
@@ -132,7 +128,6 @@ public class OrganizationsRecyclerViewAdapter extends RecyclerView.Adapter<Organ
             }
         }
     }
-
 
 
 }

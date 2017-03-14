@@ -179,7 +179,7 @@
             app:borderWidth="0dp"
             app:fabSize="mini"
             app:pressedTranslationZ="12dp"
-            android:onClick="onFabClick"/>
+            />
 
     </LinearLayout>
 
@@ -217,7 +217,7 @@
             app:borderWidth="0dp"
             app:fabSize="mini"
             app:pressedTranslationZ="12dp"
-            android:onClick="onFabClick"/>
+            />
     </LinearLayout>
 
     <LinearLayout
@@ -253,7 +253,7 @@
             app:borderWidth="0dp"
             app:fabSize="mini"
             app:pressedTranslationZ="12dp"
-            android:onClick="onFabClick"/>
+           />
 
     </LinearLayout>
 
@@ -269,6 +269,6 @@
         app:elevation="6dp"
         app:fabSize="normal"
         app:pressedTranslationZ="12dp"
-        android:onClick="onFabClick"/>
+       />
 
 </android.support.design.widget.CoordinatorLayout>

@@ -75,7 +75,7 @@
             android:layout_height="?attr/actionBarSize"
             android:background="@color/light_grey"
             android:orientation="horizontal"
-            android:onClick="onOrganizationCardClick">
+           >
 
             <ImageButton
                 android:id="@+id/ibLink"

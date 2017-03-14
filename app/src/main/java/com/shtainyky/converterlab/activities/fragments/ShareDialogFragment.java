@@ -4,10 +4,13 @@ import android.app.DialogFragment;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.content.ContextCompat;
 import android.text.TextPaint;
 import android.util.DisplayMetrics;
@@ -24,6 +27,7 @@ import com.shtainyky.converterlab.activities.logger.LogManager;
 import com.shtainyky.converterlab.activities.logger.Logger;
 import com.shtainyky.converterlab.activities.models.modelUI.OrganizationUI;
 
+import java.io.ByteArrayOutputStream;
 import java.text.DecimalFormat;
 import java.util.List;
 
@@ -69,7 +73,15 @@ public class ShareDialogFragment extends DialogFragment {
                 Toast.makeText(getActivity(), "Hello Share", Toast.LENGTH_SHORT).show();
                 Intent sharingIntent = new Intent(Intent.ACTION_SEND);
                 sharingIntent.setType("image/*");
-                sharingIntent.putExtra(Intent.EXTRA_STREAM, mBitmap);
+                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                mBitmap.compress(Bitmap.CompressFormat.PNG, 100, bytes);
+
+                String path = MediaStore.Images.Media.insertImage(getActivity().getContentResolver(),
+                        mBitmap,
+                        mOrganizationUI.getName(),
+                        null);
+                Uri uri = Uri.parse(path);
+                sharingIntent.putExtra(Intent.EXTRA_STREAM, uri);
                 startActivity(Intent.createChooser(sharingIntent, "Share image using"));
             }
         });
@@ -93,6 +105,7 @@ public class ShareDialogFragment extends DialogFragment {
         int heightBitmap = HEADER_SIZE + ONE_ITEM_SIZE * currenciesSize;
         Bitmap bitmap = Bitmap.createBitmap(widthBitmap, heightBitmap, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
+        canvas.drawColor(Color.WHITE);
         logger.d(TAG, "canvas.getWidth() ==== >" + canvas.getWidth());
         mPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG | Paint.LINEAR_TEXT_FLAG);
 
@@ -101,7 +114,6 @@ public class ShareDialogFragment extends DialogFragment {
         setColorAndSizeForNormalPaint(R.color.dark_grey, TEXT_SIZE_SMALL);
         canvas.drawText(mOrganizationUI.getRegionName(), X_TEXT_LEFT_SMALL, 95, mPaint);
         canvas.drawText(mOrganizationUI.getCityName(), X_TEXT_LEFT_SMALL, 130, mPaint);
-
 
         for (int i = 0; i < currenciesSize; i++) {
             setColorAndSizeForBoldPaint(R.color.dark_purple, TEXT_SIZE_BIG);
@@ -130,8 +142,8 @@ public class ShareDialogFragment extends DialogFragment {
 
     private String getTextForCurrencyAskBid(OrganizationUI.CurrencyUI currencyUI) {
         DecimalFormat format = new DecimalFormat("00.00");
-        return format.format(currencyUI.getAsk()) +
-                "/" + format.format(currencyUI.getBid());
+        return format.format(currencyUI.getBid()) +
+                "/" + format.format(currencyUI.getAsk());
     }
 
     private void setColorAndSizeForBoldPaint(int colorForPaint, int size) {

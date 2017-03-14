@@ -10,8 +10,11 @@ import android.view.ViewGroup;
 import com.shtainyky.converterlab.activities.activities.BaseActivity;
 
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 public abstract class BaseFragment<A extends BaseActivity> extends Fragment {
+
+    private Unbinder mBinder;
 
     @LayoutRes
     protected abstract int getLayoutResId();
@@ -25,7 +28,13 @@ public abstract class BaseFragment<A extends BaseActivity> extends Fragment {
     public final View onCreateView(final LayoutInflater inflater, final ViewGroup container,
                                    final Bundle savedInstanceState) {
         View view = inflater.inflate(getLayoutResId(), container, false);
-        ButterKnife.bind(this, view);
+        mBinder = ButterKnife.bind(this, view);
         return view;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mBinder.unbind();
     }
 }

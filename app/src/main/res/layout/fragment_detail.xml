@@ -1,39 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<android.support.v4.widget.SwipeRefreshLayout
+<android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:fab="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/swipe_refresh_for_currencies"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/coord_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-
-    <ScrollView
-        android:id="@+id/scrollView"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh_for_currencies"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
+        android:layout_height="match_parent">
 
-        <RelativeLayout
-            android:id="@+id/rl"
+        <ScrollView
+            android:id="@+id/scrollView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:ignore="ScrollViewSize">
+            >
 
-            <RelativeLayout
+            <LinearLayout
                 android:id="@+id/ll"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                >
+                android:orientation="vertical">
 
                 <android.support.v7.widget.CardView
                     android:id="@+id/card_view_detail"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_margin="10dp"
-                    android:background="@color/cardview_dark_background"
-                    fab:cardCornerRadius="2dp">
+                    app:cardCornerRadius="2dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -93,12 +89,11 @@
                 <android.support.v7.widget.CardView
                     android:id="@+id/card_view_text"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_below="@+id/card_view_detail"
+                    android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
                     android:background="@color/cardview_dark_background"
-                    fab:cardCornerRadius="2dp"
+                    app:cardCornerRadius="2dp"
                     >
 
                     <RelativeLayout
@@ -134,11 +129,10 @@
                 <android.support.v7.widget.CardView
                     android:id="@+id/card_view_recycler"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_below="@+id/card_view_text"
+                    android:layout_height="wrap_content"
                     android:layout_margin="10dp"
                     android:background="@color/cardview_dark_background"
-                    fab:cardCornerRadius="2dp"
+                    app:cardCornerRadius="2dp"
                     >
 
                     <android.support.v7.widget.RecyclerView
@@ -148,91 +142,133 @@
                         android:layout_margin="10dp"/>
 
                 </android.support.v7.widget.CardView>
+            </LinearLayout>
+        </ScrollView>
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+    <LinearLayout
+        android:id="@+id/fab_map_LinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:layout_marginBottom="215dp"
+        android:layout_marginRight="@dimen/fab_margin_mini"
+        android:gravity="right"
+        android:orientation="horizontal"
+        android:visibility="invisible">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|center_horizontal"
+            android:background="@color/white"
+            android:layout_marginRight="8dp"
+            android:gravity="center"
+            android:paddingLeft="@dimen/faf_label_padding"
+            android:paddingRight="@dimen/faf_label_padding"
+            android:text="@string/fab_map"
+            android:textSize="@dimen/text_size_medium"/>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_map"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_action_map"
+            app:backgroundTint="@color/light_grey"
+            app:elevation="0dp"
+            app:borderWidth="0dp"
+            app:fabSize="mini"
+            app:pressedTranslationZ="12dp"
+            android:onClick="onFabClick"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/fab_link_LinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:layout_marginBottom="150dp"
+        android:layout_marginRight="@dimen/fab_margin_mini"
+        android:gravity="right"
+        android:orientation="horizontal"
+        android:visibility="invisible"
+       >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|center_horizontal"
+            android:background="@color/white"
+            android:layout_marginRight="8dp"
+            android:gravity="center"
+            android:paddingLeft="@dimen/faf_label_padding"
+            android:paddingRight="@dimen/faf_label_padding"
+            android:text="@string/fab_link"
+            android:textSize="@dimen/text_size_medium"/>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_link"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_action_link"
+            app:backgroundTint="@color/light_grey"
+            app:elevation="0dp"
+            app:borderWidth="0dp"
+            app:fabSize="mini"
+            app:pressedTranslationZ="12dp"
+            android:onClick="onFabClick"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/fab_call_LinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:layout_marginBottom="85dp"
+        android:layout_marginRight="@dimen/fab_margin_mini"
+        android:gravity="right"
+        android:orientation="horizontal"
+        android:visibility="invisible">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|center_horizontal"
+            android:background="@color/white"
+            android:layout_marginRight="8dp"
+            android:gravity="center"
+            android:paddingLeft="@dimen/faf_label_padding"
+            android:paddingRight="@dimen/faf_label_padding"
+            android:text="@string/fab_call"
+            android:textSize="@dimen/text_size_medium"/>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_phone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_action_phone"
+            app:backgroundTint="@color/light_grey"
+            app:elevation="0dp"
+            app:borderWidth="0dp"
+            app:fabSize="mini"
+            app:pressedTranslationZ="12dp"
+            android:onClick="onFabClick"/>
+
+    </LinearLayout>
 
 
-            </RelativeLayout>
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        android:src="@drawable/ic_action_menu"
+        app:backgroundTint="@color/colorAccent"
+        app:elevation="6dp"
+        app:fabSize="normal"
+        app:pressedTranslationZ="12dp"
+        android:onClick="onFabClick"/>
 
-            <com.github.clans.fab.FloatingActionMenu
-                android:id="@+id/floating_action_menu"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentRight="true"
-                android:padding="10dp"
-                fab:layout_anchor="@+id/ll"
-                fab:menu_animationDelayPerItem="55"
-                fab:menu_backgroundColor="#ccdedada"
-                fab:menu_buttonSpacing="10dp"
-                fab:menu_colorNormal="@color/colorAccent"
-                fab:menu_colorPressed="@color/colorAccent"
-                fab:menu_colorRipple="#99d4d4d4"
-                fab:menu_fab_size="normal"
-                fab:menu_icon="@drawable/ic_action_menu"
-                fab:menu_labels_colorNormal="#333"
-                fab:menu_labels_colorPressed="#444"
-                fab:menu_labels_colorRipple="#66efecec"
-                fab:menu_labels_cornerRadius="3dp"
-                fab:menu_labels_ellipsize="none"
-                fab:menu_labels_hideAnimation="@anim/fab_scale_down"
-                fab:menu_labels_margin="0dp"
-                fab:menu_labels_maxLines="1"
-                fab:menu_labels_padding="7dp"
-                fab:menu_labels_position="left"
-                fab:menu_labels_showAnimation="@anim/fab_scale_up"
-                fab:menu_labels_showShadow="true"
-                fab:menu_labels_singleLine="false"
-                fab:menu_labels_style="@style/MenuLabelsStyle"
-                fab:menu_labels_textColor="#f2f1f1"
-                fab:menu_labels_textSize="15sp"
-                fab:menu_openDirection="up"
-                fab:menu_shadowColor="#66aff198"
-                fab:menu_shadowRadius="4dp"
-                fab:menu_shadowXOffset="1dp"
-                fab:menu_shadowYOffset="4dp"
-                fab:menu_showShadow="true"
-                android:layout_alignParentTop="true">
-
-                <com.github.clans.fab.FloatingActionButton
-                    android:id="@+id/floating_action_menu_map"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_action_map"
-                    fab:fab_colorNormal="@android:color/darker_gray"
-                    fab:fab_colorPressed="@color/colorAccent"
-                    fab:fab_label="@string/fab_map"
-                    fab:fab_size="mini"
-                    fab:menu_colorNormal="@android:color/transparent"
-                    />
-
-                <com.github.clans.fab.FloatingActionButton
-                    android:id="@+id/floating_action_menu_link"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_action_link"
-                    fab:fab_colorNormal="@android:color/darker_gray"
-                    fab:fab_colorPressed="@color/colorAccent"
-                    fab:fab_label="@string/fab_link"
-                    fab:fab_size="mini"
-                    fab:menu_colorNormal="@android:color/transparent"/>
-
-                <com.github.clans.fab.FloatingActionButton
-                    android:id="@+id/floating_action_menu_phone"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_action_phone"
-                    fab:fab_colorNormal="@android:color/darker_gray"
-                    fab:fab_colorPressed="@color/colorAccent"
-                    fab:fab_label="@string/fab_call"
-                    fab:fab_size="mini"
-                    fab:menu_colorNormal="@android:color/transparent"/>
-            </com.github.clans.fab.FloatingActionMenu>
-
-
-        </RelativeLayout>
-
-    </ScrollView>
-
-
-</android.support.v4.widget.SwipeRefreshLayout>
-
-
+</android.support.design.widget.CoordinatorLayout>

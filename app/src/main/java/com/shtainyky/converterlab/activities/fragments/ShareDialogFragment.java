@@ -37,6 +37,7 @@ public class ShareDialogFragment extends DialogFragment {
     private static final String TAG = "DetailFragment";
     private static Logger logger;
     public static final String ARG_ORGANIZATION_ID = "organization_id";
+
     public static final int HEADER_SIZE = 200;
     public static final int ONE_ITEM_SIZE = 60;
     public static final int TEXT_SIZE_BIG = 30;

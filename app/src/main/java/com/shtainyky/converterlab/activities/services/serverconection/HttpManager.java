@@ -10,8 +10,6 @@ import com.shtainyky.converterlab.activities.models.modelRetrofit.city.CityDeser
 import com.shtainyky.converterlab.activities.models.modelRetrofit.city.CityMap;
 import com.shtainyky.converterlab.activities.models.modelRetrofit.currency.CurrencyDeserializer;
 import com.shtainyky.converterlab.activities.models.modelRetrofit.currency.CurrencyMap;
-import com.shtainyky.converterlab.activities.models.modelRetrofit.org_type.OrgTypeDeserializer;
-import com.shtainyky.converterlab.activities.models.modelRetrofit.org_type.OrgTypeMap;
 import com.shtainyky.converterlab.activities.models.modelRetrofit.region.RegionDeserializer;
 import com.shtainyky.converterlab.activities.models.modelRetrofit.region.RegionMap;
 
@@ -74,14 +72,11 @@ public class HttpManager {
         }.getType();
         final Type typeCurrency = new TypeToken<List<CurrencyMap>>() {
         }.getType();
-        final Type typeOrgType = new TypeToken<List<OrgTypeMap>>() {
-        }.getType();
 
         return new GsonBuilder()
                 .registerTypeAdapter(typeRegion, new RegionDeserializer())
                 .registerTypeAdapter(typeCity, new CityDeserializer())
-                .registerTypeAdapter(typeCurrency, new CurrencyDeserializer())
-                .registerTypeAdapter(typeOrgType, new OrgTypeDeserializer());
+                .registerTypeAdapter(typeCurrency, new CurrencyDeserializer());
     }
 
 

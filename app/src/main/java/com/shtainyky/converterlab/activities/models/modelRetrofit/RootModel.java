@@ -3,7 +3,6 @@ package com.shtainyky.converterlab.activities.models.modelRetrofit;
 import com.google.gson.annotations.SerializedName;
 import com.shtainyky.converterlab.activities.models.modelRetrofit.city.CityMap;
 import com.shtainyky.converterlab.activities.models.modelRetrofit.currency.CurrencyMap;
-import com.shtainyky.converterlab.activities.models.modelRetrofit.org_type.OrgTypeMap;
 import com.shtainyky.converterlab.activities.models.modelRetrofit.organization.OrganizationUI;
 import com.shtainyky.converterlab.activities.models.modelRetrofit.region.RegionMap;
 
@@ -21,10 +20,6 @@ public class RootModel {
     private
     List<OrganizationUI> organizations;
 
-    @SerializedName("orgTypes")
-    private
-    List<OrgTypeMap> orgTypes;
-
     @SerializedName("currencies")
     private
     List<CurrencyMap> currencies;
@@ -41,16 +36,8 @@ public class RootModel {
         return date;
     }
 
-    public String getSourceId() {
-        return sourceId;
-    }
-
     public List<OrganizationUI> getOrganizations() {
         return organizations;
-    }
-
-    public List<OrgTypeMap> getOrgTypes() {
-        return orgTypes;
     }
 
     public List<CurrencyMap> getCurrencies() {

@@ -1,4 +1,4 @@
-package com.shtainyky.converterlab.activities.services.serverconection;
+package com.shtainyky.converterlab.activities.service.serverconection;
 
 import com.shtainyky.converterlab.activities.models.modelRetrofit.RootModel;
 

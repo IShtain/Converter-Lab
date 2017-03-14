@@ -32,7 +32,7 @@ import com.shtainyky.converterlab.activities.db.storedata.StoreData;
 import com.shtainyky.converterlab.activities.logger.LogManager;
 import com.shtainyky.converterlab.activities.logger.Logger;
 import com.shtainyky.converterlab.activities.models.modelUI.OrganizationUI;
-import com.shtainyky.converterlab.activities.services.LoadingBindService;
+import com.shtainyky.converterlab.activities.service.LoadingBindService;
 import com.shtainyky.converterlab.activities.util.Constants;
 
 import java.util.ArrayList;
@@ -105,11 +105,14 @@ public class OrganizationsFragment extends BaseFragment<MainActivity> implements
         mAdapter.setOnItemClickListener(this);
         organizationsRecyclerView.setAdapter(mAdapter);
         setData();
+
     }
 
     private void setData() {
-        mAdapter.setOrganizationUIList(getOrganizations());
-        progressBar.setVisibility(View.GONE);
+        List<OrganizationUI> organizationUIs = getOrganizations();
+        mAdapter.setOrganizationUIList(organizationUIs);
+        if (organizationUIs.size()> 0)
+            progressBar.setVisibility(View.GONE);
     }
 
     private void setupRefreshListener(SwipeRefreshLayout refreshLayout) {
@@ -184,7 +187,6 @@ public class OrganizationsFragment extends BaseFragment<MainActivity> implements
             String title = organizationUIs.get(i).getName().toLowerCase();
             String region = organizationUIs.get(i).getRegionName().toLowerCase();
             String city = organizationUIs.get(i).getCityName().toLowerCase();
-
             if (title.contains(gotText))
                 filteredOrganizationUIs.add(organizationUIs.get(i));
             else if (region.contains(gotText))
@@ -218,35 +220,41 @@ public class OrganizationsFragment extends BaseFragment<MainActivity> implements
         public void onReceive(Context context, Intent intent) {
             String message = intent.getStringExtra(Constants.SERVICE_MESSAGE);
             switch (message) {
-                case Constants.SERVICE_USER_HAS_FIRST_INSTALLATION:
+                case Constants.SERVICE_MESSAGE_USER_HAS_FIRST_INSTALLATION:
+                    logger.d(TAG, "SERVICE_MESSAGE_USER_HAS_FIRST_INSTALLATION");
                     textView.setVisibility(View.GONE);
                     setData();
-                    cancelPreviousAlarmManger();
-                    startAlamManager(5);
+                    logger.d(TAG, "SERVICE_MESSAGE_USER_HAS_FIRST_INSTALLATION");
+                    startAlarmManager();
                     break;
-                case Constants.SERVICE_USER_HAS_NOT_INTERNET:
+                case Constants.SERVICE_MESSAGE_USER_HAS_NOT_INTERNET:
+                    logger.d(TAG, "SERVICE_MESSAGE_USER_HAS_NOT_INTERNET");
+                    Snackbar.make(relativeLayout, R.string.no_internet_connection, Snackbar.LENGTH_LONG).show();
                     textView.setVisibility(View.GONE);
-                    progressBar.setVisibility(View.GONE);
-                    Snackbar.make(relativeLayout, R.string.no_internet_connection, Snackbar.LENGTH_SHORT).show();
                     cancelPreviousAlarmManger();
-                    startAlamManager(1);
+                    startAlarmManager();
                     break;
-                case Constants.SERVICE_USER_HAS_NOT_CREATED_DB_AND_INTERNET:
+                case Constants.SERVICE_MESSAGE_USER_HAS_NOT_CREATED_DB_AND_INTERNET:
+                    logger.d(TAG, "SERVICE_MESSAGE_USER_HAS_NOT_CREATED_DB_AND_INTERNET");
                     progressBar.setVisibility(View.GONE);
                     textView.setVisibility(View.VISIBLE);
                     textView.setText(R.string.no_data);
-                    Snackbar.make(relativeLayout, R.string.no_internet_connection, Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(relativeLayout, R.string.no_internet_connection, Snackbar.LENGTH_LONG).show();
+                    startAlarmManager();
+                    break;
+                case Constants.SERVICE_MESSAGE_DATA_UPDATED:
+                    logger.d(TAG, "SERVICE_MESSAGE_DATA_UPDATED");
                     cancelPreviousAlarmManger();
-                    startAlamManager(1);
+                    startAlarmManager();
                     break;
             }
 
         }
     };
 
-    private void startAlamManager(int intervalMinutes) {
+    private void startAlarmManager() {
         if (mBound) {
-            mService.setServiceAlarm(getContext(), true, intervalMinutes);
+            mService.setServiceAlarm(getContext(), true);
         }
     }
 
@@ -254,7 +262,7 @@ public class OrganizationsFragment extends BaseFragment<MainActivity> implements
         if (mBound) {
             boolean isOn = mService.isServiceAlarmOn(getContext());
             if (isOn)
-                mService.setServiceAlarm(getContext(), false, 1);
+                mService.setServiceAlarm(getContext(), false);
 
         }
     }

@@ -24,7 +24,7 @@
         </activity>
 
         <service
-            android:name=".activities.services.LoadingBindService"
+            android:name=".activities.service.LoadingBindService"
             android:enabled="true"
             android:exported="false">
         </service>

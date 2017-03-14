@@ -18,7 +18,7 @@
     <string name="fab_map">Карта</string>
     <string name="link">Link</string>
     <string name="no_internet_connection">No internet connection</string>
-    <string name="no_data">Нет данных</string>
+    <string name="no_data">Нет данных. \n Для обновления данных включите интернет</string>
     <string name="data_update">Данные обновлены</string>
     <string name="currencies_names">Название валюты</string>
     <string name="sales_purchase">Покупка/ \n Продажа</string>

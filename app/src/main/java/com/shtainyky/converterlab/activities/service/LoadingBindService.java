@@ -1,4 +1,4 @@
-package com.shtainyky.converterlab.activities.services;
+package com.shtainyky.converterlab.activities.service;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -9,7 +9,6 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.os.SystemClock;
 import android.support.v4.content.LocalBroadcastManager;
-import android.widget.Toast;
 
 import com.shtainyky.converterlab.R;
 import com.shtainyky.converterlab.activities.db.converter.ConvertData;
@@ -17,7 +16,7 @@ import com.shtainyky.converterlab.activities.db.storedata.StoreData;
 import com.shtainyky.converterlab.activities.logger.LogManager;
 import com.shtainyky.converterlab.activities.logger.Logger;
 import com.shtainyky.converterlab.activities.models.modelRetrofit.RootModel;
-import com.shtainyky.converterlab.activities.services.serverconection.HttpManager;
+import com.shtainyky.converterlab.activities.service.serverconection.HttpManager;
 import com.shtainyky.converterlab.activities.util.Constants;
 import com.shtainyky.converterlab.activities.util.NotificationAboutLoading;
 import com.shtainyky.converterlab.activities.util.Util;
@@ -27,12 +26,10 @@ public class LoadingBindService extends Service {
     private Logger mLogger = LogManager.getLogger();
     private final IBinder mBinder = new MyBinder();
 
-    private static final int DOWNLOAD_INTERVAL = 1000 * 60; // 60 second
-
     public LoadingBindService() {
     }
 
-    public void setServiceAlarm(Context context, boolean isOn, int minutes) {
+    public void setServiceAlarm(Context context, boolean isOn) {
         mLogger.d(TAG, "setServiceAlarm isOn -- > " + isOn);
         Intent i = new Intent(context, LoadingBindService.class);
         PendingIntent pi = PendingIntent.getService(context, 0, i, 0);
@@ -95,25 +92,26 @@ public class LoadingBindService extends Service {
                         StoreData.saveData();
                         NotificationAboutLoading.sendNotification(getApplicationContext(), getString(R.string.data_update), 0);
                         if (oldDate.equals(Constants.DATABASE_NOT_CREATED))
-                            sendMessage(Constants.SERVICE_USER_HAS_FIRST_INSTALLATION);
+                            sendMessage(Constants.SERVICE_MESSAGE_USER_HAS_FIRST_INSTALLATION);
+                        else
+                            sendMessage(Constants.SERVICE_MESSAGE_DATA_UPDATED);
                         mLogger.d(TAG, "NEW DATE rootModel.getDate() -- > " + rootModel.getDate());
                     }
                 }
-
                 @Override
                 public void onError(String message) {
                     if (oldDate.equals(Constants.DATABASE_NOT_CREATED))
-                        sendMessage(Constants.SERVICE_USER_HAS_NOT_CREATED_DB_AND_INTERNET);
+                        sendMessage(Constants.SERVICE_MESSAGE_USER_HAS_NOT_CREATED_DB_AND_INTERNET);
                     else
-                        sendMessage(Constants.SERVICE_USER_HAS_NOT_INTERNET);
+                        sendMessage(Constants.SERVICE_MESSAGE_USER_HAS_NOT_INTERNET);
                     mLogger.d(TAG, "message -- > " + message);
                 }
             });
         } else {
             if (oldDate.equals(Constants.DATABASE_NOT_CREATED))
-                sendMessage(Constants.SERVICE_USER_HAS_NOT_CREATED_DB_AND_INTERNET);
+                sendMessage(Constants.SERVICE_MESSAGE_USER_HAS_NOT_CREATED_DB_AND_INTERNET);
             else
-                sendMessage(Constants.SERVICE_USER_HAS_NOT_INTERNET);
+                sendMessage(Constants.SERVICE_MESSAGE_USER_HAS_NOT_INTERNET);
         }
     }
 

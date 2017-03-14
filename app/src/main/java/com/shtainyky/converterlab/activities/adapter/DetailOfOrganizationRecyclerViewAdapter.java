@@ -70,7 +70,7 @@ public class DetailOfOrganizationRecyclerViewAdapter extends
         }
 
         void bindCurrency(OrganizationUI.CurrencyUI currencyUI) {
-            DecimalFormat format = new DecimalFormat("0.0000");
+            DecimalFormat format = new DecimalFormat("00.0000");
             tvCurrencyName.setText(currencyUI.getName());
             tvAsk.setText(format.format(currencyUI.getAsk()));
             tvBid.setText(format.format(currencyUI.getAsk()));

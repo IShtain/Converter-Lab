@@ -1,4 +1,4 @@
-package com.shtainyky.converterlab.activities.services.serverconection;
+package com.shtainyky.converterlab.activities.service.serverconection;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

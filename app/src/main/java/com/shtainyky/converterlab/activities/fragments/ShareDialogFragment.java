@@ -71,12 +71,10 @@ public class ShareDialogFragment extends DialogFragment {
         shareButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getActivity(), "Hello Share", Toast.LENGTH_SHORT).show();
                 Intent sharingIntent = new Intent(Intent.ACTION_SEND);
                 sharingIntent.setType("image/*");
                 ByteArrayOutputStream bytes = new ByteArrayOutputStream();
                 mBitmap.compress(Bitmap.CompressFormat.PNG, 100, bytes);
-
                 String path = MediaStore.Images.Media.insertImage(getActivity().getContentResolver(),
                         mBitmap,
                         mOrganizationUI.getName(),

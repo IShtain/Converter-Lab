@@ -7,7 +7,7 @@ import com.raizlabs.android.dbflow.sql.language.SQLite;
 import com.raizlabs.android.dbflow.structure.database.transaction.ProcessModelTransaction;
 import com.raizlabs.android.dbflow.structure.database.transaction.Transaction;
 import com.shtainyky.converterlab.activities.db.converter.ConvertData;
-import com.shtainyky.converterlab.activities.db.storeModel.ConverterDatabase;
+import com.shtainyky.converterlab.activities.db.storeModel.OrganizationDatabase;
 import com.shtainyky.converterlab.activities.db.storeModel.TableCityMap;
 import com.shtainyky.converterlab.activities.db.storeModel.TableCityMap_Table;
 import com.shtainyky.converterlab.activities.db.storeModel.TableCurrenciesList;
@@ -26,9 +26,7 @@ import com.shtainyky.converterlab.activities.models.modelUI.OrganizationUI;
 import com.shtainyky.converterlab.activities.util.Constants;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 
 public class StoreData {
@@ -74,7 +72,7 @@ public class StoreData {
     }
 
     private static void saveAllCurrenciesMap(List<TableCurrencyMap> tableCurrencyList) {
-        FlowManager.getDatabase(ConverterDatabase.class)
+        FlowManager.getDatabase(OrganizationDatabase.class)
                 .beginTransactionAsync(new ProcessModelTransaction.Builder<>(
                         new ProcessModelTransaction.ProcessModel<TableCurrencyMap>() {
                             @Override
@@ -102,7 +100,7 @@ public class StoreData {
     }
 
     private static void saveAllCitiesMap(List<TableCityMap> tableCityList) {
-        FlowManager.getDatabase(ConverterDatabase.class)
+        FlowManager.getDatabase(OrganizationDatabase.class)
                 .beginTransactionAsync(new ProcessModelTransaction.Builder<>(
                         new ProcessModelTransaction.ProcessModel<TableCityMap>() {
                             @Override
@@ -130,7 +128,7 @@ public class StoreData {
     }
 
     private static void saveAllRegions(List<TableRegionMap> tableRegionMapList) {
-        FlowManager.getDatabase(ConverterDatabase.class)
+        FlowManager.getDatabase(OrganizationDatabase.class)
                 .beginTransactionAsync(new ProcessModelTransaction.Builder<>(
                         new ProcessModelTransaction.ProcessModel<TableRegionMap>() {
                             @Override
@@ -159,7 +157,7 @@ public class StoreData {
     }
 
     private static void saveAllOrganizations(List<TableOrganization> organizations) {
-        FlowManager.getDatabase(ConverterDatabase.class)
+        FlowManager.getDatabase(OrganizationDatabase.class)
                 .beginTransactionAsync(new ProcessModelTransaction.Builder<>(
                         new ProcessModelTransaction.ProcessModel<TableOrganization>() {
                             @Override
@@ -214,7 +212,7 @@ public class StoreData {
     }
 
     private static void saveAllCurrenciesList(List<TableCurrenciesList> tableCurrenciesLists) {
-        FlowManager.getDatabase(ConverterDatabase.class)
+        FlowManager.getDatabase(OrganizationDatabase.class)
                 .beginTransactionAsync(new ProcessModelTransaction.Builder<>(
                         new ProcessModelTransaction.ProcessModel<TableCurrenciesList>() {
                             @Override

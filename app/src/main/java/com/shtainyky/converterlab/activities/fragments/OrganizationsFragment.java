@@ -38,16 +38,19 @@ import com.shtainyky.converterlab.activities.util.Constants;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.ButterKnife;
+import butterknife.BindView;
 
 public class OrganizationsFragment extends BaseFragment<MainActivity> implements SearchView.OnQueryTextListener,
         OrganizationsRecyclerViewAdapter.OnItemClickListener {
     public static final String TAG = "OrganizationsFragment";
-    private RelativeLayout relativeLayout;
     private Logger logger;
-    private ProgressBar progressBar;
-    private SwipeRefreshLayout refreshLayout;
-    private TextView textView;
+
+
+    @BindView(R.id.main_layout) RelativeLayout relativeLayout;
+    @BindView(R.id.progress)  ProgressBar progressBar;
+    @BindView(R.id.swipe_refresh_for_currencies) SwipeRefreshLayout refreshLayout;
+    @BindView(R.id.tv_no_data) TextView textView;
+    @BindView(R.id.recycler_view_organizations) RecyclerView organizationsRecyclerView;
 
     private LoadingBindService mService;
     private boolean mBound = false;
@@ -92,25 +95,16 @@ public class OrganizationsFragment extends BaseFragment<MainActivity> implements
     @Override
     public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        initViews(view);
-        initRefreshLayout(view);
-        initRecyclerView(view);
+        setupRefreshListener(refreshLayout);
+        setupAdapter();
     }
 
-    private void initViews(View view) {
-        progressBar = ButterKnife.findById(view, R.id.progress);
-        relativeLayout = ButterKnife.findById(view, R.id.main_layout);
-        textView = ButterKnife.findById(view, R.id.tv_no_data);
-    }
-
-    private void initRecyclerView(View view) {
-        RecyclerView organizationsRecyclerView = ButterKnife.findById(view, R.id.recycler_view_organizations);
-        mAdapter = new OrganizationsRecyclerViewAdapter();
+    private void setupAdapter() {
         organizationsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mAdapter = new OrganizationsRecyclerViewAdapter();
         mAdapter.setOnItemClickListener(this);
         organizationsRecyclerView.setAdapter(mAdapter);
         setData();
-
     }
 
     private void setData() {
@@ -118,12 +112,7 @@ public class OrganizationsFragment extends BaseFragment<MainActivity> implements
         progressBar.setVisibility(View.GONE);
     }
 
-    private void initRefreshLayout(View view) {
-        refreshLayout = ButterKnife.findById(view, R.id.swipe_refresh_for_currencies);
-        swipeRefreshListener(refreshLayout);
-    }
-
-    private void swipeRefreshListener(final SwipeRefreshLayout refreshLayout) {
+    private void setupRefreshListener(SwipeRefreshLayout refreshLayout) {
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {

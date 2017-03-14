@@ -1,12 +1,11 @@
 package com.shtainyky.converterlab.activities.db.storeModel;
 
 import com.raizlabs.android.dbflow.annotation.Column;
-import com.raizlabs.android.dbflow.annotation.ForeignKey;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
 import com.raizlabs.android.dbflow.structure.BaseModel;
 
-@Table(database = ConverterDatabase.class)
+@Table(database = OrganizationDatabase.class)
 public class TableOrganization extends BaseModel {
     @Column
     @PrimaryKey

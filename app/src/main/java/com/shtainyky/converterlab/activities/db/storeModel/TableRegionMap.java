@@ -5,7 +5,7 @@ import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
 import com.raizlabs.android.dbflow.structure.BaseModel;
 
-@Table(database = ConverterDatabase.class)
+@Table(database = OrganizationDatabase.class)
 public class TableRegionMap extends BaseModel {
     @Column
     @PrimaryKey

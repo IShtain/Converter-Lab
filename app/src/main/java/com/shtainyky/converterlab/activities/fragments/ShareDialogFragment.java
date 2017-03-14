@@ -26,6 +26,7 @@ import com.shtainyky.converterlab.activities.db.storedata.StoreData;
 import com.shtainyky.converterlab.activities.logger.LogManager;
 import com.shtainyky.converterlab.activities.logger.Logger;
 import com.shtainyky.converterlab.activities.models.modelUI.OrganizationUI;
+import com.shtainyky.converterlab.activities.util.Util;
 
 import java.io.ByteArrayOutputStream;
 import java.text.DecimalFormat;
@@ -60,7 +61,7 @@ public class ShareDialogFragment extends DialogFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+                             final Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_share, container, false);
         logger = LogManager.getLogger();
         getBundle();
@@ -81,7 +82,9 @@ public class ShareDialogFragment extends DialogFragment {
                         null);
                 Uri uri = Uri.parse(path);
                 sharingIntent.putExtra(Intent.EXTRA_STREAM, uri);
-                startActivity(Intent.createChooser(sharingIntent, "Share image using"));
+                Intent shareIntent = Intent.createChooser(sharingIntent, "Share image using");
+                if (Util.isIntentSafe(getActivity(), shareIntent))
+                    startActivity(shareIntent);
             }
         });
         return view;

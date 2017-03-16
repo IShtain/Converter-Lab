@@ -29,6 +29,8 @@ import com.shtainyky.converterlab.activities.models.modelUI.OrganizationUI;
 import com.shtainyky.converterlab.activities.util.Util;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.text.DecimalFormat;
 import java.util.List;
 
@@ -72,19 +74,20 @@ public class ShareDialogFragment extends DialogFragment {
         shareButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent sharingIntent = new Intent(Intent.ACTION_SEND);
-                sharingIntent.setType("image/*");
-                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-                mBitmap.compress(Bitmap.CompressFormat.PNG, 100, bytes);
-                String path = MediaStore.Images.Media.insertImage(getActivity().getContentResolver(),
-                        mBitmap,
-                        mOrganizationUI.getName(),
-                        null);
-                Uri uri = Uri.parse(path);
-                sharingIntent.putExtra(Intent.EXTRA_STREAM, uri);
-                Intent shareIntent = Intent.createChooser(sharingIntent, "Share image using");
-                if (Util.isIntentSafe(getActivity(), shareIntent))
-                    startActivity(shareIntent);
+                shareBitmap("currencies_photo");
+//                Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+//                sharingIntent.setType("image/*");
+//                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+//                mBitmap.compress(Bitmap.CompressFormat.PNG, 100, bytes);
+//                String path = MediaStore.Images.Media.insertImage(getActivity().getContentResolver(),
+//                        mBitmap,
+//                        mOrganizationUI.getName(),
+//                        null);
+//                Uri uri = Uri.parse(path);
+//                sharingIntent.putExtra(Intent.EXTRA_STREAM, uri);
+//                Intent shareIntent = Intent.createChooser(sharingIntent, "Share image using");
+//                if (Util.isIntentSafe(getActivity(), shareIntent))
+//                    startActivity(shareIntent);
             }
         });
         return view;
@@ -127,6 +130,27 @@ public class ShareDialogFragment extends DialogFragment {
             canvas.drawText(text, widthBitmap - bounds.width() - X_TEXT_MARGIN_BIG, HEADER_SIZE + i * ONE_ITEM_SIZE, mPaint);
         }
         return bitmap;
+    }
+
+    private void shareBitmap(String fileName) {
+        try {
+            File file = new File(getActivity().getCacheDir(), fileName + ".png");
+            FileOutputStream fOut = new FileOutputStream(file);
+            mBitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut);
+            fOut.flush();
+            fOut.close();
+            file.setReadable(true, false);
+            Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+            sharingIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            sharingIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
+            sharingIntent.setType("image/png");
+            Intent shareIntent = Intent.createChooser(sharingIntent, "Share image using");
+            if (Util.isIntentSafe(getActivity(), shareIntent))
+                startActivity(shareIntent);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     private int getBitmapWidth() {

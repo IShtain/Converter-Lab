@@ -25,5 +25,6 @@
     <string name="ask">ask</string>
     <string name="action_share">Поделиться</string>
     <string name="bank_share">SHARE</string>
+    <string name="google_maps_key">AIzaSyBGLOcPxckkhsds6WJoMM2OzUFbaTPLgOo</string>
 
 </resources>

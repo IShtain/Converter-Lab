@@ -13,11 +13,14 @@ import com.shtainyky.converterlab.activities.fragments.DetailFragment;
 import com.shtainyky.converterlab.activities.fragments.OnOrganizationClickListener;
 import com.shtainyky.converterlab.activities.fragments.OrganizationsFragment;
 import com.shtainyky.converterlab.activities.fragments.ShareDialogFragment;
+import com.shtainyky.converterlab.activities.fragments.MapFragment;
+import com.shtainyky.converterlab.activities.models.modelGeoLatLng.GeoLatLng;
 import com.shtainyky.converterlab.activities.models.modelUI.OrganizationUI;
 import com.shtainyky.converterlab.activities.util.Util;
 
 public class MainActivity extends BaseActivity implements OnOrganizationClickListener {
     private static final String TAG = "MainActivity";
+
 
     @Override
     protected int getLayoutResId() {
@@ -44,9 +47,24 @@ public class MainActivity extends BaseActivity implements OnOrganizationClickLis
     }
 
     @Override
-    public void onMapClick(String organizationAddress) {
-        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("geo:0,0?q=" + organizationAddress));
-        startIntentIfItIsSafe(intent);
+    public void onMapClick(final String organizationAddress) {
+        logger.d(TAG, "onMapClick = " + organizationAddress);
+        GeoLatLng.getLatLng(this, organizationAddress,
+                new GeoLatLng.GeoPlaceListener() {
+                    @Override
+                    public void onSuccess(GeoLatLng geoLatLng) {
+                        logger.d(TAG, "geoLatLng.getLat() = " + geoLatLng.getLat());
+                        logger.d(TAG, "geoLatLng.getLng() = " + geoLatLng.getLng());
+                        addFragmentWithBackStack(MapFragment.newInstance(geoLatLng.getLat(),
+                                geoLatLng.getLng()));
+                    }
+
+                    @Override
+                    public void onFailure() {
+                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("geo:0,0?q=" + organizationAddress));
+                        startIntentIfItIsSafe(intent);
+                    }
+                });
     }
 
     @Override
@@ -91,4 +109,8 @@ public class MainActivity extends BaseActivity implements OnOrganizationClickLis
             ab.setDisplayHomeAsUpEnabled(false);
         }
     }
+
 }
+
+
+

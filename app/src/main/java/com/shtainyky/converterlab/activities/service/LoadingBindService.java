@@ -62,7 +62,7 @@ public class LoadingBindService extends Service {
 
     @Override
     public IBinder onBind(Intent intent) {
-
+        mLogger.d(TAG, "onBind");
         return mBinder;
     }
 

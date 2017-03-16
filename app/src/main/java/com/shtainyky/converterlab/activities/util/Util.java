@@ -20,6 +20,5 @@ public class Util {
         List activities = packageManager.queryIntentActivities(intent,
                 PackageManager.MATCH_DEFAULT_ONLY);
         return activities.size() > 0;
-
     }
 }

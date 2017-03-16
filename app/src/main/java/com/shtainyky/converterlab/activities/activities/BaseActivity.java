@@ -28,24 +28,6 @@ public abstract class BaseActivity extends AppCompatActivity{
         logger = LogManager.getLogger();
     }
 
-
-    protected void addFragment(BaseFragment fragment) {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        Fragment fragmentFromContainer = fragmentManager.findFragmentById(getFragmentContainerResId());
-        if (fragmentFromContainer == null) {
-            fragmentManager.beginTransaction()
-                    .add(getFragmentContainerResId(), fragment)
-                    .commit();
-        } else {
-            fragmentManager.beginTransaction()
-                    .replace(getFragmentContainerResId(), fragment)
-                    .commit();
-        }
-
-
-        logger.d(TAG, "addFragment");
-    }
-
     protected void addFragmentWithBackStack(BaseFragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         Fragment fragmentFromContainer = fragmentManager.findFragmentById(getFragmentContainerResId());

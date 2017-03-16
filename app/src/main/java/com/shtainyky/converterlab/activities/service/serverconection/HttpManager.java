@@ -13,13 +13,10 @@ import com.shtainyky.converterlab.activities.models.modelRetrofit.currency.Curre
 import com.shtainyky.converterlab.activities.models.modelRetrofit.region.RegionDeserializer;
 import com.shtainyky.converterlab.activities.models.modelRetrofit.region.RegionMap;
 
-import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.List;
 
-import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
-import okhttp3.Request;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -46,6 +43,7 @@ public class HttpManager {
         return manager;
     }
 
+
     public void init() {
         OkHttpClient okHttpClient = getOkHttpClient();
         GsonBuilder gsonBuilder = getGsonBuilder();
@@ -61,7 +59,6 @@ public class HttpManager {
 
         return new OkHttpClient.Builder()
                 .addInterceptor(loggingBODY)
-                .addInterceptor(new CustomInterceptor())
                 .build();
     }
 
@@ -121,12 +118,6 @@ public class HttpManager {
         void onError(String message);
     }
 
-    private class CustomInterceptor implements Interceptor {
-        @Override
-        public okhttp3.Response intercept(Chain chain) throws IOException {
-            Request reques = chain.request().newBuilder().addHeader("blabal0", "agag").build();
-            return chain.proceed(reques);
-        }
-    }
+
 
 }

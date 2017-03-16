@@ -46,11 +46,16 @@ public class OrganizationsFragment extends BaseFragment<MainActivity> implements
     private Logger logger;
 
 
-    @BindView(R.id.main_layout) RelativeLayout relativeLayout;
-    @BindView(R.id.progress)  ProgressBar progressBar;
-    @BindView(R.id.swipe_refresh_for_currencies) SwipeRefreshLayout refreshLayout;
-    @BindView(R.id.tv_no_data) TextView textView;
-    @BindView(R.id.recycler_view_organizations) RecyclerView organizationsRecyclerView;
+    @BindView(R.id.main_layout)
+    RelativeLayout relativeLayout;
+    @BindView(R.id.progress)
+    ProgressBar progressBar;
+    @BindView(R.id.swipe_refresh_for_currencies)
+    SwipeRefreshLayout refreshLayout;
+    @BindView(R.id.tv_no_data)
+    TextView textView;
+    @BindView(R.id.recycler_view_organizations)
+    RecyclerView organizationsRecyclerView;
 
     private LoadingBindService mService;
     private boolean mBound = false;
@@ -111,7 +116,7 @@ public class OrganizationsFragment extends BaseFragment<MainActivity> implements
     private void setData() {
         List<OrganizationUI> organizationUIs = getOrganizations();
         mAdapter.setOrganizationUIList(organizationUIs);
-        if (organizationUIs.size()> 0)
+        if (organizationUIs.size() > 0)
             progressBar.setVisibility(View.GONE);
     }
 
@@ -223,6 +228,7 @@ public class OrganizationsFragment extends BaseFragment<MainActivity> implements
                 case Constants.SERVICE_MESSAGE_USER_HAS_FIRST_INSTALLATION:
                     logger.d(TAG, "SERVICE_MESSAGE_USER_HAS_FIRST_INSTALLATION");
                     textView.setVisibility(View.GONE);
+                    mAdapter.notifyDataSetChanged();
                     setData();
                     logger.d(TAG, "SERVICE_MESSAGE_USER_HAS_FIRST_INSTALLATION");
                     startAlarmManager();
@@ -268,7 +274,6 @@ public class OrganizationsFragment extends BaseFragment<MainActivity> implements
     }
 
 
-
     private List<OrganizationUI> getOrganizations() {
         logger.d(TAG, "getOrganizations");
         return StoreData.getListOrganizationsUI();
@@ -282,7 +287,11 @@ public class OrganizationsFragment extends BaseFragment<MainActivity> implements
 
     @Override
     public void onMapClick(OrganizationUI organization) {
-        String address = organization.getAddress() + " " + organization.getCityName() + " " + organization.getRegionName();
+        String address = organization.getRegionName() +
+                " " +
+                organization.getCityName() +
+                " " +
+                organization.getAddress();
         mOrganizationClickListener.onMapClick(address);
     }
 

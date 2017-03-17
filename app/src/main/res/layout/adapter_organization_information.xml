@@ -56,7 +56,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_below="@+id/tvCityName"
                 android:text="@string/bank_phone"
-                android:textSize="@dimen/text_size_small"/>
+                android:textSize="@dimen/text_size_medium"/>
 
 
             <TextView
@@ -66,7 +66,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_below="@+id/tvPhone"
                 android:text="@string/bank_address"
-                android:textSize="@dimen/text_size_small"/>
+                android:textSize="@dimen/text_size_medium"/>
 
         </RelativeLayout>
 

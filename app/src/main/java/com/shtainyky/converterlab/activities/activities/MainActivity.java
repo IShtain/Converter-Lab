@@ -61,8 +61,9 @@ public class MainActivity extends BaseActivity implements OnOrganizationClickLis
 
                     @Override
                     public void onFailure() {
-                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("geo:0,0?q=" + organizationAddress));
-                        startIntentIfItIsSafe(intent);
+                        Toast.makeText(MainActivity.this,
+                                getString(R.string.message_not_valid_address, organizationAddress),
+                                Toast.LENGTH_LONG).show();
                     }
                 });
     }

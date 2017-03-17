@@ -7,6 +7,7 @@ import android.location.Geocoder;
 import com.shtainyky.converterlab.activities.logger.LogManager;
 import com.shtainyky.converterlab.activities.logger.Logger;
 import com.shtainyky.converterlab.activities.service.serverconection.GeoHttpManager;
+import com.shtainyky.converterlab.activities.util.Util;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -39,13 +40,14 @@ public class GeoLatLng {
     }
 
     public interface GeoPlaceListener {
+
         void onSuccess(GeoLatLng geoLatLng);
+
         void onFailure();
 
     }
 
     public static void getLatLng(Context context, String address, final GeoPlaceListener listener) {
-
         Geocoder geocoder = new Geocoder(context);
         List<Address> addresses = null;
         try {
@@ -75,8 +77,7 @@ public class GeoLatLng {
                         logger.d(TAG, "lng = " + geoLatLngFromJson.getLat());
                         logger.d(TAG, "lat = " + geoLatLngFromJson.getLng());
                         listener.onSuccess(geoLatLng);
-                    }
-                    else listener.onFailure();
+                    } else listener.onFailure();
                 }
 
                 @Override

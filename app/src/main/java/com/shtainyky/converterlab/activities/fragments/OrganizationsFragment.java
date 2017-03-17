@@ -1,17 +1,14 @@
 package com.shtainyky.converterlab.activities.fragments;
 
 
-import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -41,11 +38,9 @@ import java.util.List;
 import butterknife.BindView;
 
 public class OrganizationsFragment extends BaseFragment<MainActivity> implements SearchView.OnQueryTextListener,
-        OrganizationsRecyclerViewAdapter.OnItemClickListener {
+        OrganizationsRecyclerViewAdapter.OnItemClickListener, LoadingBindService.OnDataLoadedListener {
     public static final String TAG = "OrganizationsFragment";
     private Logger logger;
-
-
     @BindView(R.id.main_layout)
     RelativeLayout relativeLayout;
     @BindView(R.id.progress)
@@ -109,12 +104,12 @@ public class OrganizationsFragment extends BaseFragment<MainActivity> implements
         mAdapter = new OrganizationsRecyclerViewAdapter();
         mAdapter.setOnItemClickListener(this);
         organizationsRecyclerView.setAdapter(mAdapter);
-        setData();
-
+        List<OrganizationUI> organizationUI = StoreData.getListOrganizationsUI();
+        setData(organizationUI);
     }
 
-    private void setData() {
-        List<OrganizationUI> organizationUIs = getOrganizations();
+    private void setData(List<OrganizationUI> organizationUIs) {
+        logger.d(TAG, "setData" + organizationUIs.size());
         mAdapter.setOrganizationUIList(organizationUIs);
         if (organizationUIs.size() > 0)
             progressBar.setVisibility(View.GONE);
@@ -134,7 +129,6 @@ public class OrganizationsFragment extends BaseFragment<MainActivity> implements
         logger.d(TAG, "refreshDatabase");
         if (mBound) {
             mService.loadAndSaveData();
-            setData();
             refreshLayout.setRefreshing(false);
             logger.d(TAG, "loadAndSaveData");
         }
@@ -143,8 +137,6 @@ public class OrganizationsFragment extends BaseFragment<MainActivity> implements
     @Override
     public void onStart() {
         super.onStart();
-        LocalBroadcastManager.getInstance(getContext()).registerReceiver(
-                mMessageReceiver, new IntentFilter(Constants.LOCAL_BROADCAST_EVENT_NAME));
         // Bind to LocalService
         Intent intent = new Intent(getContext(), LoadingBindService.class);
         getContext().bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
@@ -153,8 +145,6 @@ public class OrganizationsFragment extends BaseFragment<MainActivity> implements
     @Override
     public void onStop() {
         super.onStop();
-        LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(
-                mMessageReceiver);
         // Unbind from the service
         if (mBound) {
             getContext().unbindService(mConnection);
@@ -186,7 +176,7 @@ public class OrganizationsFragment extends BaseFragment<MainActivity> implements
     @Override
     public boolean onQueryTextChange(String newText) {
         String gotText = newText.toLowerCase();
-        List<OrganizationUI> organizationUIs = getOrganizations();
+        List<OrganizationUI> organizationUIs = StoreData.getListOrganizationsUI();
         List<OrganizationUI> filteredOrganizationUIs = new ArrayList<>();
         for (int i = 0; i < organizationUIs.size(); i++) {
             String title = organizationUIs.get(i).getName().toLowerCase();
@@ -211,74 +201,29 @@ public class OrganizationsFragment extends BaseFragment<MainActivity> implements
             LoadingBindService.MyBinder binder = (LoadingBindService.MyBinder) service;
             mBound = true;
             mService = binder.getService();
+            mService.addOnSomeListener(OrganizationsFragment.this);
+            mService.loadAndSaveData();
         }
 
         @Override
         public void onServiceDisconnected(ComponentName arg0) {
+            mService.removeOnSomeListener(OrganizationsFragment.this);
             mBound = false;
             mService = null;
         }
     };
 
-    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String message = intent.getStringExtra(Constants.SERVICE_MESSAGE);
-            switch (message) {
-                case Constants.SERVICE_MESSAGE_USER_HAS_FIRST_INSTALLATION:
-                    logger.d(TAG, "SERVICE_MESSAGE_USER_HAS_FIRST_INSTALLATION");
-                    textView.setVisibility(View.GONE);
-                    mAdapter.notifyDataSetChanged();
-                    setData();
-                    logger.d(TAG, "SERVICE_MESSAGE_USER_HAS_FIRST_INSTALLATION");
-                    startAlarmManager();
-                    break;
-                case Constants.SERVICE_MESSAGE_USER_HAS_NOT_INTERNET:
-                    logger.d(TAG, "SERVICE_MESSAGE_USER_HAS_NOT_INTERNET");
-                    Snackbar.make(relativeLayout, R.string.no_internet_connection, Snackbar.LENGTH_LONG).show();
-                    textView.setVisibility(View.GONE);
-                    cancelPreviousAlarmManger();
-                    startAlarmManager();
-                    break;
-                case Constants.SERVICE_MESSAGE_USER_HAS_NOT_CREATED_DB_AND_INTERNET:
-                    logger.d(TAG, "SERVICE_MESSAGE_USER_HAS_NOT_CREATED_DB_AND_INTERNET");
-                    progressBar.setVisibility(View.GONE);
-                    textView.setVisibility(View.VISIBLE);
-                    textView.setText(R.string.no_data);
-                    Snackbar.make(relativeLayout, R.string.no_internet_connection, Snackbar.LENGTH_LONG).show();
-                    startAlarmManager();
-                    break;
-                case Constants.SERVICE_MESSAGE_DATA_UPDATED:
-                    logger.d(TAG, "SERVICE_MESSAGE_DATA_UPDATED");
-                    cancelPreviousAlarmManger();
-                    startAlarmManager();
-                    break;
-            }
-
-        }
-    };
-
     private void startAlarmManager() {
-        if (mBound) {
-            mService.setServiceAlarm(getContext(), true);
-        }
+        cancelPreviousAlarmManger();
+        LoadingBindService.setServiceAlarm(getContext(), true);
+
     }
 
     private void cancelPreviousAlarmManger() {
-        if (mBound) {
-            boolean isOn = mService.isServiceAlarmOn(getContext());
-            if (isOn)
-                mService.setServiceAlarm(getContext(), false);
-
-        }
+        boolean isOn = LoadingBindService.isServiceAlarmOn(getContext());
+        if (isOn)
+            LoadingBindService.setServiceAlarm(getContext(), false);
     }
-
-
-    private List<OrganizationUI> getOrganizations() {
-        logger.d(TAG, "getOrganizations");
-        return StoreData.getListOrganizationsUI();
-    }
-
 
     @Override
     public void onCallClick(OrganizationUI organization) {
@@ -305,4 +250,36 @@ public class OrganizationsFragment extends BaseFragment<MainActivity> implements
         mOrganizationClickListener.onDetailClick(organization);
     }
 
+
+    @Override
+    public void onUpdateDB(List<OrganizationUI> updatedOrganizationUIs) {
+        logger.d(TAG, "onUpdateDB");
+        setData(updatedOrganizationUIs);
+        startAlarmManager();
+    }
+
+    @Override
+    public void onFailure(String message) {
+        switch (message) {
+            case Constants.SERVICE_MESSAGE_USER_HAS_NOT_INTERNET:
+                logger.d(TAG, "SERVICE_MESSAGE_USER_HAS_NOT_INTERNET");
+                Snackbar.make(relativeLayout, R.string.no_internet_connection, Snackbar.LENGTH_LONG).show();
+                textView.setVisibility(View.GONE);
+                startAlarmManager();
+                break;
+            case Constants.SERVICE_MESSAGE_USER_HAS_INTERNET:
+                logger.d(TAG, "SERVICE_MESSAGE_USER_HAS_INTERNET");
+                textView.setVisibility(View.GONE);
+                startAlarmManager();
+                break;
+            case Constants.SERVICE_MESSAGE_USER_HAS_NOT_CREATED_DB_AND_INTERNET:
+                logger.d(TAG, "SERVICE_MESSAGE_USER_HAS_NOT_CREATED_DB_AND_INTERNET");
+                progressBar.setVisibility(View.GONE);
+                textView.setVisibility(View.VISIBLE);
+                textView.setText(R.string.no_data);
+                Snackbar.make(relativeLayout, R.string.no_internet_connection, Snackbar.LENGTH_LONG).show();
+                startAlarmManager();
+                break;
+        }
+    }
 }

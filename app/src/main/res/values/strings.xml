@@ -26,5 +26,6 @@
     <string name="action_share">Поделиться</string>
     <string name="bank_share">SHARE</string>
     <string name="google_maps_key">AIzaSyBGLOcPxckkhsds6WJoMM2OzUFbaTPLgOo</string>
+    <string name="message_not_valid_address">Данные по адрессу %s не коректные</string>
 
 </resources>

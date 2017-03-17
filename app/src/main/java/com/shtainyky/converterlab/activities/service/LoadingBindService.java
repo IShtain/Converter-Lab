@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
 import android.os.SystemClock;
-import android.support.v4.content.LocalBroadcastManager;
 
 import com.shtainyky.converterlab.R;
 import com.shtainyky.converterlab.activities.db.converter.ConvertData;
@@ -16,20 +15,25 @@ import com.shtainyky.converterlab.activities.db.storedata.StoreData;
 import com.shtainyky.converterlab.activities.logger.LogManager;
 import com.shtainyky.converterlab.activities.logger.Logger;
 import com.shtainyky.converterlab.activities.models.modelRetrofit.RootModel;
+import com.shtainyky.converterlab.activities.models.modelUI.OrganizationUI;
 import com.shtainyky.converterlab.activities.service.serverconection.HttpManager;
 import com.shtainyky.converterlab.activities.util.Constants;
 import com.shtainyky.converterlab.activities.util.NotificationAboutLoading;
 import com.shtainyky.converterlab.activities.util.Util;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class LoadingBindService extends Service {
     private static final String TAG = "LoadingBindService";
-    private Logger mLogger = LogManager.getLogger();
+    private static Logger mLogger = LogManager.getLogger();
     private final IBinder mBinder = new MyBinder();
+    private ArrayList<OnDataLoadedListener> mListeners;
 
     public LoadingBindService() {
     }
 
-    public void setServiceAlarm(Context context, boolean isOn) {
+    public static void setServiceAlarm(Context context, boolean isOn) {
         mLogger.d(TAG, "setServiceAlarm isOn -- > " + isOn);
         Intent i = new Intent(context, LoadingBindService.class);
         PendingIntent pi = PendingIntent.getService(context, 0, i, 0);
@@ -42,10 +46,9 @@ public class LoadingBindService extends Service {
             alarmManager.cancel(pi);
             pi.cancel();
         }
-
     }
 
-    public boolean isServiceAlarmOn(Context context) {
+    public static boolean isServiceAlarmOn(Context context) {
         mLogger.d(TAG, "isServiceAlarmOn isOn -- > ");
         Intent i = new Intent(context, LoadingBindService.class);
         PendingIntent pi = PendingIntent
@@ -57,7 +60,13 @@ public class LoadingBindService extends Service {
     public void onCreate() {
         mLogger.d(TAG, "onCreate");
         super.onCreate();
-        loadAndSaveData();
+    }
+
+    @Override
+    public void onDestroy() {
+        if (mListeners != null)
+            mListeners.clear();
+        super.onDestroy();
     }
 
     @Override
@@ -74,7 +83,6 @@ public class LoadingBindService extends Service {
         return START_STICKY;
     }
 
-
     public void loadAndSaveData() {
         final String oldDate = StoreData.getDate();
         if (Util.isOnline(getApplicationContext())) {
@@ -86,32 +94,60 @@ public class LoadingBindService extends Service {
                     if (rootModel.getDate().equals(oldDate)) {
                         ConvertData.convertDate(rootModel.getDate());
                         StoreData.insertDate();
+                        sendFailureMessage(oldDate);
                         mLogger.d(TAG, "oldDate -- > " + oldDate);
                     } else {
                         ConvertData.convertRootModelForStoring(rootModel);
                         StoreData.saveData();
                         NotificationAboutLoading.sendNotification(getApplicationContext(), getString(R.string.data_update), 0);
-                        if (oldDate.equals(Constants.DATABASE_NOT_CREATED))
-                            sendMessage(Constants.SERVICE_MESSAGE_USER_HAS_FIRST_INSTALLATION);
-                        else
-                            sendMessage(Constants.SERVICE_MESSAGE_DATA_UPDATED);
+                        sendData();
                         mLogger.d(TAG, "NEW DATE rootModel.getDate() -- > " + rootModel.getDate());
                     }
                 }
+
                 @Override
                 public void onError(String message) {
-                    if (oldDate.equals(Constants.DATABASE_NOT_CREATED))
-                        sendMessage(Constants.SERVICE_MESSAGE_USER_HAS_NOT_CREATED_DB_AND_INTERNET);
-                    else
-                        sendMessage(Constants.SERVICE_MESSAGE_USER_HAS_NOT_INTERNET);
+                    sendFailureMessage(oldDate);
                     mLogger.d(TAG, "message -- > " + message);
                 }
             });
         } else {
-            if (oldDate.equals(Constants.DATABASE_NOT_CREATED))
-                sendMessage(Constants.SERVICE_MESSAGE_USER_HAS_NOT_CREATED_DB_AND_INTERNET);
-            else
-                sendMessage(Constants.SERVICE_MESSAGE_USER_HAS_NOT_INTERNET);
+            sendFailureMessage(oldDate);
+        }
+    }
+
+    private void sendData() {
+        if (mListeners == null)return;
+        for (OnDataLoadedListener listener : mListeners) {
+            mLogger.d(TAG, "sendData working-- > ");
+            if (listener != null) {
+                List<OrganizationUI> organizationUIs = StoreData.getListOrganizationsUI();
+                int i = 0;
+                while (organizationUIs.size() <= 0) {
+                    organizationUIs = StoreData.getListOrganizationsUI();
+                    mLogger.d(TAG, "OnDataLoadedListener try get updated data i-- > " + i++);
+                }
+                mLogger.d(TAG, "OnDataLoadedListener list.size()-- > " + organizationUIs.size());
+                listener.onUpdateDB(organizationUIs);
+            }
+        }
+    }
+
+    private void sendFailureMessage(String oldDate) {
+        mLogger.d(TAG, "sendFailureMessage working-- > ");
+        if (mListeners == null)return;
+        for (OnDataLoadedListener listener : mListeners) {
+            if (listener != null) {
+                if (oldDate.equals(Constants.DATABASE_NOT_CREATED)) {
+                    listener.onFailure(Constants.SERVICE_MESSAGE_USER_HAS_NOT_CREATED_DB_AND_INTERNET);
+                } else {
+                    if (Util.isOnline(getApplicationContext())) {
+                        listener.onFailure(Constants.SERVICE_MESSAGE_USER_HAS_INTERNET);
+                    } else {
+                        listener.onFailure(Constants.SERVICE_MESSAGE_USER_HAS_NOT_INTERNET);
+                    }
+                }
+            }
         }
     }
 
@@ -121,10 +157,20 @@ public class LoadingBindService extends Service {
         }
     }
 
-    private void sendMessage(String message) {
-        mLogger.d(TAG, "sendMessage");
-        Intent intent = new Intent(Constants.LOCAL_BROADCAST_EVENT_NAME);
-        intent.putExtra(Constants.SERVICE_MESSAGE, message);
-        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+    public void addOnSomeListener(OnDataLoadedListener listener) {
+        if (mListeners == null)
+            mListeners = new ArrayList<>();
+
+        mListeners.add(listener);
+    }
+
+    public void removeOnSomeListener(OnDataLoadedListener listener) {
+        mListeners.remove(listener);
+    }
+
+    public interface OnDataLoadedListener {
+        void onUpdateDB(List<OrganizationUI> updatedOrganizationUIs);
+
+        void onFailure(String message);
     }
 }

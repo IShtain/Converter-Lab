@@ -75,19 +75,6 @@ public class ShareDialogFragment extends DialogFragment {
             @Override
             public void onClick(View v) {
                 shareBitmap("currencies_photo");
-//                Intent sharingIntent = new Intent(Intent.ACTION_SEND);
-//                sharingIntent.setType("image/*");
-//                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-//                mBitmap.compress(Bitmap.CompressFormat.PNG, 100, bytes);
-//                String path = MediaStore.Images.Media.insertImage(getActivity().getContentResolver(),
-//                        mBitmap,
-//                        mOrganizationUI.getName(),
-//                        null);
-//                Uri uri = Uri.parse(path);
-//                sharingIntent.putExtra(Intent.EXTRA_STREAM, uri);
-//                Intent shareIntent = Intent.createChooser(sharingIntent, "Share image using");
-//                if (Util.isIntentSafe(getActivity(), shareIntent))
-//                    startActivity(shareIntent);
             }
         });
         return view;

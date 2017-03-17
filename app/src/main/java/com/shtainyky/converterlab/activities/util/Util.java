@@ -10,9 +10,20 @@ import java.util.List;
 
 public class Util {
     public static boolean isOnline(Context context) {
-        ConnectivityManager manager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = manager.getActiveNetworkInfo();
-        return networkInfo != null && networkInfo.isConnectedOrConnecting();
+        boolean haveConnectedWifi = false;
+        boolean haveConnectedMobile = false;
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        if (activeNetwork != null) { // connected to the internet
+            if (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI) {
+                if (activeNetwork.isConnected())
+                    haveConnectedWifi = true;
+            } else if (activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE) {
+                if (activeNetwork.isConnected())
+                    haveConnectedMobile = true;
+            }
+        }
+        return haveConnectedWifi || haveConnectedMobile;
     }
 
     public static boolean isIntentSafe(Context context, Intent intent) {

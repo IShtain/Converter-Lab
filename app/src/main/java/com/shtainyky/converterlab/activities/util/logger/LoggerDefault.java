@@ -1,4 +1,4 @@
-package com.shtainyky.converterlab.activities.logger;
+package com.shtainyky.converterlab.activities.util.logger;
 
 import android.util.Log;
 

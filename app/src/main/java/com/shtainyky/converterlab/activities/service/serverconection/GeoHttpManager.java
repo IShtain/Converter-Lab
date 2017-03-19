@@ -2,8 +2,8 @@ package com.shtainyky.converterlab.activities.service.serverconection;
 
 
 import com.google.gson.JsonObject;
-import com.shtainyky.converterlab.activities.logger.LogManager;
-import com.shtainyky.converterlab.activities.logger.Logger;
+import com.shtainyky.converterlab.activities.util.logger.LogManager;
+import com.shtainyky.converterlab.activities.util.logger.Logger;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;

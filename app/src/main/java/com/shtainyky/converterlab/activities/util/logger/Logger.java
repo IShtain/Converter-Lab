@@ -1,4 +1,4 @@
-package com.shtainyky.converterlab.activities.logger;
+package com.shtainyky.converterlab.activities.util.logger;
 
 public interface Logger {
     int v(String tag, String msg);

@@ -7,8 +7,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 
 import com.shtainyky.converterlab.activities.fragments.BaseFragment;
-import com.shtainyky.converterlab.activities.logger.LogManager;
-import com.shtainyky.converterlab.activities.logger.Logger;
+import com.shtainyky.converterlab.activities.util.logger.LogManager;
+import com.shtainyky.converterlab.activities.util.logger.Logger;
 
 import butterknife.ButterKnife;
 

@@ -10,7 +10,6 @@ import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.v4.content.ContextCompat;
 import android.text.TextPaint;
 import android.util.DisplayMetrics;
@@ -19,16 +18,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.shtainyky.converterlab.R;
 import com.shtainyky.converterlab.activities.db.storedata.StoreData;
-import com.shtainyky.converterlab.activities.logger.LogManager;
-import com.shtainyky.converterlab.activities.logger.Logger;
+import com.shtainyky.converterlab.activities.util.logger.LogManager;
+import com.shtainyky.converterlab.activities.util.logger.Logger;
 import com.shtainyky.converterlab.activities.models.modelUI.OrganizationUI;
 import com.shtainyky.converterlab.activities.util.Util;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.text.DecimalFormat;

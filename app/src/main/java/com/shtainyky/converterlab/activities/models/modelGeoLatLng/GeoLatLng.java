@@ -4,10 +4,9 @@ import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
 
-import com.shtainyky.converterlab.activities.logger.LogManager;
-import com.shtainyky.converterlab.activities.logger.Logger;
+import com.shtainyky.converterlab.activities.util.logger.LogManager;
+import com.shtainyky.converterlab.activities.util.logger.Logger;
 import com.shtainyky.converterlab.activities.service.serverconection.GeoHttpManager;
-import com.shtainyky.converterlab.activities.util.Util;
 
 import org.json.JSONArray;
 import org.json.JSONException;

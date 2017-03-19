@@ -2,7 +2,7 @@ package com.shtainyky.converterlab.activities.db.converter;
 
 import com.shtainyky.converterlab.activities.models.modelRetrofit.city.CityMap;
 import com.shtainyky.converterlab.activities.models.modelRetrofit.currency.CurrencyMap;
-import com.shtainyky.converterlab.activities.models.modelRetrofit.organization.OrganizationUI;
+import com.shtainyky.converterlab.activities.models.modelRetrofit.organization.Organization;
 import com.shtainyky.converterlab.activities.models.modelRetrofit.region.RegionMap;
 
 public class Validator {
@@ -21,7 +21,7 @@ public class Validator {
         return regionMap;
     }
 
-    OrganizationUI validateOrganization(OrganizationUI organization) {
+    Organization validateOrganization(Organization organization) {
         if (organization.getTitle() == null) organization.setTitle("Нет данных");
         if (organization.getAddress() == null) organization.setAddress("Нет данных");
         if (organization.getCityId() == null) organization.setCityId("Нет данных");

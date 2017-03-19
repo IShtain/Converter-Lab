@@ -104,7 +104,7 @@ public class OrganizationsFragment extends BaseFragment<MainActivity> implements
         mAdapter = new OrganizationsRecyclerViewAdapter();
         mAdapter.setOnItemClickListener(this);
         organizationsRecyclerView.setAdapter(mAdapter);
-        List<OrganizationUI> organizationUI = StoreData.getListOrganizationsUI();
+        List<OrganizationUI> organizationUI = StoreData.getInstance().getListOrganizationsUI();
         setData(organizationUI);
     }
 
@@ -139,6 +139,7 @@ public class OrganizationsFragment extends BaseFragment<MainActivity> implements
         super.onStart();
         // Bind to LocalService
         Intent intent = new Intent(getContext(), LoadingBindService.class);
+        intent.putExtra("Bind", true);
         getContext().bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
     }
 
@@ -176,7 +177,7 @@ public class OrganizationsFragment extends BaseFragment<MainActivity> implements
     @Override
     public boolean onQueryTextChange(String newText) {
         String gotText = newText.toLowerCase();
-        List<OrganizationUI> organizationUIs = StoreData.getListOrganizationsUI();
+        List<OrganizationUI> organizationUIs = StoreData.getInstance().getListOrganizationsUI();
         List<OrganizationUI> filteredOrganizationUIs = new ArrayList<>();
         for (int i = 0; i < organizationUIs.size(); i++) {
             String title = organizationUIs.get(i).getName().toLowerCase();
@@ -269,7 +270,8 @@ public class OrganizationsFragment extends BaseFragment<MainActivity> implements
                 break;
             case Constants.SERVICE_MESSAGE_USER_HAS_INTERNET:
                 logger.d(TAG, "SERVICE_MESSAGE_USER_HAS_INTERNET");
-                textView.setVisibility(View.GONE);
+                if (textView != null)
+                    textView.setVisibility(View.GONE);
                 startAlarmManager();
                 break;
             case Constants.SERVICE_MESSAGE_USER_HAS_NOT_CREATED_DB_AND_INTERNET:

@@ -22,32 +22,68 @@ import com.shtainyky.converterlab.activities.db.storeModel.TableRegionMap;
 import com.shtainyky.converterlab.activities.db.storeModel.TableRegionMap_Table;
 import com.shtainyky.converterlab.activities.logger.LogManager;
 import com.shtainyky.converterlab.activities.logger.Logger;
+import com.shtainyky.converterlab.activities.models.modelRetrofit.RootModel;
+import com.shtainyky.converterlab.activities.models.modelRetrofit.city.CityMap;
+import com.shtainyky.converterlab.activities.models.modelRetrofit.currency.CurrencyMap;
+import com.shtainyky.converterlab.activities.models.modelRetrofit.organization.Organization;
+import com.shtainyky.converterlab.activities.models.modelRetrofit.region.RegionMap;
 import com.shtainyky.converterlab.activities.models.modelUI.OrganizationUI;
 import com.shtainyky.converterlab.activities.util.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 
 public class StoreData {
-
     private static Logger mLogger = LogManager.getLogger();
     private static String TAG = "StoreData";
 
-    public static void saveData() {
-        insertDate();
-        insertCurrencyMap();
-        insertCityMap();
-        insertRegionMap();
-        insertOrganization();
+    private static StoreData sStoreData;
+    private OnAllDBTransactionFinishedListener mListener;
+    private AtomicInteger counter;
+    private AtomicInteger mycounter;
+    private static  final int max_counter_transation = 5;
+
+
+    private StoreData() {
     }
 
-    public static void insertDate() {
-        TableDate tableDate = ConvertData.getTableDate();
+    public static StoreData getInstance() {
+        if (sStoreData == null) {
+            sStoreData = new StoreData();
+        } else {
+            return sStoreData;
+        }
+        return sStoreData;
+    }
+
+    public interface OnAllDBTransactionFinishedListener {
+        void onSuccess();
+
+        void onError();
+
+    }
+
+    public void saveData(RootModel rootModel, OnAllDBTransactionFinishedListener allDBTransactionFinishedListener) {
+        counter = new AtomicInteger();
+        mLogger.d(TAG, "max_counter_transation i = " + max_counter_transation);
+        mycounter = new AtomicInteger();
+        mListener = allDBTransactionFinishedListener;
+        insertDate(rootModel.getDate());
+        insertCurrencyMap(rootModel.getCurrencies());
+        insertCityMap(rootModel.getCities());
+        insertRegionMap(rootModel.getRegions());
+        insertOrganization(rootModel.getOrganizations());
+    }
+
+    public void insertDate(String date) {
+        TableDate tableDate = ConvertData.convertDate(date);
         tableDate.save();
     }
 
-    public static String getDate() {
+    public String getDate() {
         List<TableDate> dates;
         try {
             dates = SQLite.select()
@@ -58,20 +94,19 @@ public class StoreData {
                 return dates.get(0).getDate();
             else
                 return Constants.DATABASE_NOT_CREATED;
-        }
-        catch (SQLiteException e) {
+        } catch (SQLiteException e) {
             return Constants.DATABASE_NOT_CREATED;
         }
 
     }
 
-    private static void insertCurrencyMap() {
-        List<TableCurrencyMap> tableCurrencyList = ConvertData.getTableCurrencyList();
+    private void insertCurrencyMap(List<CurrencyMap> currencyMaps) {
+        List<TableCurrencyMap> tableCurrencyList = ConvertData.convertCurrencies(currencyMaps);
         saveAllCurrenciesMap(tableCurrencyList);
         mLogger.d(TAG, "insertCurrencyMap");
     }
 
-    private static void saveAllCurrenciesMap(List<TableCurrencyMap> tableCurrencyList) {
+    private void saveAllCurrenciesMap(List<TableCurrencyMap> tableCurrencyList) {
         FlowManager.getDatabase(OrganizationDatabase.class)
                 .beginTransactionAsync(new ProcessModelTransaction.Builder<>(
                         new ProcessModelTransaction.ProcessModel<TableCurrencyMap>() {
@@ -83,23 +118,27 @@ public class StoreData {
                 .error(new Transaction.Error() {
                     @Override
                     public void onError(Transaction transaction, Throwable error) {
+                        mListener.onError();
                     }
                 })
                 .success(new Transaction.Success() {
                     @Override
                     public void onSuccess(Transaction transaction) {
+                        mLogger.d(TAG, "saveAllCurrenciesMap i = " + mycounter.incrementAndGet());
+                        if (counter.incrementAndGet() == max_counter_transation)
+                            mListener.onSuccess();
                     }
                 }).build().execute();
         mLogger.d(TAG, "saveAllCurrenciesMap");
     }
 
-    private static void insertCityMap() {
-        List<TableCityMap> tableCityMapList = ConvertData.getTableCityMapList();
+    private void insertCityMap(List<CityMap> cityMaps) {
+        List<TableCityMap> tableCityMapList = ConvertData.convertCities(cityMaps);
         saveAllCitiesMap(tableCityMapList);
         mLogger.d(TAG, "insertCityMap");
     }
 
-    private static void saveAllCitiesMap(List<TableCityMap> tableCityList) {
+    private void saveAllCitiesMap(List<TableCityMap> tableCityList) {
         FlowManager.getDatabase(OrganizationDatabase.class)
                 .beginTransactionAsync(new ProcessModelTransaction.Builder<>(
                         new ProcessModelTransaction.ProcessModel<TableCityMap>() {
@@ -111,23 +150,27 @@ public class StoreData {
                 .error(new Transaction.Error() {
                     @Override
                     public void onError(Transaction transaction, Throwable error) {
+                        mListener.onError();
                     }
                 })
                 .success(new Transaction.Success() {
                     @Override
                     public void onSuccess(Transaction transaction) {
+                        mLogger.d(TAG, "saveAllCitiesMap i = " + mycounter.incrementAndGet());
+                        if (counter.incrementAndGet() == max_counter_transation)
+                            mListener.onSuccess();
                     }
                 }).build().execute();
         mLogger.d(TAG, "saveAllCitiesMap");
     }
 
-    private static void insertRegionMap() {
-        List<TableRegionMap> tableRegionMapList = ConvertData.getTableRegionMapList();
+    private void insertRegionMap(List<RegionMap> regionMaps) {
+        List<TableRegionMap> tableRegionMapList = ConvertData.convertRegions(regionMaps);
         saveAllRegions(tableRegionMapList);
         mLogger.d(TAG, "insertRegionMap");
     }
 
-    private static void saveAllRegions(List<TableRegionMap> tableRegionMapList) {
+    private void saveAllRegions(List<TableRegionMap> tableRegionMapList) {
         FlowManager.getDatabase(OrganizationDatabase.class)
                 .beginTransactionAsync(new ProcessModelTransaction.Builder<>(
                         new ProcessModelTransaction.ProcessModel<TableRegionMap>() {
@@ -139,24 +182,34 @@ public class StoreData {
                 .error(new Transaction.Error() {
                     @Override
                     public void onError(Transaction transaction, Throwable error) {
+                        mListener.onError();
                     }
                 })
                 .success(new Transaction.Success() {
                     @Override
                     public void onSuccess(Transaction transaction) {
+                        mLogger.d(TAG, "saveAllRegions i = " + mycounter.incrementAndGet());
+                        if (counter.incrementAndGet() == max_counter_transation)
+                            mListener.onSuccess();
                     }
                 }).build().execute();
         mLogger.d(TAG, "saveAllRegions");
     }
 
-    private static void insertOrganization() {
-        List<TableOrganization> tableOrganizationList = ConvertData.getTableOrganizationList();
+    private void insertOrganization(List<Organization> organizations) {
+        List<TableOrganization> tableOrganizationList = ConvertData.convertOrganizations(organizations);
         saveAllOrganizations(tableOrganizationList);
-        insertCurrenciesForOrganization();
+        List<TableCurrenciesList> newTableCurrenciesLists = new ArrayList<>();
+        for (int i = 0; i < organizations.size(); i++) {
+            newTableCurrenciesLists.addAll(getCurrenciesForOrganization
+                    (organizations.get(i).getId(), organizations.get(i).getCurrencies()));
+        }
+
+        saveAllCurrenciesList(newTableCurrenciesLists);
         mLogger.d(TAG, "insertOrganization");
     }
 
-    private static void saveAllOrganizations(List<TableOrganization> organizations) {
+    private void saveAllOrganizations(List<TableOrganization> organizations) {
         FlowManager.getDatabase(OrganizationDatabase.class)
                 .beginTransactionAsync(new ProcessModelTransaction.Builder<>(
                         new ProcessModelTransaction.ProcessModel<TableOrganization>() {
@@ -168,24 +221,29 @@ public class StoreData {
                 .error(new Transaction.Error() {
                     @Override
                     public void onError(Transaction transaction, Throwable error) {
+                        mListener.onError();
                     }
                 })
                 .success(new Transaction.Success() {
                     @Override
                     public void onSuccess(Transaction transaction) {
+                        mLogger.d(TAG, "saveAllOrganizations i = " + mycounter.incrementAndGet());
+                        if (counter.incrementAndGet() == 5)
+                            mListener.onSuccess();
                     }
                 }).build().execute();
         mLogger.d(TAG, "saveAllOrganizations");
     }
 
-    private static void insertCurrenciesForOrganization() {
-        List<TableCurrenciesList> newTableCurrenciesLists = ConvertData.getTableCurrenciesLists();
+    private List<TableCurrenciesList> getCurrenciesForOrganization(String orgID, Map<String, Organization.Currency> currencies) {
+        List<TableCurrenciesList> newTableCurrenciesLists = ConvertData.convertListCurrenciesForOrganization(orgID, currencies);
         List<TableCurrenciesList> oldTableCurrenciesLists = SQLite.select()
                 .from(TableCurrenciesList.class)
-                .where()
+                .where(TableCurrenciesList_Table.organizationId.is(orgID))
                 .queryList();
 
         mLogger.d(TAG, "oldTableCurrenciesLists.size() = " + oldTableCurrenciesLists.size());
+        mLogger.d(TAG, "newTableCurrenciesLists.size() = " + newTableCurrenciesLists.size());
         if (oldTableCurrenciesLists.size() > 0) {
             for (int i = 0; i < oldTableCurrenciesLists.size(); i++) {
                 for (int j = 0; j < newTableCurrenciesLists.size(); j++) {
@@ -204,14 +262,14 @@ public class StoreData {
                 }
             }
         }
-        saveAllCurrenciesList(newTableCurrenciesLists);
+        return newTableCurrenciesLists;
     }
 
-    private static boolean haveSameId(TableCurrenciesList firstCurrencyList, TableCurrenciesList secondCurrencyList) {
+    private boolean haveSameId(TableCurrenciesList firstCurrencyList, TableCurrenciesList secondCurrencyList) {
         return firstCurrencyList.getId().equals(secondCurrencyList.getId());
     }
 
-    private static void saveAllCurrenciesList(List<TableCurrenciesList> tableCurrenciesLists) {
+    private void saveAllCurrenciesList(List<TableCurrenciesList> tableCurrenciesLists) {
         FlowManager.getDatabase(OrganizationDatabase.class)
                 .beginTransactionAsync(new ProcessModelTransaction.Builder<>(
                         new ProcessModelTransaction.ProcessModel<TableCurrenciesList>() {
@@ -228,16 +286,21 @@ public class StoreData {
                 .success(new Transaction.Success() {
                     @Override
                     public void onSuccess(Transaction transaction) {
+                        mLogger.d(TAG, "saveAllCurrenciesList i = " + mycounter.incrementAndGet());
+                        if (counter.incrementAndGet() == max_counter_transation) {
+                            mListener.onSuccess();
+                        }
                     }
                 }).build().execute();
     }
 
     //************************************************************************************
 
-    public static List<OrganizationUI> getListOrganizationsUI() {
+    public List<OrganizationUI> getListOrganizationsUI() {
         List<OrganizationUI> organizationUIList = new ArrayList<>();
         List<TableOrganization> organizationList = SQLite.select()
                 .from(TableOrganization.class)
+                .orderBy(TableOrganization_Table.name, true)
                 .queryList();
         for (int i = 0; i < organizationList.size(); i++) {
             TableOrganization organization = organizationList.get(i);
@@ -255,7 +318,7 @@ public class StoreData {
         return organizationUIList;
     }
 
-    public static OrganizationUI getOrganizationForID(String id) {
+    public OrganizationUI getOrganizationForID(String id) {
         List<TableOrganization> organizationList = SQLite.select()
                 .from(TableOrganization.class)
                 .where(TableOrganization_Table.id.in(id))
@@ -274,7 +337,7 @@ public class StoreData {
         return organizationUI;
     }
 
-    private static List<OrganizationUI.CurrencyUI> getCurrenciesForID(String id) {
+    private List<OrganizationUI.CurrencyUI> getCurrenciesForID(String id) {
         List<OrganizationUI.CurrencyUI> currencyUIs = new ArrayList<>();
 
         List<TableCurrenciesList> tableCurrenciesLists = SQLite.select()
@@ -296,7 +359,7 @@ public class StoreData {
         return currencyUIs;
     }
 
-    private static String getCurrencyNameForID(String currencyId) {
+    private String getCurrencyNameForID(String currencyId) {
         List<TableCurrencyMap> currencyMaps = SQLite.select()
                 .from(TableCurrencyMap.class)
                 .where(TableCurrencyMap_Table.id.is(currencyId))
@@ -304,7 +367,7 @@ public class StoreData {
         return currencyMaps.get(0).getName();
     }
 
-    private static String getRegionNameForID(String regionId) {
+    private String getRegionNameForID(String regionId) {
         List<TableRegionMap> regionMaps = SQLite.select()
                 .from(TableRegionMap.class)
                 .where(TableRegionMap_Table.id.is(regionId))
@@ -313,7 +376,7 @@ public class StoreData {
 
     }
 
-    private static String getCityNameForID(String cityId) {
+    private String getCityNameForID(String cityId) {
         List<TableCityMap> cityMaps = SQLite.select()
                 .from(TableCityMap.class)
                 .where(TableCityMap_Table.id.is(cityId))

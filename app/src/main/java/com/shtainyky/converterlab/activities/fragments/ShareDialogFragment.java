@@ -84,7 +84,7 @@ public class ShareDialogFragment extends DialogFragment {
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             String orgID = bundle.getString(ARG_ORGANIZATION_ID);
-            mOrganizationUI = StoreData.getOrganizationForID(orgID);
+            mOrganizationUI = StoreData.getInstance().getOrganizationForID(orgID);
             logger.d(TAG, "savedInstanceState.getString(ARG_ORGANIZATION_ID) = " + orgID);
         }
     }

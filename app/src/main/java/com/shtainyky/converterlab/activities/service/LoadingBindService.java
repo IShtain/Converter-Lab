@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
 import android.os.SystemClock;
+import android.util.Log;
 
 import com.shtainyky.converterlab.R;
 import com.shtainyky.converterlab.activities.db.converter.ConvertData;
@@ -18,7 +19,6 @@ import com.shtainyky.converterlab.activities.models.modelRetrofit.RootModel;
 import com.shtainyky.converterlab.activities.models.modelUI.OrganizationUI;
 import com.shtainyky.converterlab.activities.service.serverconection.HttpManager;
 import com.shtainyky.converterlab.activities.util.Constants;
-import com.shtainyky.converterlab.activities.util.NotificationAboutLoading;
 import com.shtainyky.converterlab.activities.util.Util;
 
 import java.util.ArrayList;
@@ -27,8 +27,9 @@ import java.util.List;
 public class LoadingBindService extends Service {
     private static final String TAG = "LoadingBindService";
     private static Logger mLogger = LogManager.getLogger();
-    private final IBinder mBinder = new MyBinder();
+    private IBinder mBinder;
     private ArrayList<OnDataLoadedListener> mListeners;
+
 
     public LoadingBindService() {
     }
@@ -41,7 +42,7 @@ public class LoadingBindService extends Service {
                 context.getSystemService(Context.ALARM_SERVICE);
         if (isOn) {
             alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME,
-                    SystemClock.elapsedRealtime(), 2 * AlarmManager.INTERVAL_FIFTEEN_MINUTES, pi);
+                    SystemClock.elapsedRealtime(), 20 * AlarmManager.INTERVAL_FIFTEEN_MINUTES, pi);
         } else {
             alarmManager.cancel(pi);
             pi.cancel();
@@ -64,6 +65,7 @@ public class LoadingBindService extends Service {
 
     @Override
     public void onDestroy() {
+        mLogger.d(TAG, "onDestroy");
         if (mListeners != null)
             mListeners.clear();
         super.onDestroy();
@@ -72,19 +74,32 @@ public class LoadingBindService extends Service {
     @Override
     public IBinder onBind(Intent intent) {
         mLogger.d(TAG, "onBind");
-        return mBinder;
+        if (intent.getBooleanExtra("Bind", false)) {
+            mBinder = new MyBinder();
+            return mBinder;
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public boolean onUnbind(Intent intent) {
+        mBinder = null;
+        return super.onUnbind(intent);
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         mLogger.d(TAG, "onStartCommand");
-        loadAndSaveData();
-        stopSelf();
-        return START_STICKY;
+        if (mBinder == null)
+            loadAndSaveData();
+        else
+            stopSelf();
+        return START_NOT_STICKY;
     }
 
     public void loadAndSaveData() {
-        final String oldDate = StoreData.getDate();
+        final String oldDate = StoreData.getInstance().getDate();
         if (Util.isOnline(getApplicationContext())) {
             HttpManager.getInstance().init();
             HttpManager.getInstance().getResponse(new HttpManager.OnResponseListener() {
@@ -93,15 +108,24 @@ public class LoadingBindService extends Service {
                     mLogger.d(TAG, "onSuccess");
                     if (rootModel.getDate().equals(oldDate)) {
                         ConvertData.convertDate(rootModel.getDate());
-                        StoreData.insertDate();
-                        sendFailureMessage(oldDate);
+                        StoreData.getInstance().insertDate(rootModel.getDate());
                         mLogger.d(TAG, "oldDate -- > " + oldDate);
+                        sendFailureMessage(oldDate);
                     } else {
-                        ConvertData.convertRootModelForStoring(rootModel);
-                        StoreData.saveData();
-                        NotificationAboutLoading.sendNotification(getApplicationContext(), getString(R.string.data_update), 0);
-                        sendData();
                         mLogger.d(TAG, "NEW DATE rootModel.getDate() -- > " + rootModel.getDate());
+                        StoreData.getInstance().saveData(rootModel, new StoreData.OnAllDBTransactionFinishedListener() {
+                            @Override
+                            public void onSuccess() {
+
+                                Util.sendNotification(getApplicationContext(), getString(R.string.data_update), 0);
+                                sendData();
+                            }
+
+                            @Override
+                            public void onError() {
+                                sendFailureMessage(oldDate);
+                            }
+                        });
                     }
                 }
 
@@ -114,19 +138,20 @@ public class LoadingBindService extends Service {
         } else {
             sendFailureMessage(oldDate);
         }
+
+
     }
 
     private void sendData() {
-        if (mListeners == null)return;
+        if (mBinder == null) {
+            mLogger.d(TAG, "sendDataorstopSelf -- > ");
+            stopSelf();
+        }
+        if (mListeners == null) return;
         for (OnDataLoadedListener listener : mListeners) {
             mLogger.d(TAG, "sendData working-- > ");
             if (listener != null) {
-                List<OrganizationUI> organizationUIs = StoreData.getListOrganizationsUI();
-                int i = 0;
-                while (organizationUIs.size() <= 0) {
-                    organizationUIs = StoreData.getListOrganizationsUI();
-                    mLogger.d(TAG, "OnDataLoadedListener try get updated data i-- > " + i++);
-                }
+                List<OrganizationUI> organizationUIs = StoreData.getInstance().getListOrganizationsUI();
                 mLogger.d(TAG, "OnDataLoadedListener list.size()-- > " + organizationUIs.size());
                 listener.onUpdateDB(organizationUIs);
             }
@@ -135,7 +160,11 @@ public class LoadingBindService extends Service {
 
     private void sendFailureMessage(String oldDate) {
         mLogger.d(TAG, "sendFailureMessage working-- > ");
-        if (mListeners == null)return;
+        if (mBinder == null) {
+            mLogger.d(TAG, "sendFailureMessageorstopSelf -- > ");
+            stopSelf();
+        }
+        if (mListeners == null) return;
         for (OnDataLoadedListener listener : mListeners) {
             if (listener != null) {
                 if (oldDate.equals(Constants.DATABASE_NOT_CREATED)) {

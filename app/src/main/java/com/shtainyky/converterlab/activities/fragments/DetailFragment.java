@@ -126,7 +126,7 @@ public class DetailFragment extends BaseFragment<MainActivity>{
             @Override
             public void onRefresh() {
                 logger.d(TAG, "onRefresh");
-                mOrganizationUI = StoreData.getOrganizationForID(mOrgID);
+                mOrganizationUI = StoreData.getInstance().getOrganizationForID(mOrgID);
                 setupData();
                 refreshLayout.setRefreshing(false);
             }
@@ -217,7 +217,7 @@ public class DetailFragment extends BaseFragment<MainActivity>{
 
 
     private OrganizationUI getOrganizationUI(String id) {
-        return StoreData.getOrganizationForID(id);
+        return StoreData.getInstance().getOrganizationForID(id);
     }
 
 

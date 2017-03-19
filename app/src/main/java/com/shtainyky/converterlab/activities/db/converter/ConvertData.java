@@ -8,10 +8,9 @@ import com.shtainyky.converterlab.activities.db.storeModel.TableOrganization;
 import com.shtainyky.converterlab.activities.db.storeModel.TableRegionMap;
 import com.shtainyky.converterlab.activities.logger.LogManager;
 import com.shtainyky.converterlab.activities.logger.Logger;
-import com.shtainyky.converterlab.activities.models.modelRetrofit.RootModel;
 import com.shtainyky.converterlab.activities.models.modelRetrofit.city.CityMap;
 import com.shtainyky.converterlab.activities.models.modelRetrofit.currency.CurrencyMap;
-import com.shtainyky.converterlab.activities.models.modelRetrofit.organization.OrganizationUI;
+import com.shtainyky.converterlab.activities.models.modelRetrofit.organization.Organization;
 import com.shtainyky.converterlab.activities.models.modelRetrofit.region.RegionMap;
 
 import java.util.ArrayList;
@@ -22,30 +21,26 @@ import java.util.Map;
 public class ConvertData {
     private static Logger mLogger = LogManager.getLogger();
     private static String TAG = "StoreData";
-    private static List<TableCurrencyMap> tableCurrencyList = new ArrayList<>();
-    private static List<TableCityMap> tableCityMapList = new ArrayList<>();
-    private static List<TableRegionMap> tableRegionMapList = new ArrayList<>();
-    private static List<TableOrganization> tableOrganizationList = new ArrayList<>();
-    private static List<TableCurrenciesList> tableCurrenciesLists = new ArrayList<>();
-    private static TableDate tableDate = new TableDate();
-
     private static Validator mValidator = new Validator();
 
-    public static void convertRootModelForStoring(RootModel rootModel) {
-        mLogger.d(TAG, "convertRootModelForStoring");
-        convertDate(rootModel.getDate());
-        convertCurrencies(rootModel.getCurrencies());
-        convertCities(rootModel.getCities());
-        convertRegions(rootModel.getRegions());
-        convertOrganizations(rootModel.getOrganizations());
-    }
+//    public static void convertRootModelForStoring(RootModel rootModel) {
+//        mLogger.d(TAG, "convertRootModelForStoring");
+//        convertDate(rootModel.getDate());
+//        convertCurrencies(rootModel.getCurrencies());
+//        convertCities(rootModel.getCities());
+//        convertRegions(rootModel.getRegions());
+//        convertOrganizations(rootModel.getOrganizations());
+//    }
 
-    public static void convertDate(String date) {
+    public static TableDate convertDate(String date) {
+        TableDate tableDate = new TableDate();
         tableDate.setId("date");
         tableDate.setDate(date);
+        return tableDate;
     }
 
-    private static void convertCurrencies(List<CurrencyMap> currencyMapList) {
+    public static List<TableCurrencyMap> convertCurrencies(List<CurrencyMap> currencyMapList) {
+        List<TableCurrencyMap> tableCurrencyList = new ArrayList<>();
         for (int i = 0; i < currencyMapList.size(); i++) {
             TableCurrencyMap tableCurrencyMap = new TableCurrencyMap();
             CurrencyMap currencyMap = mValidator.validateCurrencyMap(currencyMapList.get(i));
@@ -53,9 +48,11 @@ public class ConvertData {
             tableCurrencyMap.setName(currencyMap.getCurrencyTitle());
             tableCurrencyList.add(tableCurrencyMap);
         }
+        return tableCurrencyList;
     }
 
-    private static void convertCities(List<CityMap> cityMapList) {
+    public static List<TableCityMap> convertCities(List<CityMap> cityMapList) {
+        List<TableCityMap> tableCityMapList = new ArrayList<>();
         for (int i = 0; i < cityMapList.size(); i++) {
             TableCityMap tableCityMap = new TableCityMap();
             CityMap cityMap = mValidator.validateCityMap(cityMapList.get(i));
@@ -63,9 +60,11 @@ public class ConvertData {
             tableCityMap.setName(cityMap.getCityName());
             tableCityMapList.add(tableCityMap);
         }
+        return tableCityMapList;
     }
 
-    private static void convertRegions(List<RegionMap> regionMapList) {
+    public static List<TableRegionMap> convertRegions(List<RegionMap> regionMapList) {
+        List<TableRegionMap> tableRegionMapList = new ArrayList<>();
         for (int i = 0; i < regionMapList.size(); i++) {
             TableRegionMap tableRegionMap = new TableRegionMap();
             RegionMap regionMap = mValidator.validateRegionMap(regionMapList.get(i));
@@ -73,12 +72,14 @@ public class ConvertData {
             tableRegionMap.setName(regionMap.getRegionName());
             tableRegionMapList.add(tableRegionMap);
         }
+        return tableRegionMapList;
     }
 
-    private static void convertOrganizations(List<OrganizationUI> organizations) {
+    public static List<TableOrganization> convertOrganizations(List<Organization> organizations) {
+        List<TableOrganization> tableOrganizationList = new ArrayList<>();
         for (int i = 0; i < organizations.size(); i++) {
-            OrganizationUI organization = mValidator.validateOrganization(organizations.get(i));
-            Map<String, OrganizationUI.Currency> organizationCurrenciesList = organization.getCurrencies();
+            Organization organization = mValidator.validateOrganization(organizations.get(i));
+           // Map<String, Organization.Currency> organizationCurrenciesList = organization.getCurrencies();
             TableOrganization tableOrganization = new TableOrganization();
             tableOrganization.setId(organization.getId());
             tableOrganization.setName(organization.getTitle());
@@ -88,13 +89,15 @@ public class ConvertData {
             tableOrganization.setCityId(organization.getCityId());
             tableOrganization.setRegionId(organization.getRegionId());
             tableOrganization.setCurrenciesListId(organization.getId());
-            convertListCurrenciesForOrganization(organization.getId(), organizationCurrenciesList);
+           // convertListCurrenciesForOrganization(organization.getId(), organizationCurrenciesList);
             tableOrganizationList.add(tableOrganization);
         }
+        return tableOrganizationList;
     }
 
-    private static void convertListCurrenciesForOrganization(String organizationId,
-                                                             Map<String, OrganizationUI.Currency> currencies) {
+    public static List<TableCurrenciesList> convertListCurrenciesForOrganization(String organizationId,
+                                                             Map<String, Organization.Currency> currencies) {
+        List<TableCurrenciesList> tableCurrenciesLists = new ArrayList<>();
         for (String key : currencies.keySet()) {
             TableCurrenciesList currenciesList = new TableCurrenciesList();
             currenciesList.setId(organizationId + key);
@@ -104,29 +107,7 @@ public class ConvertData {
             currenciesList.setBid(currencies.get(key).getBid());
             tableCurrenciesLists.add(currenciesList);
         }
-    }
-
-    public static List<TableCurrencyMap> getTableCurrencyList() {
-        return tableCurrencyList;
-    }
-
-    public static List<TableCityMap> getTableCityMapList() {
-        return tableCityMapList;
-    }
-
-    public static List<TableRegionMap> getTableRegionMapList() {
-        return tableRegionMapList;
-    }
-
-    public static List<TableOrganization> getTableOrganizationList() {
-        return tableOrganizationList;
-    }
-
-    public static List<TableCurrenciesList> getTableCurrenciesLists() {
         return tableCurrenciesLists;
     }
 
-    public static TableDate getTableDate() {
-        return tableDate;
-    }
 }

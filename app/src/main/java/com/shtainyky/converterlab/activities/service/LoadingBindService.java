@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
 import android.os.SystemClock;
-import android.util.Log;
 
 import com.shtainyky.converterlab.R;
 import com.shtainyky.converterlab.activities.db.converter.ConvertData;
@@ -42,7 +41,7 @@ public class LoadingBindService extends Service {
                 context.getSystemService(Context.ALARM_SERVICE);
         if (isOn) {
             alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME,
-                    SystemClock.elapsedRealtime(), 20 * AlarmManager.INTERVAL_FIFTEEN_MINUTES, pi);
+                    SystemClock.elapsedRealtime(), 2 * AlarmManager.INTERVAL_FIFTEEN_MINUTES, pi);
         } else {
             alarmManager.cancel(pi);
             pi.cancel();
@@ -74,7 +73,7 @@ public class LoadingBindService extends Service {
     @Override
     public IBinder onBind(Intent intent) {
         mLogger.d(TAG, "onBind");
-        if (intent.getBooleanExtra("Bind", false)) {
+        if (intent.getBooleanExtra(Constants.SERVICE_IS_BINDER, false)) {
             mBinder = new MyBinder();
             return mBinder;
         } else {
@@ -116,7 +115,6 @@ public class LoadingBindService extends Service {
                         StoreData.getInstance().saveData(rootModel, new StoreData.OnAllDBTransactionFinishedListener() {
                             @Override
                             public void onSuccess() {
-
                                 Util.sendNotification(getApplicationContext(), getString(R.string.data_update), 0);
                                 sendData();
                             }
@@ -131,8 +129,8 @@ public class LoadingBindService extends Service {
 
                 @Override
                 public void onError(String message) {
-                    sendFailureMessage(oldDate);
                     mLogger.d(TAG, "message -- > " + message);
+                    sendFailureMessage(oldDate);
                 }
             });
         } else {

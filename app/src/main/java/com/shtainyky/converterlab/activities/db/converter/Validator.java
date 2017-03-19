@@ -23,7 +23,7 @@ public class Validator {
 
     Organization validateOrganization(Organization organization) {
         if (organization.getTitle() == null) organization.setTitle("Нет данных");
-        if (organization.getAddress() == null) organization.setAddress("Нет данных");
+        if (organization.getAddress() == null||organization.getAddress().equals("")) organization.setAddress("Нет данных");
         if (organization.getCityId() == null) organization.setCityId("Нет данных");
         if (organization.getRegionId() == null) organization.setRegionId("Нет данных");
         if (organization.getPhone() == null) organization.setPhone("Нет данных");

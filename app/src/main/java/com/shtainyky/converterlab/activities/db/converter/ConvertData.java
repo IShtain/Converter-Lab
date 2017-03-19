@@ -20,17 +20,8 @@ import java.util.Map;
 
 public class ConvertData {
     private static Logger mLogger = LogManager.getLogger();
-    private static String TAG = "StoreData";
+    private static String TAG = "ConvertData";
     private static Validator mValidator = new Validator();
-
-//    public static void convertRootModelForStoring(RootModel rootModel) {
-//        mLogger.d(TAG, "convertRootModelForStoring");
-//        convertDate(rootModel.getDate());
-//        convertCurrencies(rootModel.getCurrencies());
-//        convertCities(rootModel.getCities());
-//        convertRegions(rootModel.getRegions());
-//        convertOrganizations(rootModel.getOrganizations());
-//    }
 
     public static TableDate convertDate(String date) {
         TableDate tableDate = new TableDate();
@@ -79,7 +70,6 @@ public class ConvertData {
         List<TableOrganization> tableOrganizationList = new ArrayList<>();
         for (int i = 0; i < organizations.size(); i++) {
             Organization organization = mValidator.validateOrganization(organizations.get(i));
-           // Map<String, Organization.Currency> organizationCurrenciesList = organization.getCurrencies();
             TableOrganization tableOrganization = new TableOrganization();
             tableOrganization.setId(organization.getId());
             tableOrganization.setName(organization.getTitle());
@@ -89,7 +79,6 @@ public class ConvertData {
             tableOrganization.setCityId(organization.getCityId());
             tableOrganization.setRegionId(organization.getRegionId());
             tableOrganization.setCurrenciesListId(organization.getId());
-           // convertListCurrenciesForOrganization(organization.getId(), organizationCurrenciesList);
             tableOrganizationList.add(tableOrganization);
         }
         return tableOrganizationList;

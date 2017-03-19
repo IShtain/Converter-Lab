@@ -43,7 +43,6 @@ public class StoreData {
     private static StoreData sStoreData;
     private OnAllDBTransactionFinishedListener mListener;
     private AtomicInteger counter;
-    private AtomicInteger mycounter;
     private static  final int max_counter_transation = 5;
 
 
@@ -69,7 +68,6 @@ public class StoreData {
     public void saveData(RootModel rootModel, OnAllDBTransactionFinishedListener allDBTransactionFinishedListener) {
         counter = new AtomicInteger();
         mLogger.d(TAG, "max_counter_transation i = " + max_counter_transation);
-        mycounter = new AtomicInteger();
         mListener = allDBTransactionFinishedListener;
         insertDate(rootModel.getDate());
         insertCurrencyMap(rootModel.getCurrencies());
@@ -124,7 +122,6 @@ public class StoreData {
                 .success(new Transaction.Success() {
                     @Override
                     public void onSuccess(Transaction transaction) {
-                        mLogger.d(TAG, "saveAllCurrenciesMap i = " + mycounter.incrementAndGet());
                         if (counter.incrementAndGet() == max_counter_transation)
                             mListener.onSuccess();
                     }
@@ -156,7 +153,6 @@ public class StoreData {
                 .success(new Transaction.Success() {
                     @Override
                     public void onSuccess(Transaction transaction) {
-                        mLogger.d(TAG, "saveAllCitiesMap i = " + mycounter.incrementAndGet());
                         if (counter.incrementAndGet() == max_counter_transation)
                             mListener.onSuccess();
                     }
@@ -188,7 +184,6 @@ public class StoreData {
                 .success(new Transaction.Success() {
                     @Override
                     public void onSuccess(Transaction transaction) {
-                        mLogger.d(TAG, "saveAllRegions i = " + mycounter.incrementAndGet());
                         if (counter.incrementAndGet() == max_counter_transation)
                             mListener.onSuccess();
                     }
@@ -199,6 +194,7 @@ public class StoreData {
     private void insertOrganization(List<Organization> organizations) {
         List<TableOrganization> tableOrganizationList = ConvertData.convertOrganizations(organizations);
         saveAllOrganizations(tableOrganizationList);
+
         List<TableCurrenciesList> newTableCurrenciesLists = new ArrayList<>();
         for (int i = 0; i < organizations.size(); i++) {
             newTableCurrenciesLists.addAll(getCurrenciesForOrganization
@@ -227,8 +223,7 @@ public class StoreData {
                 .success(new Transaction.Success() {
                     @Override
                     public void onSuccess(Transaction transaction) {
-                        mLogger.d(TAG, "saveAllOrganizations i = " + mycounter.incrementAndGet());
-                        if (counter.incrementAndGet() == 5)
+                        if (counter.incrementAndGet() == max_counter_transation)
                             mListener.onSuccess();
                     }
                 }).build().execute();
@@ -286,7 +281,6 @@ public class StoreData {
                 .success(new Transaction.Success() {
                     @Override
                     public void onSuccess(Transaction transaction) {
-                        mLogger.d(TAG, "saveAllCurrenciesList i = " + mycounter.incrementAndGet());
                         if (counter.incrementAndGet() == max_counter_transation) {
                             mListener.onSuccess();
                         }

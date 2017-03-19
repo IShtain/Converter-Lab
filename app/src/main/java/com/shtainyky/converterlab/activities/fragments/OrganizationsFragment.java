@@ -139,7 +139,7 @@ public class OrganizationsFragment extends BaseFragment<MainActivity> implements
         super.onStart();
         // Bind to LocalService
         Intent intent = new Intent(getContext(), LoadingBindService.class);
-        intent.putExtra("Bind", true);
+        intent.putExtra(Constants.SERVICE_IS_BINDER, true);
         getContext().bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
     }
 

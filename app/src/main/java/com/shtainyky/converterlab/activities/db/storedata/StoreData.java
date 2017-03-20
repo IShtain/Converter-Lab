@@ -20,8 +20,6 @@ import com.shtainyky.converterlab.activities.db.storeModel.TableOrganization;
 import com.shtainyky.converterlab.activities.db.storeModel.TableOrganization_Table;
 import com.shtainyky.converterlab.activities.db.storeModel.TableRegionMap;
 import com.shtainyky.converterlab.activities.db.storeModel.TableRegionMap_Table;
-import com.shtainyky.converterlab.activities.util.logger.LogManager;
-import com.shtainyky.converterlab.activities.util.logger.Logger;
 import com.shtainyky.converterlab.activities.models.modelRetrofit.RootModel;
 import com.shtainyky.converterlab.activities.models.modelRetrofit.city.CityMap;
 import com.shtainyky.converterlab.activities.models.modelRetrofit.currency.CurrencyMap;
@@ -29,6 +27,8 @@ import com.shtainyky.converterlab.activities.models.modelRetrofit.organization.O
 import com.shtainyky.converterlab.activities.models.modelRetrofit.region.RegionMap;
 import com.shtainyky.converterlab.activities.models.modelUI.OrganizationUI;
 import com.shtainyky.converterlab.activities.util.Constants;
+import com.shtainyky.converterlab.activities.util.logger.LogManager;
+import com.shtainyky.converterlab.activities.util.logger.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,8 +43,7 @@ public class StoreData {
     private static StoreData sStoreData;
     private OnAllDBTransactionFinishedListener mListener;
     private AtomicInteger counter;
-    private static  final int max_count_transaction = 5;
-
+    private static final int max_count_transaction = 5;
 
     private StoreData() {
     }

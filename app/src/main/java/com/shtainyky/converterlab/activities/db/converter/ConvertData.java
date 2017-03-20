@@ -17,8 +17,6 @@ import java.util.Map;
 
 
 public class ConvertData {
-    private static Validator mValidator = new Validator();
-
     public static TableDate convertDate(String date) {
         TableDate tableDate = new TableDate();
         tableDate.setId("date");
@@ -30,7 +28,7 @@ public class ConvertData {
         List<TableCurrencyMap> tableCurrencyList = new ArrayList<>();
         for (int i = 0; i < currencyMapList.size(); i++) {
             TableCurrencyMap tableCurrencyMap = new TableCurrencyMap();
-            CurrencyMap currencyMap = mValidator.validateCurrencyMap(currencyMapList.get(i));
+            CurrencyMap currencyMap = Validator.getInstance().validateCurrencyMap(currencyMapList.get(i));
             tableCurrencyMap.setId(currencyMap.getId());
             tableCurrencyMap.setName(currencyMap.getCurrencyTitle());
             tableCurrencyList.add(tableCurrencyMap);
@@ -42,7 +40,7 @@ public class ConvertData {
         List<TableCityMap> tableCityMapList = new ArrayList<>();
         for (int i = 0; i < cityMapList.size(); i++) {
             TableCityMap tableCityMap = new TableCityMap();
-            CityMap cityMap = mValidator.validateCityMap(cityMapList.get(i));
+            CityMap cityMap = Validator.getInstance().validateCityMap(cityMapList.get(i));
             tableCityMap.setId(cityMap.getId());
             tableCityMap.setName(cityMap.getCityName());
             tableCityMapList.add(tableCityMap);
@@ -54,7 +52,7 @@ public class ConvertData {
         List<TableRegionMap> tableRegionMapList = new ArrayList<>();
         for (int i = 0; i < regionMapList.size(); i++) {
             TableRegionMap tableRegionMap = new TableRegionMap();
-            RegionMap regionMap = mValidator.validateRegionMap(regionMapList.get(i));
+            RegionMap regionMap = Validator.getInstance().validateRegionMap(regionMapList.get(i));
             tableRegionMap.setId(regionMap.getId());
             tableRegionMap.setName(regionMap.getRegionName());
             tableRegionMapList.add(tableRegionMap);
@@ -65,7 +63,7 @@ public class ConvertData {
     public static List<TableOrganization> convertOrganizations(List<Organization> organizations) {
         List<TableOrganization> tableOrganizationList = new ArrayList<>();
         for (int i = 0; i < organizations.size(); i++) {
-            Organization organization = mValidator.validateOrganization(organizations.get(i));
+            Organization organization = Validator.getInstance().validateOrganization(organizations.get(i));
             TableOrganization tableOrganization = new TableOrganization();
             tableOrganization.setId(organization.getId());
             tableOrganization.setName(organization.getTitle());

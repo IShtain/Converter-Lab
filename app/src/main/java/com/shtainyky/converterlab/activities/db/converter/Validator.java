@@ -6,7 +6,19 @@ import com.shtainyky.converterlab.activities.models.modelRetrofit.organization.O
 import com.shtainyky.converterlab.activities.models.modelRetrofit.region.RegionMap;
 
 class Validator {
+    private static Validator sValidator;
 
+    private Validator() {
+    }
+
+    public static Validator getInstance() {
+        if (sValidator == null) {
+            sValidator = new Validator();
+        } else {
+            return sValidator;
+        }
+        return sValidator;
+    }
 
     CurrencyMap validateCurrencyMap(CurrencyMap currencyMap) {
         if (currencyMap.getCurrencyTitle() == null) currencyMap.setCurrencyTitle("Нет данных");
@@ -25,7 +37,8 @@ class Validator {
 
     Organization validateOrganization(Organization organization) {
         if (organization.getTitle() == null) organization.setTitle("Нет данных");
-        if (organization.getAddress() == null||organization.getAddress().equals(" ")) organization.setAddress("Нет данных");
+        if (organization.getAddress() == null || organization.getAddress().equals(" "))
+            organization.setAddress("Нет данных");
         if (organization.getCityId() == null) organization.setCityId("Нет данных");
         if (organization.getRegionId() == null) organization.setRegionId("Нет данных");
         if (organization.getPhone() == null) organization.setPhone("Нет данных");

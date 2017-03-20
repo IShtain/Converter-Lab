@@ -49,6 +49,7 @@ public class MapFragment extends BaseFragment<MainActivity> implements OnMapRead
             mapView.getMapAsync(this);
         }
     }
+
     private void getBundle() {
         Bundle bundle = this.getArguments();
         if (bundle != null) {

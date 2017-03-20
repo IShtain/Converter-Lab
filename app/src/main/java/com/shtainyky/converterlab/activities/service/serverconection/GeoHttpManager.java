@@ -17,7 +17,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class GeoHttpManager {
 
-    private static GeoHttpManager manager;
+    private static GeoHttpManager sManager;
     private  GeoApiService mApiService;
     private Logger mLogger = LogManager.getLogger();
     private static final String TAG = "GeoHttpManager";
@@ -27,12 +27,12 @@ public class GeoHttpManager {
     }
 
     public static GeoHttpManager getInstance() {
-        if (manager == null) {
-            manager = new GeoHttpManager();
+        if (sManager == null) {
+            sManager = new GeoHttpManager();
         } else {
-            return manager;
+            return sManager;
         }
-        return manager;
+        return sManager;
     }
 
     public void initGeoService() {

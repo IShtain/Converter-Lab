@@ -19,8 +19,6 @@ import java.util.Map;
 
 
 public class ConvertData {
-    private static Logger mLogger = LogManager.getLogger();
-    private static String TAG = "ConvertData";
     private static Validator mValidator = new Validator();
 
     public static TableDate convertDate(String date) {

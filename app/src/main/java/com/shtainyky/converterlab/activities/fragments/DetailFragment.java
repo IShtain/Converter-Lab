@@ -40,7 +40,7 @@ public class DetailFragment extends BaseFragment<MainActivity> implements OnBack
     private static final String TAG = "DetailFragment";
     private static Logger logger;
 
-    public static final String ARG_ORGANIZATION_ID = "organization_id";
+    private static final String ARG_ORGANIZATION_ID = "organization_id";
     private OnOrganizationClickListener mOrganizationClickListener;
     private OrganizationUI mOrganizationUI;
     private String mOrgID;
@@ -85,6 +85,10 @@ public class DetailFragment extends BaseFragment<MainActivity> implements OnBack
         fragment.setArguments(args);
         return fragment;
     }
+    @Override
+    protected int getLayoutResId() {
+        return R.layout.fragment_detail;
+    }
 
     @Override
     public void onAttach(Context context) {
@@ -95,11 +99,6 @@ public class DetailFragment extends BaseFragment<MainActivity> implements OnBack
             throw new ClassCastException(context.toString()
                     + " must implement OnOrganizationClickListener");
         }
-    }
-
-    @Override
-    protected int getLayoutResId() {
-        return R.layout.fragment_detail;
     }
 
     @Override

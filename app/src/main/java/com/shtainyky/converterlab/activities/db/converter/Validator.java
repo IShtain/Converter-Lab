@@ -5,7 +5,9 @@ import com.shtainyky.converterlab.activities.models.modelRetrofit.currency.Curre
 import com.shtainyky.converterlab.activities.models.modelRetrofit.organization.Organization;
 import com.shtainyky.converterlab.activities.models.modelRetrofit.region.RegionMap;
 
-public class Validator {
+class Validator {
+
+
     CurrencyMap validateCurrencyMap(CurrencyMap currencyMap) {
         if (currencyMap.getCurrencyTitle() == null) currencyMap.setCurrencyTitle("Нет данных");
         return currencyMap;

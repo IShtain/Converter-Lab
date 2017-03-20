@@ -36,14 +36,14 @@ import butterknife.ButterKnife;
 public class ShareDialogFragment extends DialogFragment {
     private static final String TAG = "DetailFragment";
     private static Logger logger;
-    public static final String ARG_ORGANIZATION_ID = "organization_id";
+    private static final String ARG_ORGANIZATION_ID = "organization_id";
 
-    public static final int HEADER_SIZE = 200;
-    public static final int ONE_ITEM_SIZE = 60;
-    public static final int TEXT_SIZE_BIG = 30;
-    public static final int TEXT_SIZE_SMALL = 25;
-    public static final int X_TEXT_LEFT_SMALL = 10;
-    public static final int X_TEXT_MARGIN_BIG = 30;
+    private static final int HEADER_SIZE = 200;
+    private static final int ONE_ITEM_SIZE = 60;
+    private static final int TEXT_SIZE_BIG = 30;
+    private static final int TEXT_SIZE_SMALL = 25;
+    private static final int X_TEXT_LEFT_SMALL = 10;
+    private static final int X_TEXT_MARGIN_BIG = 30;
 
     private OrganizationUI mOrganizationUI;
     private Paint mPaint;
@@ -87,33 +87,37 @@ public class ShareDialogFragment extends DialogFragment {
     }
 
     private Bitmap getBitmap() {
+        List<OrganizationUI.CurrencyUI> currencyUIs = mOrganizationUI.getCurrencies();
+        int heightBitmap = HEADER_SIZE + ONE_ITEM_SIZE * currencyUIs.size();
         int widthBitmap = getBitmapWidth();
         logger.d(TAG, "widthBitmap) ==== >" + widthBitmap);
-        List<OrganizationUI.CurrencyUI> currencyUIs = mOrganizationUI.getCurrencies();
-        int currenciesSize = currencyUIs.size();
-        int heightBitmap = HEADER_SIZE + ONE_ITEM_SIZE * currenciesSize;
         Bitmap bitmap = Bitmap.createBitmap(widthBitmap, heightBitmap, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         canvas.drawColor(Color.WHITE);
-        logger.d(TAG, "canvas.getWidth() ==== >" + canvas.getWidth());
         mPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG | Paint.LINEAR_TEXT_FLAG);
+        drawHeaderBitmap(canvas);
+        drawCurrencies(canvas, currencyUIs);
+        return bitmap;
+    }
 
+    private void drawHeaderBitmap(Canvas canvas){
         setColorAndSizeForBoldPaint(R.color.colorPrimaryDark, TEXT_SIZE_BIG);
         canvas.drawText(mOrganizationUI.getName(), X_TEXT_LEFT_SMALL, 60, mPaint);
         setColorAndSizeForNormalPaint(R.color.dark_grey, TEXT_SIZE_SMALL);
         canvas.drawText(mOrganizationUI.getRegionName(), X_TEXT_LEFT_SMALL, 95, mPaint);
         canvas.drawText(mOrganizationUI.getCityName(), X_TEXT_LEFT_SMALL, 130, mPaint);
+    }
 
-        for (int i = 0; i < currenciesSize; i++) {
+    private void drawCurrencies(Canvas canvas, List<OrganizationUI.CurrencyUI> currencyUIs){
+        for (int i = 0; i < currencyUIs.size(); i++) {
             setColorAndSizeForBoldPaint(R.color.dark_purple, TEXT_SIZE_BIG);
             canvas.drawText(currencyUIs.get(i).getCurrencyId(), X_TEXT_MARGIN_BIG, HEADER_SIZE + i * ONE_ITEM_SIZE, mPaint);
             setColorAndSizeForNormalPaint(R.color.dark_grey, TEXT_SIZE_BIG);
             String text = getTextForCurrencyAskBid(currencyUIs.get(i));
             Rect bounds = new Rect();
             mPaint.getTextBounds(text, 0, text.length(), bounds);
-            canvas.drawText(text, widthBitmap - bounds.width() - X_TEXT_MARGIN_BIG, HEADER_SIZE + i * ONE_ITEM_SIZE, mPaint);
+            canvas.drawText(text, getBitmapWidth() - bounds.width() - X_TEXT_MARGIN_BIG, HEADER_SIZE + i * ONE_ITEM_SIZE, mPaint);
         }
-        return bitmap;
     }
 
     private void shareBitmap(String fileName) {

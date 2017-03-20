@@ -27,7 +27,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class HttpManager {
     private static final String TAG = "HttpManager";
     private static final String BASE_URL = "http://resources.finance.ua/";
-    private static HttpManager manager;
+    private static HttpManager sManager;
     private Logger mLogger = LogManager.getLogger();
     private ApiService mApiService;
 
@@ -35,12 +35,12 @@ public class HttpManager {
     }
 
     public static HttpManager getInstance() {
-        if (manager == null) {
-            manager = new HttpManager();
+        if (sManager == null) {
+            sManager = new HttpManager();
         } else {
-            return manager;
+            return sManager;
         }
-        return manager;
+        return sManager;
     }
 
 

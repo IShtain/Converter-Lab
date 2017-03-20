@@ -2,136 +2,135 @@ package com.shtainyky.converterlab.activities.models.modelUI;
 
 
 import java.util.List;
-import java.util.Map;
 
 public class OrganizationUI {
-    private String id;
-    private String name;
-    private String phone;
-    private String address;
-    private String link;
-    private String regionName;
-    private String cityName;
-    private List<CurrencyUI> currencies;
+    private String mId;
+    private String mName;
+    private String mPhone;
+    private String mAddress;
+    private String mLink;
+    private String mRegionName;
+    private String mCityName;
+    private List<CurrencyUI> mCurrencies;
 
     public class CurrencyUI {
-        private String currencyId;
-        private String name;
-        private double ask;
-        private double diffAsk;
-        private double bid;
-        private double diffBid;
+        private String mCurrencyId;
+        private String mName;
+        private double mAsk;
+        private double mDiffAsk;
+        private double mBid;
+        private double mDiffBid;
 
         public String getName() {
-            return name;
+            return mName;
         }
 
         public void setName(String name) {
-            this.name = name;
+            this.mName = name;
         }
 
         public double getAsk() {
-            return ask;
+            return mAsk;
         }
 
         public double getBid() {
-            return bid;
+            return mBid;
         }
 
         public void setAsk(double ask) {
-            this.ask = ask;
+            this.mAsk = ask;
         }
 
         public void setBid(double bid) {
-            this.bid = bid;
+            this.mBid = bid;
         }
 
         public double getDiffAsk() {
-            return diffAsk;
+            return mDiffAsk;
         }
 
         public void setDiffAsk(double diffAsk) {
-            this.diffAsk = diffAsk;
+            this.mDiffAsk = diffAsk;
         }
 
         public double getDiffBid() {
-            return diffBid;
+            return mDiffBid;
         }
 
         public void setDiffBid(double diffBid) {
-            this.diffBid = diffBid;
+            this.mDiffBid = diffBid;
         }
 
         public String getCurrencyId() {
-            return currencyId;
+            return mCurrencyId;
         }
 
         public void setCurrencyId(String currencyId) {
-            this.currencyId = currencyId;
+            this.mCurrencyId = currencyId;
         }
     }
 
     public String getId() {
-        return id;
+        return mId;
     }
 
     public void setId(String id) {
-        this.id = id;
+        this.mId = id;
     }
 
     public String getName() {
-        return name;
+        return mName;
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.mName = name;
     }
 
     public String getPhone() {
-        return phone;
+        return mPhone;
     }
 
     public void setPhone(String phone) {
-        this.phone = phone;
+        this.mPhone = phone;
     }
 
     public String getAddress() {
-        return address;
+        return mAddress;
     }
 
     public void setAddress(String address) {
-        this.address = address;
+        this.mAddress = address;
     }
 
     public String getLink() {
-        return link;
+        return mLink;
     }
 
     public void setLink(String link) {
-        this.link = link;
+        this.mLink = link;
     }
 
     public String getRegionName() {
-        return regionName;
+        return mRegionName;
     }
 
     public void setRegionName(String regionName) {
-        this.regionName = regionName;
+        this.mRegionName = regionName;
     }
 
     public String getCityName() {
-        return cityName;
+        return mCityName;
     }
 
     public void setCityName(String cityName) {
-        this.cityName = cityName;
+        this.mCityName = cityName;
     }
 
     public List<CurrencyUI> getCurrencies() {
-        return currencies;
+        return mCurrencies;
     }
 
     public void setCurrencies(List<CurrencyUI> currencies) {
-        this.currencies = currencies;
+        this.mCurrencies = currencies;
     }
 }

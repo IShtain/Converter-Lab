@@ -18,10 +18,10 @@ import com.shtainyky.converterlab.activities.activities.MainActivity;
 import butterknife.ButterKnife;
 
 public class MapFragment extends BaseFragment<MainActivity> implements OnMapReadyCallback {
-    private static final String ARG_LATITUDE = "latitude";
-    private static final String ARG_LONGITUDE = "longitude";
-    private double latitude;
-    private double longitude;
+    private static final String ARG_LATITUDE = "mLatitude";
+    private static final String ARG_LONGITUDE = "mLongitude";
+    private double mLatitude;
+    private double mLongitude;
 
 
     public static MapFragment newInstance(double latitude, double longitude) {
@@ -52,8 +52,8 @@ public class MapFragment extends BaseFragment<MainActivity> implements OnMapRead
     private void getBundle() {
         Bundle bundle = this.getArguments();
         if (bundle != null) {
-            latitude = bundle.getDouble(ARG_LATITUDE);
-            longitude = bundle.getDouble(ARG_LONGITUDE);
+            mLatitude = bundle.getDouble(ARG_LATITUDE);
+            mLongitude = bundle.getDouble(ARG_LONGITUDE);
         }
     }
 
@@ -61,10 +61,10 @@ public class MapFragment extends BaseFragment<MainActivity> implements OnMapRead
     public void onMapReady(GoogleMap googleMap) {
         MapsInitializer.initialize(getContext());
         googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-        googleMap.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude)));
+        googleMap.addMarker(new MarkerOptions().position(new LatLng(mLatitude, mLongitude)));
 
         CameraPosition position = CameraPosition.builder()
-                .target(new LatLng(latitude, longitude)).zoom(17).bearing(0).tilt(45).build();
+                .target(new LatLng(mLatitude, mLongitude)).zoom(17).bearing(0).tilt(45).build();
         googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(position));
     }
 

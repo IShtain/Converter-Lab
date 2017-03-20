@@ -12,16 +12,21 @@ import android.os.SystemClock;
 import com.shtainyky.converterlab.R;
 import com.shtainyky.converterlab.activities.db.converter.ConvertData;
 import com.shtainyky.converterlab.activities.db.storedata.StoreData;
-import com.shtainyky.converterlab.activities.util.logger.LogManager;
-import com.shtainyky.converterlab.activities.util.logger.Logger;
 import com.shtainyky.converterlab.activities.models.modelRetrofit.RootModel;
 import com.shtainyky.converterlab.activities.models.modelUI.OrganizationUI;
 import com.shtainyky.converterlab.activities.service.serverconection.HttpManager;
-import com.shtainyky.converterlab.activities.util.Constants;
 import com.shtainyky.converterlab.activities.util.Util;
+import com.shtainyky.converterlab.activities.util.logger.LogManager;
+import com.shtainyky.converterlab.activities.util.logger.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.shtainyky.converterlab.activities.util.Constants.DATABASE_NOT_CREATED;
+import static com.shtainyky.converterlab.activities.util.Constants.SERVICE_IS_BINDER;
+import static com.shtainyky.converterlab.activities.util.Constants.SERVICE_MESSAGE_USER_HAS_INTERNET;
+import static com.shtainyky.converterlab.activities.util.Constants.SERVICE_MESSAGE_USER_HAS_NOT_CREATED_DB_AND_INTERNET;
+import static com.shtainyky.converterlab.activities.util.Constants.SERVICE_MESSAGE_USER_HAS_NOT_INTERNET;
 
 public class LoadingBindService extends Service {
     private static final String TAG = "LoadingBindService";
@@ -73,7 +78,7 @@ public class LoadingBindService extends Service {
     @Override
     public IBinder onBind(Intent intent) {
         mLogger.d(TAG, "onBind");
-        if (intent.getBooleanExtra(Constants.SERVICE_IS_BINDER, false)) {
+        if (intent.getBooleanExtra(SERVICE_IS_BINDER, false)) {
             mBinder = new MyBinder();
             return mBinder;
         } else {
@@ -165,13 +170,13 @@ public class LoadingBindService extends Service {
         if (mListeners == null) return;
         for (OnDataLoadedListener listener : mListeners) {
             if (listener != null) {
-                if (oldDate.equals(Constants.DATABASE_NOT_CREATED)) {
-                    listener.onFailure(Constants.SERVICE_MESSAGE_USER_HAS_NOT_CREATED_DB_AND_INTERNET);
+                if (oldDate.equals(DATABASE_NOT_CREATED)) {
+                    listener.onFailure(SERVICE_MESSAGE_USER_HAS_NOT_CREATED_DB_AND_INTERNET);
                 } else {
                     if (Util.isOnline(getApplicationContext())) {
-                        listener.onFailure(Constants.SERVICE_MESSAGE_USER_HAS_INTERNET);
+                        listener.onFailure(SERVICE_MESSAGE_USER_HAS_INTERNET);
                     } else {
-                        listener.onFailure(Constants.SERVICE_MESSAGE_USER_HAS_NOT_INTERNET);
+                        listener.onFailure(SERVICE_MESSAGE_USER_HAS_NOT_INTERNET);
                     }
                 }
             }

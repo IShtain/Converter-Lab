@@ -43,7 +43,7 @@ public class StoreData {
     private static StoreData sStoreData;
     private OnAllDBTransactionFinishedListener mListener;
     private AtomicInteger counter;
-    private static  final int max_counter_transation = 5;
+    private static  final int max_count_transaction = 5;
 
 
     private StoreData() {
@@ -67,7 +67,7 @@ public class StoreData {
 
     public void saveData(RootModel rootModel, OnAllDBTransactionFinishedListener allDBTransactionFinishedListener) {
         counter = new AtomicInteger();
-        mLogger.d(TAG, "max_counter_transation i = " + max_counter_transation);
+        mLogger.d(TAG, "max_count_transaction i = " + max_count_transaction);
         mListener = allDBTransactionFinishedListener;
         insertDate(rootModel.getDate());
         insertCurrencyMap(rootModel.getCurrencies());
@@ -122,7 +122,7 @@ public class StoreData {
                 .success(new Transaction.Success() {
                     @Override
                     public void onSuccess(Transaction transaction) {
-                        if (counter.incrementAndGet() == max_counter_transation)
+                        if (counter.incrementAndGet() == max_count_transaction)
                             mListener.onSuccess();
                     }
                 }).build().execute();
@@ -153,7 +153,7 @@ public class StoreData {
                 .success(new Transaction.Success() {
                     @Override
                     public void onSuccess(Transaction transaction) {
-                        if (counter.incrementAndGet() == max_counter_transation)
+                        if (counter.incrementAndGet() == max_count_transaction)
                             mListener.onSuccess();
                     }
                 }).build().execute();
@@ -184,7 +184,7 @@ public class StoreData {
                 .success(new Transaction.Success() {
                     @Override
                     public void onSuccess(Transaction transaction) {
-                        if (counter.incrementAndGet() == max_counter_transation)
+                        if (counter.incrementAndGet() == max_count_transaction)
                             mListener.onSuccess();
                     }
                 }).build().execute();
@@ -223,7 +223,7 @@ public class StoreData {
                 .success(new Transaction.Success() {
                     @Override
                     public void onSuccess(Transaction transaction) {
-                        if (counter.incrementAndGet() == max_counter_transation)
+                        if (counter.incrementAndGet() == max_count_transaction)
                             mListener.onSuccess();
                     }
                 }).build().execute();
@@ -281,7 +281,7 @@ public class StoreData {
                 .success(new Transaction.Success() {
                     @Override
                     public void onSuccess(Transaction transaction) {
-                        if (counter.incrementAndGet() == max_counter_transation) {
+                        if (counter.incrementAndGet() == max_count_transaction) {
                             mListener.onSuccess();
                         }
                     }

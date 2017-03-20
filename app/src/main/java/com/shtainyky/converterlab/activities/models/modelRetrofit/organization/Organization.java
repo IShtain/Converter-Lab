@@ -8,9 +8,6 @@ public class Organization {
     @SerializedName("id")
     private String id;
 
-    @SerializedName("orgType")
-    private int orgType;
-
     @SerializedName("title")
     private String title;
 
@@ -51,10 +48,6 @@ public class Organization {
         return id;
     }
 
-    public int getOrgType() {
-        return orgType;
-    }
-
     public String getTitle() {
         return title;
     }
@@ -81,10 +74,6 @@ public class Organization {
 
     public Map<String, Currency> getCurrencies() {
         return currencies;
-    }
-
-    public void setOrgType(int orgType) {
-        this.orgType = orgType;
     }
 
     public void setTitle(String title) {

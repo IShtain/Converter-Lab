@@ -19,23 +19,23 @@ public class GeoLatLng {
     private static final String TAG = "GeoLatLng";
     private static Logger logger = LogManager.getLogger();
 
-    private double lat;
-    private double lng;
+    private double mLat;
+    private double mLng;
 
     public double getLat() {
-        return lat;
+        return mLat;
     }
 
     private void setLat(double lat) {
-        this.lat = lat;
+        this.mLat = lat;
     }
 
     public double getLng() {
-        return lng;
+        return mLng;
     }
 
     private void setLng(double lng) {
-        this.lng = lng;
+        this.mLng = lng;
     }
 
     public interface GeoPlaceListener {
@@ -73,8 +73,8 @@ public class GeoLatLng {
                         GeoLatLng geoLatLng = new GeoLatLng();
                         geoLatLng.setLat(geoLatLngFromJson.getLat());
                         geoLatLng.setLng(geoLatLngFromJson.getLng());
-                        logger.d(TAG, "lng = " + geoLatLngFromJson.getLat());
-                        logger.d(TAG, "lat = " + geoLatLngFromJson.getLng());
+                        logger.d(TAG, "mLng = " + geoLatLngFromJson.getLat());
+                        logger.d(TAG, "mLat = " + geoLatLngFromJson.getLng());
                         listener.onSuccess(geoLatLng);
                     } else listener.onFailure();
                 }
@@ -96,11 +96,11 @@ public class GeoLatLng {
 
             double lng = ((JSONArray) jsonObject.get("results")).getJSONObject(0)
                     .getJSONObject("geometry").getJSONObject("location")
-                    .getDouble("lng");
+                    .getDouble("mLng");
 
             double lat = ((JSONArray) jsonObject.get("results")).getJSONObject(0)
                     .getJSONObject("geometry").getJSONObject("location")
-                    .getDouble("lat");
+                    .getDouble("mLat");
 
             geoLatLng = new GeoLatLng();
             geoLatLng.setLat(lat);

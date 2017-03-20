@@ -21,6 +21,7 @@ public class GeoHttpManager {
     private  GeoApiService mApiService;
     private Logger mLogger = LogManager.getLogger();
     private static final String TAG = "GeoHttpManager";
+    private static final String BASE_URL = "https://maps.googleapis.com/";
 
     private GeoHttpManager() {
     }
@@ -37,7 +38,7 @@ public class GeoHttpManager {
     public void initGeoService() {
         OkHttpClient okHttpClient = getOkHttpClient();
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://maps.googleapis.com/")
+                .baseUrl(BASE_URL)
                 .client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();

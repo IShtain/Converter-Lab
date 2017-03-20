@@ -26,21 +26,26 @@ import com.shtainyky.converterlab.R;
 import com.shtainyky.converterlab.activities.activities.MainActivity;
 import com.shtainyky.converterlab.activities.adapter.OrganizationsRecyclerViewAdapter;
 import com.shtainyky.converterlab.activities.db.storedata.StoreData;
-import com.shtainyky.converterlab.activities.util.logger.LogManager;
-import com.shtainyky.converterlab.activities.util.logger.Logger;
 import com.shtainyky.converterlab.activities.models.modelUI.OrganizationUI;
 import com.shtainyky.converterlab.activities.service.LoadingBindService;
-import com.shtainyky.converterlab.activities.util.Constants;
+import com.shtainyky.converterlab.activities.util.logger.LogManager;
+import com.shtainyky.converterlab.activities.util.logger.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 
+import static com.shtainyky.converterlab.activities.util.Constants.SERVICE_IS_BINDER;
+import static com.shtainyky.converterlab.activities.util.Constants.SERVICE_MESSAGE_USER_HAS_INTERNET;
+import static com.shtainyky.converterlab.activities.util.Constants.SERVICE_MESSAGE_USER_HAS_NOT_CREATED_DB_AND_INTERNET;
+import static com.shtainyky.converterlab.activities.util.Constants.SERVICE_MESSAGE_USER_HAS_NOT_INTERNET;
+
 public class OrganizationsFragment extends BaseFragment<MainActivity> implements SearchView.OnQueryTextListener,
         OrganizationsRecyclerViewAdapter.OnItemClickListener, LoadingBindService.OnDataLoadedListener {
     public static final String TAG = "OrganizationsFragment";
     private Logger logger;
+
     @BindView(R.id.main_layout)
     RelativeLayout relativeLayout;
     @BindView(R.id.progress)
@@ -139,7 +144,7 @@ public class OrganizationsFragment extends BaseFragment<MainActivity> implements
         super.onStart();
         // Bind to LocalService
         Intent intent = new Intent(getContext(), LoadingBindService.class);
-        intent.putExtra(Constants.SERVICE_IS_BINDER, true);
+        intent.putExtra(SERVICE_IS_BINDER, true);
         getContext().bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
     }
 
@@ -262,19 +267,19 @@ public class OrganizationsFragment extends BaseFragment<MainActivity> implements
     @Override
     public void onFailure(String message) {
         switch (message) {
-            case Constants.SERVICE_MESSAGE_USER_HAS_NOT_INTERNET:
+            case SERVICE_MESSAGE_USER_HAS_NOT_INTERNET:
                 logger.d(TAG, "SERVICE_MESSAGE_USER_HAS_NOT_INTERNET");
                 Snackbar.make(relativeLayout, R.string.no_internet_connection, Snackbar.LENGTH_LONG).show();
                 textView.setVisibility(View.GONE);
                 startAlarmManager();
                 break;
-            case Constants.SERVICE_MESSAGE_USER_HAS_INTERNET:
+            case SERVICE_MESSAGE_USER_HAS_INTERNET:
                 logger.d(TAG, "SERVICE_MESSAGE_USER_HAS_INTERNET");
                 if (textView != null)
                     textView.setVisibility(View.GONE);
                 startAlarmManager();
                 break;
-            case Constants.SERVICE_MESSAGE_USER_HAS_NOT_CREATED_DB_AND_INTERNET:
+            case SERVICE_MESSAGE_USER_HAS_NOT_CREATED_DB_AND_INTERNET:
                 logger.d(TAG, "SERVICE_MESSAGE_USER_HAS_NOT_CREATED_DB_AND_INTERNET");
                 progressBar.setVisibility(View.GONE);
                 textView.setVisibility(View.VISIBLE);

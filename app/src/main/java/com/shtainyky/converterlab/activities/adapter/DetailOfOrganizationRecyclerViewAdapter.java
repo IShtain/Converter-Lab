@@ -63,7 +63,6 @@ public class DetailOfOrganizationRecyclerViewAdapter extends
         @BindView(R.id.ivBid)
         CustomImageView ivBid;
 
-
         DetailOfOrganizationRecyclerViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);

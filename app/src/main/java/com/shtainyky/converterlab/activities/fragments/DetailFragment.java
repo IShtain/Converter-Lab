@@ -201,7 +201,7 @@ public class DetailFragment extends BaseFragment<MainActivity>{
             fabCallLinearLayout.startAnimation(mAnimFabClose);
             mScrollView.setAlpha(1f);
             logger.d(TAG, "close");
-        } else {//if you touch and FAB is open, please open all menu
+        } else {//if you touch and FAB is not open, please open all menu
             fabMenu.setImageResource(R.drawable.ic_action_close);
             fabCall.setClickable(true);
             fabMap.setClickable(true);

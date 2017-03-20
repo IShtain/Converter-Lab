@@ -5,12 +5,15 @@ import android.app.DialogFragment;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.widget.Toast;
 
 import com.shtainyky.converterlab.R;
 import com.shtainyky.converterlab.activities.fragments.DetailFragment;
-import com.shtainyky.converterlab.activities.fragments.OnOrganizationClickListener;
+import com.shtainyky.converterlab.activities.fragments.listeners.OnBackPressedListener;
+import com.shtainyky.converterlab.activities.fragments.listeners.OnOrganizationClickListener;
 import com.shtainyky.converterlab.activities.fragments.OrganizationsFragment;
 import com.shtainyky.converterlab.activities.fragments.ShareDialogFragment;
 import com.shtainyky.converterlab.activities.fragments.MapFragment;
@@ -102,16 +105,33 @@ public class MainActivity extends BaseActivity implements OnOrganizationClickLis
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        ActionBar ab = getSupportActionBar();
-        if (ab != null) {
-            ab.setTitle(R.string.app_name);
-            ab.setSubtitle("");
-            ab.setDisplayHomeAsUpEnabled(false);
+        FragmentManager fm = getSupportFragmentManager();
+        OnBackPressedListener backPressedListener = null;
+        for (Fragment fragment : fm.getFragments()) {
+            if (fragment instanceof OnBackPressedListener) {
+                backPressedListener = (OnBackPressedListener) fragment;
+                break;
+            }
+        }
+        if (backPressedListener != null) {
+            logger.d(TAG, "backPressedListener() = >");
+            backPressedListener.onBackPressed();
+        } else {
+            super.onBackPressed();
+            logger.d(TAG, "onBackPressed() = >");
+            changeActionBarTitleAndSubTitle();
         }
     }
-
+    private void changeActionBarTitleAndSubTitle(){
+        ActionBar ab = getSupportActionBar();
+        if (ab != null) {
+            ab.setDisplayHomeAsUpEnabled(false);
+            ab.setTitle(R.string.app_name);
+            ab.setSubtitle("");
+        }
+    }
 }
+
 
 
 

@@ -22,6 +22,8 @@ import com.shtainyky.converterlab.R;
 import com.shtainyky.converterlab.activities.activities.MainActivity;
 import com.shtainyky.converterlab.activities.adapter.DetailOfOrganizationRecyclerViewAdapter;
 import com.shtainyky.converterlab.activities.db.storedata.StoreData;
+import com.shtainyky.converterlab.activities.fragments.listeners.OnBackPressedListener;
+import com.shtainyky.converterlab.activities.fragments.listeners.OnOrganizationClickListener;
 import com.shtainyky.converterlab.activities.util.logger.LogManager;
 import com.shtainyky.converterlab.activities.util.logger.Logger;
 import com.shtainyky.converterlab.activities.models.modelUI.OrganizationUI;
@@ -31,7 +33,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class DetailFragment extends BaseFragment<MainActivity>{
+public class DetailFragment extends BaseFragment<MainActivity> implements OnBackPressedListener {
 
     private static final String TAG = "DetailFragment";
     private static Logger logger;
@@ -190,29 +192,37 @@ public class DetailFragment extends BaseFragment<MainActivity>{
     }
 
     private void animateFAB() {
-        if (mIsFabOpen) { //if you touch and FAB is open, please close all menu
-            fabCall.setClickable(false);
-            fabMap.setClickable(false);
-            fabLink.setClickable(false);
-            mIsFabOpen = false;
-            fabMenu.setImageResource(R.drawable.ic_action_menu);
-            fabLinkLinearLayout.startAnimation(mAnimFabClose);
-            fabMapLinearLayout.startAnimation(mAnimFabClose);
-            fabCallLinearLayout.startAnimation(mAnimFabClose);
-            mScrollView.setAlpha(1f);
-            logger.d(TAG, "close");
-        } else {//if you touch and FAB is not open, please open all menu
-            fabMenu.setImageResource(R.drawable.ic_action_close);
-            fabCall.setClickable(true);
-            fabMap.setClickable(true);
-            fabLink.setClickable(true);
-            mIsFabOpen = true;
-            fabLinkLinearLayout.startAnimation(mAminFabOpen);
-            fabMapLinearLayout.startAnimation(mAminFabOpen);
-            fabCallLinearLayout.startAnimation(mAminFabOpen);
-            mScrollView.setAlpha(0.15f);
-            logger.d("Raj", "open");
+        if (mIsFabOpen) { //if user touch and FAB is open, close all menu
+            closeFabMenu();
+        } else {//if user touch and FAB is not open, open all menu
+            openFabMenu();
         }
+    }
+
+    private void closeFabMenu() {
+        fabCall.setClickable(false);
+        fabMap.setClickable(false);
+        fabLink.setClickable(false);
+        mIsFabOpen = false;
+        fabMenu.setImageResource(R.drawable.ic_action_menu);
+        fabLinkLinearLayout.startAnimation(mAnimFabClose);
+        fabMapLinearLayout.startAnimation(mAnimFabClose);
+        fabCallLinearLayout.startAnimation(mAnimFabClose);
+        mScrollView.setAlpha(1f);
+        logger.d(TAG, "close");
+    }
+
+    private void openFabMenu() {
+        fabMenu.setImageResource(R.drawable.ic_action_close);
+        fabCall.setClickable(true);
+        fabMap.setClickable(true);
+        fabLink.setClickable(true);
+        mIsFabOpen = true;
+        fabLinkLinearLayout.startAnimation(mAminFabOpen);
+        fabMapLinearLayout.startAnimation(mAminFabOpen);
+        fabCallLinearLayout.startAnimation(mAminFabOpen);
+        mScrollView.setAlpha(0.15f);
+        logger.d(TAG, "open");
     }
 
 
@@ -242,18 +252,40 @@ public class DetailFragment extends BaseFragment<MainActivity>{
         switch (item.getItemId()) {
             case android.R.id.home:
                 getActivityGeneric().getSupportFragmentManager().popBackStack();
-                ActionBar ab = getActivityGeneric().getSupportActionBar();
-                if (ab != null) {
-                    ab.setDisplayHomeAsUpEnabled(false);
-                    ab.setTitle(R.string.app_name);
-                    ab.setSubtitle("");
-                }
+                changeActionBarTitleAndSubTitle();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
+
+    @Override
+    public void onBackPressed() {
+        if (mIsFabOpen) {
+            closeFabMenu();
+            logger.d(TAG, "onBackPressed close");
+        } else {
+            logger.d(TAG, "onBackPressed else");
+            getActivityGeneric().getSupportFragmentManager().popBackStack();
+            changeActionBarTitleAndSubTitle();
+            }
+        }
+
+
+    private void changeActionBarTitleAndSubTitle(){
+        ActionBar ab = getActivityGeneric().getSupportActionBar();
+        if (ab != null) {
+            ab.setDisplayHomeAsUpEnabled(false);
+            ab.setTitle(R.string.app_name);
+            ab.setSubtitle("");
+        }
+    }
+
 }
+
+
+
+
 
 
 

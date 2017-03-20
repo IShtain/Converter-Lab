@@ -26,6 +26,7 @@ import com.shtainyky.converterlab.R;
 import com.shtainyky.converterlab.activities.activities.MainActivity;
 import com.shtainyky.converterlab.activities.adapter.OrganizationsRecyclerViewAdapter;
 import com.shtainyky.converterlab.activities.db.storedata.StoreData;
+import com.shtainyky.converterlab.activities.fragments.listeners.OnOrganizationClickListener;
 import com.shtainyky.converterlab.activities.models.modelUI.OrganizationUI;
 import com.shtainyky.converterlab.activities.service.LoadingBindService;
 import com.shtainyky.converterlab.activities.util.logger.LogManager;

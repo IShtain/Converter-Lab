@@ -6,8 +6,6 @@ import com.shtainyky.converterlab.activities.db.storeModel.TableCurrencyMap;
 import com.shtainyky.converterlab.activities.db.storeModel.TableDate;
 import com.shtainyky.converterlab.activities.db.storeModel.TableOrganization;
 import com.shtainyky.converterlab.activities.db.storeModel.TableRegionMap;
-import com.shtainyky.converterlab.activities.util.logger.LogManager;
-import com.shtainyky.converterlab.activities.util.logger.Logger;
 import com.shtainyky.converterlab.activities.models.modelRetrofit.city.CityMap;
 import com.shtainyky.converterlab.activities.models.modelRetrofit.currency.CurrencyMap;
 import com.shtainyky.converterlab.activities.models.modelRetrofit.organization.Organization;

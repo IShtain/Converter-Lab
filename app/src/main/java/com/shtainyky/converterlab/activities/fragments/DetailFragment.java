@@ -1,9 +1,11 @@
 package com.shtainyky.converterlab.activities.fragments;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
@@ -24,9 +26,9 @@ import com.shtainyky.converterlab.activities.adapter.DetailOfOrganizationRecycle
 import com.shtainyky.converterlab.activities.db.storedata.StoreData;
 import com.shtainyky.converterlab.activities.fragments.listeners.OnBackPressedListener;
 import com.shtainyky.converterlab.activities.fragments.listeners.OnOrganizationClickListener;
+import com.shtainyky.converterlab.activities.models.modelUI.OrganizationUI;
 import com.shtainyky.converterlab.activities.util.logger.LogManager;
 import com.shtainyky.converterlab.activities.util.logger.Logger;
-import com.shtainyky.converterlab.activities.models.modelUI.OrganizationUI;
 import com.shtainyky.converterlab.activities.widgets.CustomDividerItemDecoration;
 
 import butterknife.BindView;
@@ -103,24 +105,32 @@ public class DetailFragment extends BaseFragment<MainActivity> implements OnBack
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
-        ActionBar ab = getActivityGeneric().getSupportActionBar();
-        if (ab != null) {
-            ab.setDisplayHomeAsUpEnabled(true);
-        }
         logger = LogManager.getLogger();
         logger.d(TAG, "onCreate = ");
+        getBundleAndInitOrganization();
+        setHasOptionsMenu(true);
+        setupActionBar();
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         logger.d(TAG, "onViewCreated = ");
-        getBundle();
         showMainInformation(view);
         setupRecyclerView(view);
         setupFabMenu();
         swipeRefreshListener(refreshLayout);
+    }
+
+    private void setupActionBar() {
+        ActionBar ab = getActivityGeneric().getSupportActionBar();
+        Drawable drawable = ResourcesCompat.getDrawable(getActivityGeneric().getResources(), R.drawable.ic_action_arrow, null);
+        if (ab != null) {
+            ab.setDisplayHomeAsUpEnabled(true);
+            ab.setHomeAsUpIndicator(drawable);
+            ab.setTitle(mOrganizationUI.getName());
+            ab.setSubtitle(mOrganizationUI.getCityName());
+        }
     }
 
     private void swipeRefreshListener(final SwipeRefreshLayout refreshLayout) {
@@ -135,7 +145,7 @@ public class DetailFragment extends BaseFragment<MainActivity> implements OnBack
         });
     }
 
-    private void getBundle() {
+    private void getBundleAndInitOrganization() {
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             mOrgID = bundle.getString(ARG_ORGANIZATION_ID);
@@ -252,7 +262,7 @@ public class DetailFragment extends BaseFragment<MainActivity> implements OnBack
         switch (item.getItemId()) {
             case android.R.id.home:
                 getActivityGeneric().getSupportFragmentManager().popBackStack();
-                changeActionBarTitleAndSubTitle();
+                changeActionBarTitleAndSubTitle(getActivityGeneric().getSupportActionBar());
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -267,13 +277,12 @@ public class DetailFragment extends BaseFragment<MainActivity> implements OnBack
         } else {
             logger.d(TAG, "onBackPressed else");
             getActivityGeneric().getSupportFragmentManager().popBackStack();
-            changeActionBarTitleAndSubTitle();
-            }
+            changeActionBarTitleAndSubTitle(getActivityGeneric().getSupportActionBar());
         }
+    }
 
 
-    private void changeActionBarTitleAndSubTitle(){
-        ActionBar ab = getActivityGeneric().getSupportActionBar();
+    private void changeActionBarTitleAndSubTitle(ActionBar ab) {
         if (ab != null) {
             ab.setDisplayHomeAsUpEnabled(false);
             ab.setTitle(R.string.app_name);

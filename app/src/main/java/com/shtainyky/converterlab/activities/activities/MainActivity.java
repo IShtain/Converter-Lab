@@ -81,11 +81,6 @@ public class MainActivity extends BaseActivity implements OnOrganizationClickLis
     public void onDetailClick(OrganizationUI organization) {
         addFragmentWithBackStack(DetailFragment.newInstance(organization.getId()));
         logger.d(TAG, organization.getId());
-        ActionBar ab = getSupportActionBar();
-        if (ab != null) {
-            ab.setTitle(organization.getName());
-            ab.setSubtitle(organization.getCityName());
-        }
     }
 
     @Override

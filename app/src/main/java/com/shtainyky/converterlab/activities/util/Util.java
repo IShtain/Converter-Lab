@@ -17,7 +17,10 @@ import com.shtainyky.converterlab.activities.activities.MainActivity;
 
 import java.util.List;
 
-public class Util {
+public final class Util {
+    private Util() {
+    }
+
     public static boolean isOnline(Context context) {
         boolean haveConnectedWifi = false;
         boolean haveConnectedMobile = false;

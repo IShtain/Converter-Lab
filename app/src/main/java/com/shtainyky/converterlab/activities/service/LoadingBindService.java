@@ -55,10 +55,13 @@ public class LoadingBindService extends Service {
 
     public static boolean isServiceAlarmOn(Context context) {
         mLogger.d(TAG, "isServiceAlarmOn isOn -- > ");
-        Intent i = new Intent(context, LoadingBindService.class);
-        PendingIntent pi = PendingIntent
-                .getService(context, 0, i, PendingIntent.FLAG_NO_CREATE);
-        return pi != null;
+        if (context != null) {
+            Intent i = new Intent(context, LoadingBindService.class);
+            PendingIntent pi = PendingIntent
+                    .getService(context, 0, i, PendingIntent.FLAG_NO_CREATE);
+            return pi != null;
+        }
+        else  return true;
     }
 
     @Override

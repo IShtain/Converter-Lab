@@ -62,9 +62,11 @@ public class MainActivity extends BaseActivity implements OnOrganizationClickLis
                         public void onSuccess(GeoLatLng geoLatLng) {
                             logger.d(TAG, "geoLatLng.getLat() = " + geoLatLng.getLat());
                             logger.d(TAG, "geoLatLng.getLng() = " + geoLatLng.getLng());
-                            addFragmentWithBackStack(MapFragment.newInstance(geoLatLng.getLat(),
-                                    geoLatLng.getLng()));
-                            dialog.cancel();
+                            if (!isChangingConfigurations()) {
+                                addFragmentWithBackStack(MapFragment.newInstance(geoLatLng.getLat(),
+                                        geoLatLng.getLng()));
+                                dialog.cancel();
+                            }
                         }
 
                         @Override

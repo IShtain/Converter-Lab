@@ -43,5 +43,4 @@ public abstract class BaseActivity extends AppCompatActivity{
         }
         logger.d(TAG, "addFragmentWithBackStack");
     }
-
 }

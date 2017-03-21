@@ -60,6 +60,7 @@ public class MapFragment extends BaseFragment<MainActivity> implements OnMapRead
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        if (getContext() == null) return;
         MapsInitializer.initialize(getContext());
         googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         googleMap.addMarker(new MarkerOptions().position(new LatLng(mLatitude, mLongitude)));

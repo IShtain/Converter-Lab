@@ -27,5 +27,12 @@
     <string name="bank_share">SHARE</string>
     <string name="google_maps_key">AIzaSyBGLOcPxckkhsds6WJoMM2OzUFbaTPLgOo</string>
     <string name="message_not_valid_address">Данные по адрессу %s не коректные</string>
+    <string name="image_saving_problem">Возникла проблема с сохранение фото в памяти телефона</string>
+    <string name="title_need_permission">Необходимо разрешение</string>
+    <string name="message_need_permission">Для пересылки фотографии с курсами валют нужно разрешение для сохранение фото в памяти телефона.</string>
+    <string name="answer_grant">Предоставить</string>
+    <string name="answer_cancel">Запретить</string>
+    <string name="message_no_permission">Нет разрешения</string>
+    <string name="message_path_to_permisions">Go to Permissions to Grant Phone</string>
 
 </resources>

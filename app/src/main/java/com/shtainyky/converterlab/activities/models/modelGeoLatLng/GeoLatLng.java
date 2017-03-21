@@ -96,11 +96,11 @@ public class GeoLatLng {
 
             double lng = ((JSONArray) jsonObject.get("results")).getJSONObject(0)
                     .getJSONObject("geometry").getJSONObject("location")
-                    .getDouble("mLng");
+                    .getDouble("lng");
 
             double lat = ((JSONArray) jsonObject.get("results")).getJSONObject(0)
                     .getJSONObject("geometry").getJSONObject("location")
-                    .getDouble("mLat");
+                    .getDouble("lat");
 
             geoLatLng = new GeoLatLng();
             geoLatLng.setLat(lat);

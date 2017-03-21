@@ -44,6 +44,7 @@ import java.io.FileOutputStream;
 import java.text.DecimalFormat;
 import java.util.List;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class ShareDialogFragment extends DialogFragment {
@@ -63,8 +64,12 @@ public class ShareDialogFragment extends DialogFragment {
     private OrganizationUI mOrganizationUI;
     private Paint mPaint;
     private Bitmap mBitmap;
-    private SharedPreferences permissionStatus;
-    private Button shareButton;
+    private SharedPreferences mPermissionStatus;
+
+    @BindView(R.id.bt_share)
+    Button shareButton;
+    @BindView( R.id.iv)
+    ImageView imageView;
 
     public static ShareDialogFragment newInstance(String organizationID) {
         Bundle args = new Bundle();
@@ -79,12 +84,11 @@ public class ShareDialogFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              final Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_share, container, false);
+        ButterKnife.bind(this, view);
         logger = LogManager.getLogger();
         getBundle();
         mBitmap = getBitmap();
-        final ImageView imageView = ButterKnife.findById(view, R.id.iv);
         imageView.setImageBitmap(mBitmap);
-        shareButton = ButterKnife.findById(view, R.id.bt_share);
         logger.d(TAG, "onCreateView ********");
         return view;
     }
@@ -197,7 +201,7 @@ public class ShareDialogFragment extends DialogFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         logger.d(TAG, "onActivityCreated ********");
-        permissionStatus = getActivity().getSharedPreferences("permissionStatus", Context.MODE_PRIVATE);
+        mPermissionStatus = getActivity().getSharedPreferences("mPermissionStatus", Context.MODE_PRIVATE);
         shareButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -210,7 +214,7 @@ public class ShareDialogFragment extends DialogFragment {
                         //Show Information about why you need the permission
                         showDialogWithExplanation();
                     } else
-                        if (permissionStatus.getBoolean(Manifest.permission.WRITE_EXTERNAL_STORAGE, false)) {
+                        if (mPermissionStatus.getBoolean(Manifest.permission.WRITE_EXTERNAL_STORAGE, false)) {
                         //Previously Permission Request was cancelled with 'Dont Ask Again',
                         // Redirect to Settings after showing Information about why you need the permission
                             logger.d(TAG, "onActivityCreated showDialogWithExplanationAfterDontAskAgainPressed");
@@ -243,9 +247,9 @@ public class ShareDialogFragment extends DialogFragment {
 
     private void savePermissionStatus(){
         logger.d(TAG, "savePermissionStatus");
-        SharedPreferences.Editor editor = permissionStatus.edit();
+        SharedPreferences.Editor editor = mPermissionStatus.edit();
         editor.putBoolean(Manifest.permission.WRITE_EXTERNAL_STORAGE, true);
-        editor.commit();
+        editor.apply();
     }
 
     private void showDialogWithExplanationAfterDontAskAgainPressed() {
@@ -326,9 +330,5 @@ public class ShareDialogFragment extends DialogFragment {
             }
         }
     }
-
-
-
-
 
 }

@@ -64,9 +64,14 @@ public class MainActivity extends BaseActivity implements OnOrganizationClickLis
 
                     @Override
                     public void onFailure() {
-                        Toast.makeText(MainActivity.this,
-                                getString(R.string.message_not_valid_address, organizationAddress),
-                                Toast.LENGTH_LONG).show();
+                        if (Util.isOnline(getApplicationContext()))
+                            Toast.makeText(MainActivity.this,
+                                    getString(R.string.message_not_valid_address, organizationAddress),
+                                    Toast.LENGTH_LONG).show();
+                        else
+                            Toast.makeText(MainActivity.this,
+                                    getString(R.string.no_internet_connection),
+                                    Toast.LENGTH_LONG).show();
                     }
                 });
     }
@@ -117,7 +122,8 @@ public class MainActivity extends BaseActivity implements OnOrganizationClickLis
             changeActionBarTitleAndSubTitle();
         }
     }
-    private void changeActionBarTitleAndSubTitle(){
+
+    private void changeActionBarTitleAndSubTitle() {
         ActionBar ab = getSupportActionBar();
         if (ab != null) {
             ab.setDisplayHomeAsUpEnabled(false);

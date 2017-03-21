@@ -15,10 +15,12 @@
     <string name="menu_detail">Detail</string>
     <string name="menu_search">Search</string>
     <string name="action_search">Search</string>
-    <string name="no_internet_connection">No internet connection</string>
-    <string name="no_data">Нет данных. \n Для обновления данных включите интернет</string>
+    <string name="no_internet_connection">Нет соединения с интернетом</string>
+    <string name="no_internet_connection_map">Для просмотра карты Вам необходимо подключение к интернету</string>
+    <string name="no_data">Нет данных. \n Для обновления данных Вам необходимо подключение к интернету</string>
     <string name="data_update">Данные обновлены</string>
     <string name="message_not_valid_address">Данные по адрессу %s не коректные</string>
+    <string name="loading_lat_lng">Загрузка координат…</string>
 
     <!-- detail screen -->
     <string name="fab_call">Позвонить</string>
@@ -38,5 +40,6 @@
     <string name="answer_cancel">Запретить</string>
     <string name="message_no_permission">Нет разрешения</string>
     <string name="message_path_to_permisions">Go to Permissions to Grant Phone</string>
+
 
 </resources>

@@ -2,6 +2,7 @@ package com.shtainyky.converterlab.activities.activities;
 
 
 import android.app.DialogFragment;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -52,28 +53,41 @@ public class MainActivity extends BaseActivity implements OnOrganizationClickLis
     @Override
     public void onMapClick(final String organizationAddress) {
         logger.d(TAG, "onMapClick = " + organizationAddress);
-        GeoLatLng.getLatLng(this, organizationAddress,
-                new GeoLatLng.GeoPlaceListener() {
-                    @Override
-                    public void onSuccess(GeoLatLng geoLatLng) {
-                        logger.d(TAG, "geoLatLng.getLat() = " + geoLatLng.getLat());
-                        logger.d(TAG, "geoLatLng.getLng() = " + geoLatLng.getLng());
-                        addFragmentWithBackStack(MapFragment.newInstance(geoLatLng.getLat(),
-                                geoLatLng.getLng()));
-                    }
+        if (Util.isOnline(getApplicationContext())) {
+            final ProgressDialog dialog = getProgressDialog();
+            dialog.show();
+            GeoLatLng.getLatLng(this, organizationAddress,
+                    new GeoLatLng.GeoPlaceListener() {
+                        @Override
+                        public void onSuccess(GeoLatLng geoLatLng) {
+                            logger.d(TAG, "geoLatLng.getLat() = " + geoLatLng.getLat());
+                            logger.d(TAG, "geoLatLng.getLng() = " + geoLatLng.getLng());
+                            addFragmentWithBackStack(MapFragment.newInstance(geoLatLng.getLat(),
+                                    geoLatLng.getLng()));
+                            dialog.cancel();
+                        }
 
-                    @Override
-                    public void onFailure() {
-                        if (Util.isOnline(getApplicationContext()))
+                        @Override
+                        public void onFailure() {
+                            dialog.cancel();
                             Toast.makeText(MainActivity.this,
                                     getString(R.string.message_not_valid_address, organizationAddress),
                                     Toast.LENGTH_LONG).show();
-                        else
-                            Toast.makeText(MainActivity.this,
-                                    getString(R.string.no_internet_connection),
-                                    Toast.LENGTH_LONG).show();
-                    }
-                });
+                        }
+                    });
+        } else
+            Toast.makeText(MainActivity.this,
+                    getString(R.string.no_internet_connection_map),
+                    Toast.LENGTH_LONG).show();
+    }
+
+    private ProgressDialog getProgressDialog() {
+        ProgressDialog dialog = new ProgressDialog(this);
+        dialog.setMessage(getString(R.string.loading_lat_lng));
+        dialog.setIndeterminate(false);
+        dialog.setCancelable(false);
+        dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        return dialog;
     }
 
     @Override

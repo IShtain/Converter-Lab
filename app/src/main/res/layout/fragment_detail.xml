@@ -139,8 +139,8 @@
                         android:id="@+id/recycler_view_organization"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="10dp"
-                        android:layout_marginLeft="10dp"/>
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"/>
 
                 </android.support.v7.widget.CardView>
             </LinearLayout>
@@ -162,8 +162,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center|center_horizontal"
-            android:background="@color/white"
             android:layout_marginRight="8dp"
+            android:background="@color/white"
             android:gravity="center"
             android:paddingLeft="@dimen/faf_label_padding"
             android:paddingRight="@dimen/faf_label_padding"
@@ -176,8 +176,8 @@
             android:layout_height="wrap_content"
             android:src="@drawable/ic_action_map"
             app:backgroundTint="@color/light_grey"
-            app:elevation="0dp"
             app:borderWidth="0dp"
+            app:elevation="0dp"
             app:fabSize="mini"
             app:pressedTranslationZ="12dp"
             />
@@ -194,14 +194,14 @@
         android:gravity="right"
         android:orientation="horizontal"
         android:visibility="invisible"
-       >
+        >
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center|center_horizontal"
-            android:background="@color/white"
             android:layout_marginRight="8dp"
+            android:background="@color/white"
             android:gravity="center"
             android:paddingLeft="@dimen/faf_label_padding"
             android:paddingRight="@dimen/faf_label_padding"
@@ -214,8 +214,8 @@
             android:layout_height="wrap_content"
             android:src="@drawable/ic_action_link"
             app:backgroundTint="@color/light_grey"
-            app:elevation="0dp"
             app:borderWidth="0dp"
+            app:elevation="0dp"
             app:fabSize="mini"
             app:pressedTranslationZ="12dp"
             />
@@ -236,8 +236,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center|center_horizontal"
-            android:background="@color/white"
             android:layout_marginRight="8dp"
+            android:background="@color/white"
             android:gravity="center"
             android:paddingLeft="@dimen/faf_label_padding"
             android:paddingRight="@dimen/faf_label_padding"
@@ -250,11 +250,11 @@
             android:layout_height="wrap_content"
             android:src="@drawable/ic_action_phone"
             app:backgroundTint="@color/light_grey"
-            app:elevation="0dp"
             app:borderWidth="0dp"
+            app:elevation="0dp"
             app:fabSize="mini"
             app:pressedTranslationZ="12dp"
-           />
+            />
 
     </LinearLayout>
 
@@ -270,6 +270,6 @@
         app:elevation="6dp"
         app:fabSize="normal"
         app:pressedTranslationZ="12dp"
-       />
+        />
 
 </android.support.design.widget.CoordinatorLayout>

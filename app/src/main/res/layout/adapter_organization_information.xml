@@ -75,15 +75,15 @@
             android:layout_height="?attr/actionBarSize"
             android:background="@color/light_grey"
             android:orientation="horizontal"
-           >
+            >
 
             <ImageButton
                 android:id="@+id/ibLink"
                 android:layout_width="0dp"
                 android:layout_height="?attr/actionBarSize"
-                android:contentDescription="@string/link"
                 android:layout_weight="1"
                 android:background="@android:color/transparent"
+                android:contentDescription="@string/desc"
                 android:src="@drawable/ic_action_link"
                 />
 
@@ -91,9 +91,9 @@
                 android:id="@+id/ibMap"
                 android:layout_width="0dp"
                 android:layout_height="?attr/actionBarSize"
-                android:contentDescription="@string/link"
                 android:layout_weight="1"
                 android:background="@android:color/transparent"
+                android:contentDescription="@string/desc"
                 android:src="@drawable/ic_action_map"
                 />
 
@@ -101,17 +101,18 @@
                 android:id="@+id/ibPhone"
                 android:layout_width="0dp"
                 android:layout_height="?attr/actionBarSize"
-                android:contentDescription="@string/link"
                 android:layout_weight="1"
                 android:background="@android:color/transparent"
+                android:contentDescription="@string/desc"
                 android:src="@drawable/ic_action_phone"/>
+
             <ImageButton
                 android:id="@+id/ibDetail"
                 android:layout_width="0dp"
                 android:layout_height="?attr/actionBarSize"
-                android:contentDescription="@string/link"
                 android:layout_weight="1"
                 android:background="@android:color/transparent"
+                android:contentDescription="@string/desc"
                 android:src="@drawable/ic_action_detail"/>
 
 

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.res.ResourcesCompat;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
@@ -63,7 +64,7 @@ public class DetailFragment extends BaseFragment<MainActivity> implements OnBack
     @BindView(R.id.fab_call_LinearLayout)
     LinearLayout fabCallLinearLayout;
     @BindView(R.id.scrollView)
-    ScrollView mScrollView;
+    NestedScrollView mScrollView;
     @BindView(R.id.tvBankName)
     TextView tvBankName;
     @BindView(R.id.tvRegionName)
@@ -166,6 +167,7 @@ public class DetailFragment extends BaseFragment<MainActivity> implements OnBack
         organizationRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mAdapter = new DetailOfOrganizationRecyclerViewAdapter();
         organizationRecyclerView.setAdapter(mAdapter);
+        organizationRecyclerView.setNestedScrollingEnabled(false);
         organizationRecyclerView.addItemDecoration(new CustomDividerItemDecoration(getContext()));
         setupData();
     }

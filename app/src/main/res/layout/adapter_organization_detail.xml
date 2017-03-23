@@ -33,7 +33,7 @@
             android:layout_marginBottom="7dp"
             android:orientation="horizontal">
 
-            <com.shtainyky.converterlab.activities.widgets.CustomImageView
+            <com.shtainyky.converterlab.widgets.CustomImageView
                 android:id="@+id/ivAsk"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
@@ -56,7 +56,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <com.shtainyky.converterlab.activities.widgets.CustomImageView
+            <com.shtainyky.converterlab.widgets.CustomImageView
                 android:id="@+id/ivBid"
                 android:layout_width="20dp"
                 android:layout_height="20dp"

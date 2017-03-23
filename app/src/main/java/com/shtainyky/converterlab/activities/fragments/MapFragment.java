@@ -1,8 +1,13 @@
 package com.shtainyky.converterlab.activities.fragments;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.res.ResourcesCompat;
+import android.support.v7.app.ActionBar;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -41,6 +46,8 @@ public class MapFragment extends BaseFragment<MainActivity> implements OnMapRead
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        setHasOptionsMenu(true);
+        setupActionBar();
         getBundle();
         MapView mapView = ButterKnife.findById(view, R.id.map);
         if (mapView != null) {
@@ -68,6 +75,30 @@ public class MapFragment extends BaseFragment<MainActivity> implements OnMapRead
         CameraPosition position = CameraPosition.builder()
                 .target(new LatLng(mLatitude, mLongitude)).zoom(17).bearing(0).tilt(45).build();
         googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(position));
+    }
+
+    private void setupActionBar() {
+        ActionBar ab = getActivityGeneric().getSupportActionBar();
+        Drawable drawable = ResourcesCompat.getDrawable(getActivityGeneric().getResources(), R.drawable.ic_action_arrow, null);
+        if (ab != null) {
+            ab.setDisplayHomeAsUpEnabled(true);
+            ab.setHomeAsUpIndicator(drawable);
+            ab.setTitle(getContext().getString(R.string.app_name));
+            ab.setSubtitle("");
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                getActivityGeneric().getSupportFragmentManager().popBackStack();
+                if (getActivityGeneric().getSupportActionBar() != null)
+                    getActivityGeneric().getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
 

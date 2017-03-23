@@ -109,7 +109,7 @@ public class DetailFragment extends BaseFragment<MainActivity> implements OnBack
         logger.d(TAG, "onCreate = ");
         getBundleAndInitOrganization();
         setHasOptionsMenu(true);
-        setupActionBar();
+       // setupActionBar();
     }
 
     @Override
@@ -120,6 +120,12 @@ public class DetailFragment extends BaseFragment<MainActivity> implements OnBack
         setupRecyclerView(view);
         setupFabMenu();
         swipeRefreshListener(refreshLayout);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        setupActionBar();
     }
 
     private void setupActionBar() {
@@ -188,18 +194,22 @@ public class DetailFragment extends BaseFragment<MainActivity> implements OnBack
         switch (v.getId()) {
             case R.id.fab_link:
                 mOrganizationClickListener.onLinkClick(mOrganizationUI.getLink());
+                mIsFabOpen = false;
                 break;
             case R.id.fab_map:
                 String address = mOrganizationUI.getAddress() + " " + mOrganizationUI.getCityName() + " " + mOrganizationUI.getRegionName();
                 mOrganizationClickListener.onMapClick(address);
+                mIsFabOpen = false;
                 break;
             case R.id.fab_phone:
                 mOrganizationClickListener.onCallClick(mOrganizationUI.getPhone());
+                mIsFabOpen = false;
                 break;
             case R.id.fab_menu:
                 animateFAB();
                 break;
         }
+
     }
 
     private void animateFAB() {
